@@ -1,1 +1,1 @@
-export const DB_NAME = "kindpaws"
+export const DB_NAME = "kindpawsDB"
