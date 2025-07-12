@@ -36,7 +36,8 @@ const Hero = () => {
   ];
 
   return (
-    <section className=" absolute -z-1 h-[65vh] md:h-[50vh] lg:h-[90vh] w-full overflow-hidden">
+    <section className=" -mt-35 -z-10 h-[50vw]   w-full">
+
       <Swiper
         direction="vertical"
         slidesPerView={1}
@@ -48,7 +49,7 @@ const Hero = () => {
           delay: 3000,
           disableOnInteraction: false,
         }}
-        className="h-full"
+        className="h-full "
       >
         {swiperItems.map((item) => (
           <SwiperSlide key={item.title} className="overflow-hidden">
@@ -74,67 +75,4 @@ const Hero = () => {
 };
 
 export default Hero;
-
-
-// const tabImages = import.meta.glob(
-//   "/src/assets/carousel/tab/*.{jpg,jpeg,png,svg,webp}",
-//   {
-//     eager: true,
-//     import: "default",
-//   },
-// );
-
-
-// const ctaData = [
-//   {
-//     title: "Delicious Breakfast Ideas",
-//     description: "Start your day with our easy and healthy breakfast recipes.",
-//   },
-//   {
-//     title: "Quick Lunch Recipes",
-//     description: "Tasty meals ready in under 30 minutes.",
-//   },
-//   {
-//     title: "Dinner You’ll Love",
-//     description: "Hearty dinners for the whole family to enjoy.",
-//   },
-// ];
-
-// const Hero = () => {
-//   return (
-//     <div className="relative w-full h-screen">
-//       <Carousel
-//         showThumbs={false}
-//         showStatus={false}
-//         infiniteLoop
-//         autoPlay
-//         showArrows={false}
-//         interval={3000}
-//         verticalSwipe="natural"
-//         swipeable
-//         emulateTouch
-//         className="h-full"
-//       >
-//         {imageList.map((src, idx) => (
-//           <div key={idx} className="relative h-full">
-//             <img src={src} alt={`Slide ${idx + 1}`} className="object-cover h-screen w-full brightness-75" />
-//             <div className="absolute bottom-10 w-full text-center z-20 px-4">
-//               <div className="bg-black/50 p-6 rounded-xl inline-block text-white">
-//                 <h2 className="text-3xl font-bold mb-2">{ctaData[idx % ctaData.length].title}</h2>
-//                 <p className="mb-4">{ctaData[idx % ctaData.length].description}</p>
-//                 <Link to="/recipes">
-//                   <button className="bg-white text-black px-6 py-2 rounded-full hover:bg-[#00ed64] transition">
-//                     See All Recipes
-//                   </button>
-//                 </Link>
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </Carousel>
-//     </div>
-//   );
-// };
-
-// export default Hero;
 

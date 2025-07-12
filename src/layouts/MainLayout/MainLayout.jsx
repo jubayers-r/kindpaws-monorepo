@@ -1,16 +1,17 @@
-import Navbar from "../../components/navbar/Navbar";
+import Navbar from "../../components/shared/Navbar/Navbar";
 import { Outlet } from "react-router";
 import Footer from "./Footer";
-import Hero from "../../Home/Hero/Hero";
+import Hero from "../../components/homePage/Hero/Hero";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen  flex flex-col relative font-[Laila]">
-      <div className=" 2xl:w-9/11 w-[95%] mx-auto my-7" >
+    <div className="  flex flex-col font-[Laila]">
+      <div className=" 2xl:w-9/11 w-[95%] mx-auto my-7 ">
         <Navbar />
       </div>
-        <Hero />
-      <main className="flex-grow flex flex-col justify-center mb-15  w-8/11 mx-auto ">
+      <Hero />
+      <div className="" />
+      <main className="flex-grow flex flex-col justify-center mb-15 2xl:w-9/11 w-[95%] mx-auto ">
         <Outlet />
       </main>
       <Footer />
