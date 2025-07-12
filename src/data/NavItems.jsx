@@ -1,8 +1,8 @@
 export const NavItems = [
-  { label: 'Home', href: '#' },
-  { label: 'Pet Listing', href: '#' },
-  { label: 'Donation Campaigns', href: '#' },
-  { label: 'Dashboard', href: '#' },
-  { label: 'Contact us', href: '#' },
+  { label: 'Home', href: '/' },
+  { label: 'Pet Listing', href: '/listing' },
+  { label: 'Donation Campaigns', href: '/campagins' },
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Contact us ', href: '/contact' },
 
 ]
