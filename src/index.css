@@ -1,5 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Laila:wght@300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Laila:wght@300;400;500;600;700&family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
+@import "keen-slider/keen-slider.min.css";
 .active{
   color: orange
 }
@@ -72,7 +73,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* changed */
-  --radius: 9999rem;
+  --radius: 0.65rem;
 
   --primary: oklch(72.87% 0.16116 65.931);
   --primary-foreground: oklch(0.985 0 0);
