@@ -36,7 +36,7 @@ const Categories = () => {
     },
   ];
 
-   //   motion/react variables
+  //   motion/react variables
   const circleVariants = {
     initial: {
       scale: 1.1,
@@ -71,12 +71,14 @@ const Categories = () => {
         className={`relative h-[120px] w-[120px] sm:h-[200px] sm:w-[200px] rounded-full flex items-center justify-center font-bold ${color} ${shrink}`}
       >
         {/* CATEGORY TEXT BEHIND IMAGE */}
-        <motion.p
-          variants={textVariants}
-          className="absolute text-white -translate-y-5 text-[50px] sm:text-[80px] font-black tracking-wide pointer-events-none select-none font-[Outfit]"
-        >
-          {category}
-        </motion.p>
+        <div className="absolute inset-0 overflow-hidden rounded-full z-0">
+          <motion.p
+            variants={textVariants}
+            className="  text-white translate-y-2 text-[50px] sm:text-[80px] font-black tracking-wide pointer-events-none select-none font-[Outfit]"
+          >
+            {category}
+          </motion.p>
+        </div>
 
         {/* IMAGE ABOVE TEXT */}
         <motion.img
@@ -87,15 +89,18 @@ const Categories = () => {
           className="scale-[1.1] z-10 object-contain -translate-y-3 sm:-translate-y-5"
         />
       </div>
-        <p className="mt-3 font-bold">{category}<sup>(10)</sup></p>
+      <p className="mt-3 font-bold">
+        {category}
+        <sup>(10)</sup>
+      </p>
     </motion.div>
   );
 
-
-
   return (
     <div className="text-black overflow-hidden ">
-        <h3 className="font-bold sm:text-5xl text-3xl text-center sm:my-20 my-10">Choose Your Type</h3>
+      <h3 className="font-bold sm:text-5xl text-3xl text-center sm:my-20 my-10">
+        Choose Your Type
+      </h3>
       <div className="xl:grid xl:grid-cols-6 xl:gap-5 hidden my-20 sm:my-30 ">
         {petCategories.map((item, i) => (
           <>{circle(i, "", item.color, item.img, item.category)}</>

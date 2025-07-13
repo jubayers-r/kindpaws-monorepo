@@ -48,7 +48,7 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
+
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -73,6 +73,9 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* changed */
+
+  --background: oklch(0.965 0.0114 84.58);
+
   --radius: 0.65rem;
 
   --primary: oklch(72.87% 0.16116 65.931);
