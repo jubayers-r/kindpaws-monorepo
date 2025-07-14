@@ -4,6 +4,9 @@
 .active{
   color: orange
 }
+body {
+  overflow-x: hidden;
+}
 @import "@radix-ui/themes/styles.css";
 @import "tw-animate-css";
 
