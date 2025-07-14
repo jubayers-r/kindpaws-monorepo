@@ -23,4 +23,10 @@ export const FaqItems = [
     content:
       "Life happens — and we get that. If you're unable to care for your adopted pet, you can relist them on the platform or reach out to our support team. We'll help ensure your pet finds another loving home without judgment.",
   },
+  {
+    itemNo: 5,
+    title: "Are the pets vaccinated and healthy?",
+    content:
+      "Health and safety are a top priority. While we encourage all pet owners to provide recent vaccination records, it's always recommended to verify medical documents before adoption. You can also arrange a vet check-up before finalizing the adoption.",
+  },
 ];
