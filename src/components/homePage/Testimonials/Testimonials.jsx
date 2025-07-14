@@ -45,7 +45,7 @@ const Testimonials = () => {
       </div>
 
       {/* Centered content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         <div ref={sliderRef} className="keen-slider">
           {TestimonialItems.map((testimonial) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} />
