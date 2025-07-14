@@ -20,8 +20,7 @@ const FAQ = () => {
         className="relative pointer-events-none pt-20"
       >
         <div>
-        <img src="/src/assets/FAQ/about-img-04.png" alt="dog" className="" />
-
+          <img src="/src/assets/FAQ/about-img-04.png" alt="dog" className="" />
         </div>
         <img
           src="/src/assets/FAQ/paw-bg-pattern-white.png"
@@ -46,6 +45,10 @@ const FAQ = () => {
 
       {/* accordians */}
       <div>
+        <div className="bg-white rounded-full w-fit px-5 py-1 mb-2">
+          <img src="" alt="" />
+          <p className="text-secondary text-sm font-[Roboto]">Any FAQ</p>
+        </div>
         <h1 className="text-3xl sm:text-4xl/tight md:text-5xl/tight font-black text-secondary mb-10">
           Why Choose Our Pet Adoption Community?
         </h1>
