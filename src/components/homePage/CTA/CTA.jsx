@@ -46,7 +46,7 @@ export default function CTA() {
           viewport={{ once: true }}
           className=" lg:-translate-x-50 sm:-translate-x-20 place-items-center text-center sm:place-items-start sm:text-left py-10 sm:py-0"
         >
-          <div className="space-y-5  max-w-md">
+          <div className="space-y-5  max-w-lg">
             <p className="font-light lg:text-5xl text-3xl text-primary">
               Give a Paw🐾
             </p>
