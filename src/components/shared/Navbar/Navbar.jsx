@@ -1,14 +1,12 @@
 import { MoveUpRight } from "lucide-react";
 import Logo from "../../../assets/Logo";
-import { NavItems } from "../../../data/NavItems";
-import { NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
 
 const Navbar = () => {
   return (
-    <div className=" p-4 flex items-center justify-between  ">
+    <div className=" py-4 flex items-center justify-between  ">
       {/* logo/ dropdown+logo on mobile */}
       <div className="">
         <Logo />

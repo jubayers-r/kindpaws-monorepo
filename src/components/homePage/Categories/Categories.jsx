@@ -99,7 +99,7 @@ const Categories = () => {
   return (
     <div className="text-black overflow-hidden ">
       <h3 className="font-bold sm:text-5xl text-3xl text-center sm:mt-20 mt-10">
-        Choose Your Type
+        Find Your Best Match
       </h3>
       <div className="xl:grid xl:grid-cols-6 xl:gap-5 hidden my-20 sm:my-30 ">
         {petCategories.map((item, i) => (
