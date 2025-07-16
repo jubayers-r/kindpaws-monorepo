@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/accordion";
 import { AccordionItemComponent } from "@/components/ui/SharedComponents/AccordionItemComponent";
 import { FaqItems } from "@/data/FaqItems";
+import { PawPrint } from "lucide-react";
 
 const FAQ = () => {
   return (
@@ -46,8 +47,12 @@ const FAQ = () => {
       {/* accordians */}
       <div>
         <div className="bg-white rounded-full w-fit px-5 py-1 mb-2">
-          <img src="" alt="" />
-          <p className="text-secondary text-sm font-[Roboto]">Any FAQ</p>
+          <p className="text-secondary text-sm font-[Roboto] flex items-center justify-center gap-2">
+            <PawPrint className="text-primary" />
+            <span className="uppercase text-sm font-semibold text-primary">
+              Any FAQ
+            </span>{" "}
+          </p>
         </div>
         <h1 className="text-3xl sm:text-4xl/tight md:text-5xl/tight font-black text-secondary mb-10">
           Why Choose Our Pet Adoption Community?
