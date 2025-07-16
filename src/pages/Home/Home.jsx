@@ -1,6 +1,7 @@
 import Categories from "@/components/homePage/Categories/Categories";
 import CTA from "@/components/homePage/CTA/CTA";
 import FAQ from "@/components/homePage/FAQ/FAQ";
+import Newsletter from "@/components/homePage/Newsletter/Newsletter";
 import Testimonials from "@/components/homePage/Testimonials/Testimonials";
 
 import React from "react";
@@ -11,6 +12,7 @@ const Home = () => {
       <Categories />
       <CTA />
       <Testimonials />
+      <Newsletter/>
       <FAQ />
     </div>
   );
