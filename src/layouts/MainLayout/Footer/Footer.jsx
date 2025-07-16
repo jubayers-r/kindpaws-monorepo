@@ -1,5 +1,5 @@
 import QuickLinks from "./QuickLinks";
-import FooterNewsletter from "./FooterNewsletter";
+import FooterInput from "./FooterInput";
 
 const Footer = () => {
   const openingHour = (days, time) => (
@@ -16,7 +16,7 @@ const Footer = () => {
     <div className="bg-secondary text-white gap-5  ">
       <div className="mx-auto 2xl:w-9/11 w-[95%] grid grid-cols-3 py-20 gap-10">
         {/* left */}
-        <FooterNewsletter />
+        <FooterInput />
         {/* center (quicklinks) */}
         <QuickLinks />
 

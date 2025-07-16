@@ -2,7 +2,7 @@ import Logo from "@/assets/Logo";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 
-const FooterNewsletter = () => {
+const FooterInput = () => {
   return (
     <div className="space-y-5">
       <Logo />
@@ -15,7 +15,7 @@ const FooterNewsletter = () => {
         {/* Input */}
         <Input
           type="email"
-          placeholder="Enter your email"
+          placeholder="Ask your Question"
           className="px-5 py-6 rounded-full bg-transparent text-white !placeholder-gray-400  "
         />
         {/* Send Icon on the left */}
@@ -27,4 +27,4 @@ const FooterNewsletter = () => {
   );
 };
 
-export default FooterNewsletter;
+export default FooterInput;
