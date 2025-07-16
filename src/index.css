@@ -1,12 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Laila&family=Roboto:wght@300;400;500;600;700&family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Laila&family=Roboto&family=Paytone+One:wght@300;400;500;600;700&family=Outfit:wght@100..900&display=swap");
 @import "tailwindcss";
 @import "keen-slider/keen-slider.min.css";
-.active{
-  color: orange
+.active {
+  color: orange;
 }
 body {
   overflow-x: hidden;
 }
+
+input::placeholder {
+  font-size: 12px;
+}
+
 @import "@radix-ui/themes/styles.css";
 @import "tw-animate-css";
 
@@ -51,16 +56,12 @@ body {
 }
 
 :root {
-
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -94,7 +95,10 @@ body {
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
 
+  --ring: oklch(72.87% 0.16116 65.931);
 
+  --border: oklch(63.009% 0.00007 271.152 / 0.406);
+  --input: oklch(63.009% 0.00007 271.152 / 0.406);
 }
 
 .dark {
