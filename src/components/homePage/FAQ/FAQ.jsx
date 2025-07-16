@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AccordionItemComponent } from "@/components/ui/tinyParts/AccordionItemComponent";
+import { AccordionItemComponent } from "@/components/ui/SharedComponents/AccordionItemComponent";
 import { FaqItems } from "@/data/FaqItems";
 
 const FAQ = () => {
