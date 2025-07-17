@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../layouts/MainLayout/MainLayout";
 import Home from "@/pages/Home/Home";
-import PetList from "@/pages/PetList/PetList";
+import PetList from "@/pages/Adopt/Adopt";
+import Campaigns from "@/pages/Campaigns/Campaigns";
+import Adopt from "@/pages/Adopt/Adopt";
 
 export const router = createBrowserRouter([
   {
@@ -13,8 +15,12 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "pet-listing",
-        Component: PetList,
+        path: "adopt",
+        Component: Adopt,
+      },
+      {
+        path: "donation-campaigns",
+        Component: Campaigns,
       },
     ],
   },
