@@ -1,10 +1,20 @@
 import { motion, useAnimation } from "motion/react";
 import ShinyImage from "@/components/shared/CardComponent/ShinyImages";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import PetCardComponent from "./PetCardDescription";
+import CampaignCardDescription from "./CampaignCardDescription";
 
-const CardComponent = ({ pet }) => {
-  const { image, name } = pet;
+const CardComponent = ({ data }) => {
+  const { image, name } = data;
+  const location = useLocation();
+
+  let content = null;
+
+  if (location.pathname === "/adopt") {
+    content = <PetCardComponent pet={data} />;
+  } else {
+    content = <CampaignCardDescription campaign={data} />;
+  }
 
   // Animation controls
   const shineControls = useAnimation();
@@ -82,7 +92,8 @@ const CardComponent = ({ pet }) => {
         </div>
 
         {/* Name + Gender + Location + Description */}
-        <PetCardComponent pet={pet} />
+
+        {content}
       </motion.div>
     </Link>
   );
