@@ -3,6 +3,7 @@ import {
   FaXTwitter,
   FaInstagram,
   FaPinterestP,
+  FaLinkedinIn,
 } from "react-icons/fa6";
 
 const CopyrightComponent = () => {
@@ -20,17 +21,17 @@ const CopyrightComponent = () => {
 
         {/* Social Icons */}
         <div className="flex items-center gap-4">
-          <a href="https://facebook.com/jubayers.r" target="_blank" rel="noreferrer" className={wrapperClass}>
-            <FaFacebookF className={iconClass} />
+          <a href="https://linkedin.com/in/jubayer-shikder" target="_blank" rel="noreferrer" className={wrapperClass}>
+            <FaLinkedinIn className={iconClass} />
           </a>
           <a href="https://x.com/jubayers_r" target="_blank" rel="noreferrer" className={wrapperClass}>
             <FaXTwitter className={iconClass} />
           </a>
+          <a href="https://facebook.com/jubayers.r" target="_blank" rel="noreferrer" className={wrapperClass}>
+            <FaFacebookF className={iconClass} />
+          </a>
           <a href="https://instagram.com" target="_blank" rel="noreferrer" className={wrapperClass}>
             <FaInstagram className={iconClass} />
-          </a>
-          <a href="https://pinterest.com" target="_blank" rel="noreferrer" className={wrapperClass}>
-            <FaPinterestP className={iconClass} />
           </a>
         </div>
       </div>

@@ -4,6 +4,7 @@ import Home from "@/pages/Home/Home";
 import PetList from "@/pages/Adopt/Adopt";
 import Campaigns from "@/pages/Campaigns/Campaigns";
 import Adopt from "@/pages/Adopt/Adopt";
+import ContactUs from "@/pages/ContactUs/ContactUs";
 
 export const router = createBrowserRouter([
   {
@@ -19,8 +20,12 @@ export const router = createBrowserRouter([
         Component: Adopt,
       },
       {
-        path: "donation-campaigns",
+        path: "campaigns",
         Component: Campaigns,
+      },
+      {
+        path: "contact-us",
+        Component: ContactUs,
       },
     ],
   },
