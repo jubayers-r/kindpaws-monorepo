@@ -1,5 +1,5 @@
 import { MoveUpRight } from "lucide-react";
-import Logo from "../../../assets/Logo";
+import {Logo} from "../../../assets/Logo";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";

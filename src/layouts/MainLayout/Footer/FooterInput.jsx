@@ -1,4 +1,4 @@
-import Logo from "@/assets/Logo";
+import { Logo } from "@/assets/Logo";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 
