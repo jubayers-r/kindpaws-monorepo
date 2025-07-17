@@ -1,9 +1,6 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AccordionItemComponent } from "@/components/shared/AccordionItemComponent";
 import { FaqItems } from "@/data/FaqItems";

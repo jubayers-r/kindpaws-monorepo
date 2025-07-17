@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { MapPin, CalendarDays } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const CampaignCardDescription = ({ campaign }) => {
   const {
