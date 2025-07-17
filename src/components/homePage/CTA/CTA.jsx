@@ -59,7 +59,7 @@ export default function CTA() {
               impact — one paw at a time.
             </p>
           </div>
-          <Link to="/pet-listing">
+          <Link to="/adopt">
             <Button className="px-5 py-5 rounded-full lg:text-xl  " size="xl">
               Find Your New Best Friend
               <MoveUpRight />

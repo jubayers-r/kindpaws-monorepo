@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AccordionItemComponent } from "@/components/ui/SharedComponents/AccordionItemComponent";
+import { AccordionItemComponent } from "@/components/shared/AccordionItemComponent";
 import { FaqItems } from "@/data/FaqItems";
 import { PawPrint } from "lucide-react";
 
