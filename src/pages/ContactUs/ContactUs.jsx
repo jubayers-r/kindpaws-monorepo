@@ -117,7 +117,7 @@ export default function ContactUs() {
           <Card className="bg-muted/50 border-none shadow-sm">
             <CardContent className="p-6 space-y-6">
               <h3 className="text-xl font-semibold text-primary">
-                Post a comment
+                Your queries are important to us
               </h3>
               <p className="text-sm text-muted-foreground">
                 Your email address will not be published. Required fields are
