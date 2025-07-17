@@ -1,4 +1,4 @@
-import AboutUs from "@/components/homePage/AboutUs/AbutUs";
+import AboutUs from "@/components/homePage/AboutUs/AboutUs";
 import Categories from "@/components/homePage/Categories/Categories";
 import CTA from "@/components/homePage/CTA/CTA";
 import FAQ from "@/components/homePage/FAQ/FAQ";
