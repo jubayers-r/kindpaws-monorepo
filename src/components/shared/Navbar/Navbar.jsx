@@ -1,5 +1,5 @@
 import { MoveUpRight } from "lucide-react";
-import {Logo} from "../../../assets/Logo";
+import { Logo } from "../../../assets/Logo";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
@@ -19,19 +19,22 @@ const Navbar = () => {
       {/* navend starts */}
       <div className=" flex items-center gap-4">
         {/* <Button className="btn">Toggle</Button> */}
-
-        <p className=" text-white border-b hover:brightness-90 ">Register</p>
-        <Button className=" py-4 hover:bg-white hover:text-black ">
-          Login
-        </Button>
+        <Link to="/register">
+          <p className=" text-white border-b hover:brightness-90 ">Register</p>
+        </Link>
+        <Link to="/login">
+          <Button className=" py-4 hover:bg-white hover:text-black ">
+            Login
+          </Button>
+        </Link>
         <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60" />
         <Link to="/contact">
-        <Button
-          variant="none"
-          className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 rounded-full bg-white hover:bg-amber-500 text-black hover:text-white"
-        >
-          Get In Touch <MoveUpRight />
-        </Button>
+          <Button
+            variant="none"
+            className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 rounded-full bg-white hover:bg-amber-500 text-black hover:text-white"
+          >
+            Get In Touch <MoveUpRight />
+          </Button>
         </Link>
 
         <div className="xl:hidden text-white ">

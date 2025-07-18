@@ -5,6 +5,9 @@ import PetList from "@/pages/Adopt/Adopt";
 import Campaigns from "@/pages/Campaigns/Campaigns";
 import Adopt from "@/pages/Adopt/Adopt";
 import ContactUs from "@/pages/ContactUs/ContactUs";
+import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
+import Login from "@/pages/Login/Login";
+import Register from "@/pages/Register/Register";
 
 export const router = createBrowserRouter([
   {
@@ -28,5 +31,19 @@ export const router = createBrowserRouter([
         Component: ContactUs,
       },
     ],
+  },
+  {
+    path: "/",
+    Component: AuthLayout,
+    children: [
+      {
+        path: "login",
+        Component: Login
+      },
+      {
+        path: "register",
+        Component: Register
+      },
+    ]
   },
 ]);
