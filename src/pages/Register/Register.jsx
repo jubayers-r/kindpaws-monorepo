@@ -84,7 +84,7 @@ export default function Register() {
                     className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
                     onClick={() => googleLogin()}
                   >
-                    <FaGoogle className="w-5 h-5 text-[#EA4335]" />
+                    <FaGoogle className="w-5 h-5 text-primary" />
                     Continue with Google
                   </Button>
                 </div>
