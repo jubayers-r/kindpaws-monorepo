@@ -15,22 +15,38 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm();
   const { googleLogin, setUser, stateData } = use(AuthContext);
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    logIn(data.email, data.password)
-      .then((userCredential) => {
-         setUser(userCredential);
-        navigate(stateData ? stateData : "/")
-      })
-      .catch((error) => {
-        console.log(error);
+  const onSubmit = async (data) => {
+    try {
+      await logIn(data.email, data.password).then((userCredential) => {
+        setUser(userCredential);
+        navigate(stateData ? stateData : "/");
       });
+    } catch (error) {
+      // Handle Firebase error
+      if (error.code === "auth/wrong-password") {
+        setError("password", {
+          type: "manual",
+          message: "Incorrect password",
+        });
+      } else if (error.code === "auth/user-not-found") {
+        setError("email", {
+          type: "manual",
+          message: "No user found with this email",
+        });
+      } else {
+        setError("password", {
+          type: "manual",
+          message: "Authentication failed",
+        });
+      }
+    }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/20">
       <div className="  max-w-md 2xl:w-9/11 w-[95%] mx-auto">

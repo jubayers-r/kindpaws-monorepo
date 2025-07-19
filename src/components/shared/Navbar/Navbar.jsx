@@ -4,8 +4,28 @@ import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
 import { Link } from "react-router";
+import { use } from "react";
+import { AuthContext } from "@/context/auth/AuthContext";
 
 const Navbar = () => {
+  const { user, logOut } = use(AuthContext);
+
+  console.log(user);
+
+  const loginRegister = (
+    <>
+      {" "}
+      <Link to="/register">
+        <p className=" text-white border-b hover:brightness-90 ">Register</p>
+      </Link>
+      <Link to="/login">
+        <Button className=" py-4 hover:bg-white hover:text-black ">
+          Login
+        </Button>
+      </Link>
+    </>
+  );
+
   return (
     <div className=" py-4 flex items-center justify-between  ">
       {/* logo/ dropdown+logo on mobile */}
@@ -18,15 +38,18 @@ const Navbar = () => {
       </div>
       {/* navend starts */}
       <div className=" flex items-center gap-4">
-        {/* <Button className="btn">Toggle</Button> */}
-        <Link to="/register">
-          <p className=" text-white border-b hover:brightness-90 ">Register</p>
-        </Link>
-        <Link to="/login">
-          <Button className=" py-4 hover:bg-white hover:text-black ">
-            Login
+        {user === null ? (
+          <>{loginRegister}</>
+        ) : (
+          <Button
+            onClick={logOut}
+            className=" py-4 hover:bg-white hover:text-black "
+          >
+            Logout
           </Button>
-        </Link>
+        )}
+        {/* <Button className="btn">Toggle</Button> */}
+
         <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60" />
         <Link to="/contact">
           <Button
