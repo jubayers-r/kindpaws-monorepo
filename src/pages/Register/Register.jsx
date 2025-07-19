@@ -6,10 +6,67 @@ import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
 import { FaGoogle } from "react-icons/fa6";
 import { use } from "react";
 import { AuthContext } from "@/context/auth/AuthContext";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import { updateProfile } from "firebase/auth";
+import { auth } from "@/firebase/firebase.init";
+import axios from "axios";
 
 export default function Register() {
-  const { googleLogin } = use(AuthContext);
+  const { googleLogin, createUser, stateData, setUser } = use(AuthContext);
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const imageFile = data.photo[0];
+      const imageUrl = await uploadToImgBB(imageFile);
+
+      const { user } = await createUser(data.email, data.password).then(() => {
+        console.log(user);
+        setUser(user);
+        navigate(stateData ? stateData : "/");
+      });
+
+      await updateProfile(user, {
+        displayName: data.name,
+        photoURL: imageUrl,
+      });
+
+      console.log("✅ User created:", {
+        name: data.name,
+        email: data.email,
+        imageUrl,
+      });
+
+      // Optionally: redirect, toast, etc.
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const uploadToImgBB = async (imageFile) => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    const imgUpload = `https://api.imgbb.com/1/upload?key=${
+      import.meta.env.VITE_imgbb_apiKey
+    }`;
+
+    const res = await axios.post(imgUpload, formData);
+
+    const data = await res.data;
+
+    if (data.success) {
+      return data.data.url; // The direct image URL
+    } else {
+      throw new Error("Image upload failed");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/20">
@@ -24,39 +81,77 @@ export default function Register() {
             <h2 className="text-2xl font-bold text-center text-primary mb-6">
               Create an Account
             </h2>
-
             <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Full Name</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-2 text-muted-foreground h-5 w-5" />
-                  <Input
-                    type="text"
-                    placeholder="Your full name"
-                    className="pl-10"
-                    required
-                    autoComplete="name"
-                  />
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div>
+                  {/* name */}
+                  <label className="text-sm font-medium">Full Name</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-2 text-muted-foreground h-5 w-5" />
+                    <Input
+                      type="text"
+                      placeholder="Your full name"
+                      className="pl-10"
+                      autoComplete="name"
+                      {...register("name", { required: "Name is required" })}
+                    />
+                  </div>
+                  {errors.name && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium">Email</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-2 text-muted-foreground h-5 w-5" />
+                {/* image upload */}
+                <div>
+                  <label className="text-sm font-medium">Profile Picture</label>
                   <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    className="pl-10"
-                    required
-                    autoComplete="email"
+                    type="file"
+                    accept="image/*"
+                    {...register("photo", {
+                      required: "Profile picture is required",
+                      validate: {
+                        fileType: (fileList) =>
+                          fileList?.[0]?.type?.startsWith("image/") ||
+                          "Only image files are allowed",
+                      },
+                    })}
                   />
+                  {errors.photo && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.photo.message}
+                    </p>
+                  )}
                 </div>
-              </div>
+                {/* email */}
+                <div>
+                  <label className="text-sm font-medium">Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-2 text-muted-foreground h-5 w-5" />
+                    <Input
+                      type="email"
+                      placeholder="you@example.com"
+                      className="pl-10"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Enter a valid email",
+                        },
+                      })}
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                {/* passoword */}
+                <PasswordInput register={register} errors={errors} />
 
-              <PasswordInput />
-
-              <Button className="w-full mt-4">Register</Button>
+                <Button className="w-full mt-4">Register</Button>
+              </form>
 
               <p className="text-sm text-center mt-4">
                 Already have an account?{" "}
@@ -80,6 +175,7 @@ export default function Register() {
 
                 <div className="flex justify-center">
                   <Button
+                    type="submit"
                     variant="outline"
                     className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
                     onClick={() => googleLogin()}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Lock, Eye, EyeOff } from "lucide-react";
 
-const PasswordInput = () => {
+const PasswordInput = ({ register, errors }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -14,7 +14,13 @@ const PasswordInput = () => {
           type={showPassword ? "text" : "password"}
           placeholder="••••••••"
           className="pl-10"
-          required
+          {...register("password", {
+            required: "Password is required",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters",
+            },
+          })}
         />
         <button
           type="button"
@@ -28,6 +34,9 @@ const PasswordInput = () => {
           )}
         </button>
       </div>
+      {errors?.password && (
+        <p className="text-sm text-red-500 mt-1">{errors.password?.message}</p>
+      )}
     </div>
   );
 };

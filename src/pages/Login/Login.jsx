@@ -6,10 +6,30 @@ import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
 import { FaGoogle } from "react-icons/fa6";
 import { use } from "react";
 import { AuthContext } from "@/context/auth/AuthContext";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
 
 export default function Login() {
-  const { googleLogin } = use(AuthContext);
+  const { logIn } = use(AuthContext);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { googleLogin, setUser, stateData } = use(AuthContext);
+  const navigate = useNavigate();
+
+  const onSubmit = (data) => {
+    logIn(data.email, data.password)
+      .then((userCredential) => {
+         setUser(userCredential);
+        navigate(stateData ? stateData : "/")
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/20">
@@ -26,8 +46,8 @@ export default function Login() {
               Welcome Back
             </h2>
 
-            <div className="space-y-4">
-              <div>
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <label className="text-sm font-medium">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-2 text-muted-foreground h-5 w-5" />
@@ -35,14 +55,27 @@ export default function Login() {
                     type="email"
                     placeholder="you@example.com"
                     className="pl-10"
-                    required
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Enter a valid email",
+                      },
+                    })}
                   />
+                  {errors.email && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
-              </div>
 
-              <PasswordInput />
+                <PasswordInput register={register} errors={errors} />
 
-              <Button className="w-full mt-4">Login</Button>
+                <Button type="submit" className="w-full mt-4">
+                  Login
+                </Button>
+              </form>
 
               <p className="text-sm text-center mt-4">
                 New to PawLink?{" "}
