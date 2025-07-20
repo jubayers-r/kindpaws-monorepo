@@ -6,8 +6,9 @@ import clsx from "clsx";
 import { NavItems } from "@/data/NavItems";
 import { LogoBlack } from "@/assets/Logo";
 import { dashboardNavItems } from "@/components/dashboard/DashboardNavItems";
+import DashboardTopNavbar from "@/components/dashboard/DashboardTopNavbar/DashboardTopNavbar";
 
-const home = (
+export const home = (
   <Link to="/">
     <Button className="mx-2">Go back to home</Button>
   </Link>
@@ -63,6 +64,7 @@ const DashboardLayout = () => {
         {home}
       </aside>
       <main className="sm:ml-64">
+        <DashboardTopNavbar/>
         <Outlet/>
       </main>
     </div>
