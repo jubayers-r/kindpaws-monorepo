@@ -16,7 +16,7 @@ const CopyrightComponent = () => {
       <div className="w-[95%] mx-auto 2xl:w-9/11 flex flex-col md:flex-row justify-between items-center py-6 gap-4">
         {/* Text */}
         <p className="text-center md:text-left">
-          © 2024 <span className="text-primary">KindPaws</span>. All rights reserved.
+          © 2025 <span className="text-primary">KindPaws</span>. All rights reserved.
         </p>
 
         {/* Social Icons */}

@@ -51,7 +51,7 @@ const Navbar = () => {
         {/* <Button className="btn">Toggle</Button> */}
 
         <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60" />
-        <Link to="/contact">
+        <Link to="/contact-us">
           <Button
             variant="none"
             className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 rounded-full bg-white hover:bg-amber-500 text-black hover:text-white"
