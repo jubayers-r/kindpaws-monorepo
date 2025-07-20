@@ -65,7 +65,7 @@ const socialIcons = [
 
 export default function ContactUs() {
   return (
-    <section className="w-full bg-white py-16 px-6 md:px-12">
+    <section className="w-full  py-16 px-6 md:px-12">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-start">
         {/* Left Side */}
         <div>
@@ -114,7 +114,7 @@ export default function ContactUs() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Card className="bg-muted/50 border-none shadow-sm">
+          <Card className="bg-white/90 border-none shadow-sm">
             <CardContent className="p-6 space-y-6">
               <h3 className="text-xl font-semibold text-primary">
                 Your queries are important to us
