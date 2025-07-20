@@ -5,10 +5,34 @@ import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoBlack } from "@/assets/Logo";
 
-function Sheet({ ...props }) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />;
-}
+function Sheet({ open: controlledOpen, onOpenChange, ...props }) {
+  const [open, setOpen] = React.useState(controlledOpen ?? false);
 
+  // Handle media query to auto-close on desktop
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 640px)");
+    const handler = (e) => {
+      if (e.matches) {
+        setOpen(false);
+        onOpenChange?.(false); // Notify parent if controlled
+      }
+    };
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, [onOpenChange]);
+
+  return (
+    <SheetPrimitive.Root
+      open={open}
+      onOpenChange={(val) => {
+        setOpen(val);
+        onOpenChange?.(val);
+      }}
+      data-slot="sheet"
+      {...props}
+    />
+  );
+}
 function SheetTrigger({ ...props }) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }

@@ -8,6 +8,9 @@ import ContactUs from "@/pages/ContactUs/ContactUs";
 import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
 import Login from "@/pages/Login/Login";
 import Register from "@/pages/Register/Register";
+import Dashboard from "@/pages/Dashboard/Dashboard";
+import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
+import PrivetRoute from "./PrivetRoute";
 
 export const router = createBrowserRouter([
   {
@@ -38,12 +41,26 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "login",
-        Component: Login
+        Component: Login,
       },
       {
         path: "register",
-        Component: Register
+        Component: Register,
       },
-    ]
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivetRoute>
+        <DashboardLayout />
+      </PrivetRoute>
+    ),
+    children: [
+      {
+        index: true,
+        Component: Dashboard,
+      },
+    ],
   },
 ]);
