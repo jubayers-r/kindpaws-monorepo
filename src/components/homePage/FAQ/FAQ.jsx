@@ -1,10 +1,11 @@
 import { motion } from "motion/react";
-import {
-  Accordion,
-} from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import { AccordionItemComponent } from "@/components/shared/AccordionItemComponent";
 import { FaqItems } from "@/data/FaqItems";
 import { PawPrint } from "lucide-react";
+import boneImg from "/src/assets/cta/bone-img.png";
+import pawWhite from "/src/assets/FAQ/paw-bg-pattern-white.png";
+import about from "/src/assets/FAQ/about-img-04.png";
 
 const FAQ = () => {
   return (
@@ -18,15 +19,11 @@ const FAQ = () => {
         className="relative pointer-events-none pt-20"
       >
         <div>
-          <img src="/src/assets/FAQ/about-img-04.png" alt="dog" className="" />
+          <img src={about} alt="dog" className="" />
         </div>
-        <img
-          src="/src/assets/FAQ/paw-bg-pattern-white.png"
-          alt="bg-paw"
-          className="absolute -top-0 -z-1"
-        />
+        <img src={pawWhite} alt="bg-paw" className="absolute -top-0 -z-1" />
         <motion.img
-          src="/src/assets/cta/bone-img.png"
+          src={boneImg}
           alt="bone"
           className="absolute w-15 sm:w-20 top-10 sm:top-50 sm:right-10 right-5"
           animate={{

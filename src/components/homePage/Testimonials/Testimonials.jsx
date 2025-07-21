@@ -4,6 +4,7 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useRef } from "react";
 import { TestimonialItems } from "@/data/TestimonialItems";
+import testiBg from "/src/assets/testimonial/testimonial-bg.jpg"
 
 const Testimonials = () => {
   const timer = useRef(null);
@@ -38,7 +39,7 @@ const Testimonials = () => {
       {/* Full-width background image that escapes container */}
       <div className="absolute top-0 left-1/2 w-screen -translate-x-1/2 h-full -z-10">
         <img
-          src="/src/assets/testimonial/testimonial-bg.jpg"
+          src={testiBg}
           alt="Testimonial background"
           className="w-full h-full object-cover opacity-10"
         />

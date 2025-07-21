@@ -9,6 +9,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
+import titlebarBg from "/src/assets/heroElse/titlebar-bg.jpg"
+
 const HeroElseComponent = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/").filter(Boolean);
@@ -16,7 +18,7 @@ const HeroElseComponent = () => {
   return (
     <div className="-mt-35 -z-10 w-full relative sm:mb-20 mb-10">
       <img
-        src="/src/assets/heroElse/titlebar-bg.jpg"
+        src={titlebarBg}
         alt=""
         className="object-cover h-[300px] w-full"
       />

@@ -1,41 +1,23 @@
 import React from "react";
 import { motion } from "motion/react";
 
+import reptilesImg from '/src/assets/categories/reptiles.png';
+import fishImg from '/src/assets/categories/fish.png';
+import catImg from '/src/assets/categories/cat.png';
+import dogImg from '/src/assets/categories/dog.png';
+import parrotImg from '/src/assets/categories/parrot.png';
+import frogImg from '/src/assets/categories/frog.png';
+
 const Categories = () => {
   // pet category info array
-  const petCategories = [
-    {
-      img: "/src/assets/categories/reptiles.png",
-      category: "Reptile",
-      color: "bg-[#e2f1d2]",
-    },
-    {
-      img: "/src/assets/categories/fish.png",
-      category: "Fish",
-      color: "bg-[#f7efe2]",
-    },
-    {
-      img: "/src/assets/categories/cat.png",
-      category: "Cats",
-      color: "bg-[#f2dcdc]",
-    },
-    {
-      img: "/src/assets/categories/dog.png",
-      category: "Dogs",
-      color: "bg-[#f3e9e0]",
-    },
-    {
-      img: "/src/assets/categories/parrot.png",
-      category: "Birds",
-      color: "bg-[#eeeeee]",
-    },
-    {
-      img: "/src/assets/categories/frog.png",
-      category: "Frog",
-      color: "bg-[#f7efe2]",
-    },
-  ];
-
+const petCategories = [
+  { img: reptilesImg, category: "Reptile", color: "bg-[#e2f1d2]" },
+  { img: fishImg, category: "Fish", color: "bg-[#f7efe2]" },
+  { img: catImg, category: "Cats", color: "bg-[#f2dcdc]" },
+  { img: dogImg, category: "Dogs", color: "bg-[#f3e9e0]" },
+  { img: parrotImg, category: "Birds", color: "bg-[#eeeeee]" },
+  { img: frogImg, category: "Frog", color: "bg-[#f7efe2]" },
+];
   //   motion/react variables
   const circleVariants = {
     initial: {

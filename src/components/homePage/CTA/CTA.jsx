@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import { MoveUpRight } from "lucide-react";
 import { Link } from "react-router";
+import bgImg from '/src/assets/cta/bg-img.png';
+import pawBgPattern from '/src/assets/cta/paw-bg-pattern.png';
+import boneImg from '/src/assets/cta/bone-img.png';
+import pawImg from '/src/assets/cta/paw-img.png';
+
 
 export default function CTA() {
   return (
@@ -16,14 +21,14 @@ export default function CTA() {
           viewport={{ once: true }}
           className="col-span-2 relative pointer-events-none sm:block hidden"
         >
-          <img src="/src/assets/cta/bg-img.png" alt="dog" className="" />
+          <img src={bgImg} alt="dog" className="" />
           <img
-            src="/src/assets/cta/paw-bg-pattern.png"
+            src={pawBgPattern}
             alt="bg-paw"
             className="absolute top-20 "
           />
           <motion.img
-            src="/src/assets/cta/bone-img.png"
+            src={boneImg}
             alt="bone"
             className="absolute w-15 md:w-20  xl:top-30 xl:right-80 lg:top-30 lg:right-60 md:right-45 right-40 top-20 "
             animate={{
@@ -69,7 +74,7 @@ export default function CTA() {
 
         {/* absolute part */}
         <motion.img
-          src="/src/assets/cta/paw-img.png"
+          src={pawImg}
           alt="bg-paw"
           className="pointer-events-none bottom-5 right-5 lg:flex hidden   absolute"
           animate={{
