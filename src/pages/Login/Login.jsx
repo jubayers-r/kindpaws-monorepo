@@ -8,6 +8,8 @@ import { use } from "react";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { auth } from "@/firebase/firebase.init";
 
 export default function Login() {
   const { logIn } = use(AuthContext);
@@ -18,15 +20,25 @@ export default function Login() {
     setError,
     formState: { errors },
   } = useForm();
-  const { googleLogin, setUser, stateData } = use(AuthContext);
+  const { googleLogin, stateData } = use(AuthContext);
   const navigate = useNavigate();
+
+  const updateLastLogin = async (userId) => {
+    try {
+      await axios.patch(`http://localhost:8000/api/users/last-login/${userId}`);
+    } catch (err) {
+      console.error("❌ Failed to update last login:", err);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
-      await logIn(data.email, data.password).then((userCredential) => {
-        setUser(userCredential);
-        navigate(stateData ? stateData : "/");
-      });
+      await logIn(data.email, data.password);
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        await updateLastLogin(currentUser.uid);
+      }
+      navigate(stateData ? stateData : "/");
     } catch (error) {
       // Handle Firebase error
       if (error.code === "auth/wrong-password") {

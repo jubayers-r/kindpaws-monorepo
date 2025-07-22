@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { User, Mail } from "lucide-react";
 import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
 import { FaGoogle } from "react-icons/fa6";
-import { use } from "react";
+import { use, useState } from "react";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
@@ -20,23 +20,36 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [submitError, setSubmitError] = useState("");
 
   const onSubmit = async (data) => {
     try {
-      const imageFile = data.photo[0];
-      const imageUrl = await uploadToImgBB(imageFile);
+      const imageFile = data.photo?.[0];
+      const imageUrl = imageFile && (await uploadToImgBB(imageFile));
 
-      const { user } = await createUser(data.email, data.password).then(() => {
-        console.log(user);
-        setUser(user);
-        navigate(stateData ? stateData : "/");
-      });
+      const { user } = await createUser(data.email, data.password);
+      setUser(user);
+      navigate(stateData ? stateData : "/");
 
       await updateProfile(user, {
         displayName: data.name,
-        photoURL: imageUrl,
+        ...(imageUrl
+          ? { photoURL: imageUrl }
+          : {
+              photoURL: "https://img.icons8.com/?size=256&id=89245&format=png",
+            }),
       });
 
+      const userDB = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        image: user.photoURL,
+        role: "user",
+        lastLoginAt: new Date(),
+      };
+
+      await axios.post("http://localhost:8000/api/users/register", userDB);
       console.log("✅ User created:", {
         name: data.name,
         email: data.email,
@@ -46,6 +59,13 @@ export default function Register() {
       // Optionally: redirect, toast, etc.
     } catch (err) {
       console.error(err);
+
+      // Show Firebase-friendly message
+      if (err.code === "auth/email-already-in-use") {
+        setSubmitError("This email is already registered. Please use another.");
+      } else {
+        setSubmitError("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -109,11 +129,14 @@ export default function Register() {
                     type="file"
                     accept="image/*"
                     {...register("photo", {
-                      required: "Profile picture is required",
                       validate: {
-                        fileType: (fileList) =>
-                          fileList?.[0]?.type?.startsWith("image/") ||
-                          "Only image files are allowed",
+                        fileType: (fileList) => {
+                          if (!fileList || fileList.length === 0) return true; // ✅ no file = valid
+                          return (
+                            fileList[0].type.startsWith("image/") ||
+                            "Only image files are allowed"
+                          );
+                        },
                       },
                     })}
                   />
@@ -149,6 +172,9 @@ export default function Register() {
                 </div>
                 {/* passoword */}
                 <PasswordInput register={register} errors={errors} />
+                {submitError && (
+                  <p className="text-sm text-red-500 mt-1">{submitError}</p>
+                )}
 
                 <Button className="w-full mt-4">Register</Button>
               </form>
