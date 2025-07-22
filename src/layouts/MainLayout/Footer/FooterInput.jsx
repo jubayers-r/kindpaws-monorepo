@@ -5,8 +5,11 @@ import { Send } from "lucide-react";
 const FooterInput = () => {
   return (
     <div className="space-y-5">
+      <div className="flex justify-center md:justify-start">
+
       <Logo />
-      <p>
+      </div>
+      <p className="text-center md:text-left">
         We're here to help you give pets a better life — whether you're a
         first-time adopter or ready to welcome another friend into your home.
         Have questions? We're just a paw away.

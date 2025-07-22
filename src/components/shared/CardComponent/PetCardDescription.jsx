@@ -27,7 +27,7 @@ const PetCardDescription = ({ pet }) => {
           <span>{location}</span>
         </div>
       </div>
-      <p className="text-sm text-gray-700">{shortDescription}</p>
+      <p className="text-sm text-gray-700 h-8">{shortDescription}</p>
 
       <motion.div
         whileHover={{ scale: 1.03 }}
