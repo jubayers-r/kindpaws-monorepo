@@ -10,6 +10,23 @@ router.post("/register", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+router.patch("/last-login/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
 
+    const updatedUser = await User.findOneAndUpdate(
+      { uid: userId },
+      { lastLoginAt: new Date() },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 export default router;
