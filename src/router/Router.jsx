@@ -24,6 +24,7 @@ export const router = createBrowserRouter([
       {
         path: "adopt",
         Component: Adopt,
+        loader: async() => await fetch("http://localhost:8000/api/pets")
       },
       {
         path: "campaigns",
