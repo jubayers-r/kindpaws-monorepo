@@ -7,15 +7,42 @@ import { NavItems } from "@/data/NavItems";
 import { LogoBlack } from "@/assets/Logo";
 import { dashboardNavItems } from "@/components/dashboard/DashboardNavItems";
 import DashboardTopNavbar from "@/components/dashboard/DashboardTopNavbar/DashboardTopNavbar";
-
-export const home = (
-  <Link to="/">
-    <Button className="mx-2">Go back to home</Button>
-  </Link>
-);
+import { use, useEffect, useState } from "react";
+import { AuthContext } from "@/context/auth/AuthContext";
+import axios from "axios";
 
 const DashboardLayout = () => {
+  const home = (
+    <Link to="/">
+      <Button className="mx-2">Go back to home</Button>
+    </Link>
+  );
   const location = useLocation();
+
+  const { user } = use(AuthContext);
+
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+    const fetchUserRole = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/users/role", {
+          params: { uid: user.uid },
+        });
+        setRole(res.data.role);
+      } catch (err) {
+        console.error("Axios error:", err);
+      }
+    };
+
+    fetchUserRole();
+  }, [user?.uid]);
+
+  const filteredNavItems = dashboardNavItems.filter((item) =>
+    item.roles.includes(role)
+  );
+
   return (
     <div>
       {/* Mobile: Only show on small screens */}
@@ -28,7 +55,7 @@ const DashboardLayout = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 sm:hidden">
-          {dashboardNavItems.map((item, i) => (
+          {filteredNavItems.map((item, i) => (
             <Link
               key={i}
               to={item.href}
@@ -48,7 +75,7 @@ const DashboardLayout = () => {
       {/* Desktop: Always visible */}
       <aside className="hidden sm:flex flex-col w-64 p-4 border-r bg-muted h-screen fixed top-0 left-0 z-40 gap-2">
         <h3>Dashboard</h3>
-        {dashboardNavItems.map((item, i) => (
+        {filteredNavItems.map((item, i) => (
           <Link
             key={i}
             to={item.href}
@@ -64,8 +91,8 @@ const DashboardLayout = () => {
         {home}
       </aside>
       <main className="sm:ml-64">
-        <DashboardTopNavbar/>
-        <Outlet/>
+        <DashboardTopNavbar />
+        <Outlet />
       </main>
     </div>
   );
