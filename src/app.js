@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
+import petRoutes from "./routes/petRoutes.js";
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use(cookieParser());
 
 // apis
 app.use("/api/users", userRoutes);
+app.use("/api/pets", petRoutes);
 
 export { app };
