@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { Mail, Lock } from "lucide-react";
 import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
 import { FaGoogle } from "react-icons/fa6";
-import { use } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ import axios from "axios";
 import { auth } from "@/firebase/firebase.init";
 
 export default function Login() {
-  const { logIn } = use(AuthContext);
+  const { logIn } = useAuth();
 
   const {
     register,
@@ -20,7 +20,7 @@ export default function Login() {
     setError,
     formState: { errors },
   } = useForm();
-  const { googleLogin, stateData } = use(AuthContext);
+  const { googleLogin, stateData } = useAuth();
   const navigate = useNavigate();
 
   const updateLastLogin = async (userId) => {

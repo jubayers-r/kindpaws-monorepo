@@ -6,12 +6,12 @@ import clsx from "clsx";
 import { Button } from "@/components/ui/button";
 import { Menu, Icon, LogOut, AxeIcon, PawPrint } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { use } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
 
 const MobileMenu = () => {
   const location = useLocation();
-  const { user } = use(AuthContext);
+  const { user } = useAuth();
 
   return (
     <Sheet>

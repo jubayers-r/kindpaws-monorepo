@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
 import { Link } from "react-router";
-import { use } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
 
 const Navbar = () => {
-  const { user, logOut } = use(AuthContext);
+  const { user, logOut } = useAuth();
 
   const loginRegister = (
     <>

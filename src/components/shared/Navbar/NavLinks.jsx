@@ -1,10 +1,10 @@
 import { NavLink } from "react-router";
 import { NavItems } from "../../../data/NavItems";
-import { use } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
 
 const NavLinks = () => {
-  const { user } = use(AuthContext);
+  const { user } = useAuth();
 
   return (
     <ul className="flex gap-2">

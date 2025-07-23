@@ -13,7 +13,7 @@ import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
 import PrivetRoute from "./PrivetRoute";
 import UserTable from "@/pages/Dashboard/Admin/UsersTable/UsersTable";
 import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
-import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable";
+import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDonationsTable";
 
 export const router = createBrowserRouter([
   {

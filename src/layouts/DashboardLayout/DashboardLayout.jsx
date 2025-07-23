@@ -5,11 +5,13 @@ import { Link, Outlet, useLocation } from "react-router";
 import clsx from "clsx";
 import { NavItems } from "@/data/NavItems";
 import { LogoBlack } from "@/assets/Logo";
-import { dashboardNavItems } from "@/components/dashboard/DashboardNavItems";
+import { dashboardNavItems } from "@/data/DashboardNavItems";
 import DashboardTopNavbar from "@/components/dashboard/DashboardTopNavbar/DashboardTopNavbar";
-import { use, useEffect, useState } from "react";
-import { AuthContext } from "@/context/auth/AuthContext";
+import { useEffect, useState } from "react";
+
 import axios from "axios";
+import { AuthRoleProvider } from "@/context/role/AuthRoleProvider";
+import { useAuth } from "@/hooks/useAuth";
 
 const DashboardLayout = () => {
   const home = (
@@ -19,7 +21,7 @@ const DashboardLayout = () => {
   );
   const location = useLocation();
 
-  const { user } = use(AuthContext);
+  const { user } = useAuth();
 
   const [role, setRole] = useState(null);
 
@@ -92,7 +94,9 @@ const DashboardLayout = () => {
       </aside>
       <main className="sm:ml-64">
         <DashboardTopNavbar />
+        <AuthRoleProvider user={user}>
         <Outlet />
+        </AuthRoleProvider>
       </main>
     </div>
   );

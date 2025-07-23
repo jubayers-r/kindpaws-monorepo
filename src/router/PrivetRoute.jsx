@@ -1,10 +1,10 @@
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Loader2 } from "lucide-react";
-import { use } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { Navigate } from "react-router";
 
 const PrivetRoute = ({ children }) => {
-  const { loading, user } = use(AuthContext);
+  const { loading, user } = useAuth();
 
   if (loading) {
     return (

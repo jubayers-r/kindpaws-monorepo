@@ -13,7 +13,7 @@ import { auth } from "@/firebase/firebase.init";
 import axios from "axios";
 
 export default function Register() {
-  const { googleLogin, createUser, stateData, setUser } = use(AuthContext);
+  const { googleLogin, createUser, stateData, setUser } = useAuth();
   const navigate = useNavigate();
   const {
     register,
