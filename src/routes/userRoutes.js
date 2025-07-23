@@ -1,5 +1,7 @@
-import { router } from "../constants.js";
+import express from "express";
 import User from "../models/User.js";
+
+export const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {

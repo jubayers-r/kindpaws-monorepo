@@ -1,5 +1,8 @@
-import { router } from "../constants.js";
+import express from "express";
 import Pet from "../models/Pet.js";
+
+
+export const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
