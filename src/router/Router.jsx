@@ -17,6 +17,8 @@ import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDona
 import AddPetForm from "@/pages/Dashboard/User/AddPet/AddPet";
 import AdoptionRequests from "@/pages/Dashboard/User/AdoptRequest/AdoptRequest";
 import CreateCampaignForm from "@/pages/Dashboard/User/CreateDonationCampaign/CreateDonationCampaign";
+import MyDonationCampaigns from "@/pages/Dashboard/User/MyDonationCampaigns/MyDonationCampaigns";
+import MyDonations from "@/pages/Dashboard/User/MyDonations/MyDonations";
 
 export const router = createBrowserRouter([
   {
@@ -98,6 +100,14 @@ export const router = createBrowserRouter([
       {
         path: "create-campaign",
         Component: CreateCampaignForm,
+      },
+      {
+        path: "my-campaigns",
+        Component: MyDonationCampaigns,
+      },
+      {
+        path: "my-donations",
+        Component: MyDonations,
       },
 
     ],

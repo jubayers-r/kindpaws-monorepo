@@ -60,13 +60,13 @@ export const dashboardNavItems = [
     roles: ["user"],
   },
   {
-    label: "My donation Campaigns (X)",
+    label: "My donation Campaigns",
     href: "/dashboard/my-campaigns",
     icon: FolderHeart,
     roles: ["user"],
   },
   {
-    label: "My donations (X)",
+    label: "My donations",
     href: "/dashboard/my-donations",
     icon: HandHeart,
     roles: ["user"],
