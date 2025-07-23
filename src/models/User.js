@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+     banned: {
+      type: Boolean,
+      default: false, 
+    },
   },
   { timestamps: true }
 );
