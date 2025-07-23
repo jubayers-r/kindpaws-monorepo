@@ -1,4 +1,5 @@
 import {
+  LayoutDashboard,
   Users,
   PawPrint,
   HandCoins,
@@ -12,11 +13,8 @@ import {
 export const dashboardNavItems = [
   {
     label: "Overview",
-    icon: Users,
-    href: {
-      admin: "/dashboard/admin",
-      user: "/dashboard/user",
-    },
+    icon: LayoutDashboard,
+    href: "/dashboard",
     roles: ["admin", "user"],
   },
   {

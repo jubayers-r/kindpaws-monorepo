@@ -11,6 +11,9 @@ import Register from "@/pages/Register/Register";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
 import PrivetRoute from "./PrivetRoute";
+import UserTable from "@/pages/Dashboard/Admin/UsersTable/UsersTable";
+import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
+import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable";
 
 export const router = createBrowserRouter([
   {
@@ -24,12 +27,12 @@ export const router = createBrowserRouter([
       {
         path: "adopt",
         Component: Adopt,
-        loader: async() => await fetch("http://localhost:8000/api/pets")
+        loader: async () => await fetch("http://localhost:8000/api/pets"),
       },
       {
         path: "campaigns",
         Component: Campaigns,
-        loader: async() => await fetch("http://localhost:8000/api/campaigns")
+        loader: async () => await fetch("http://localhost:8000/api/campaigns"),
       },
       {
         path: "contact-us",
@@ -62,6 +65,22 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Dashboard,
+      },
+      {
+        path: "users",
+        Component: UserTable,
+      },
+      {
+        path: "users",
+        Component: UserTable,
+      },
+      {
+        path: "all-pets",
+        Component: AllPetsTable,
+      },
+      {
+        path: "all-donations",
+        Component: AllDonationsTable,
       },
     ],
   },

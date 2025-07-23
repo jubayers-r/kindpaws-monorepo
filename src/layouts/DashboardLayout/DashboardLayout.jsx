@@ -84,7 +84,7 @@ const DashboardLayout = () => {
               location.pathname === item.href && "bg-white font-semibold"
             )}
           >
-            <PawPrint className="h-5 w-5" />
+            <item.icon className="w-5 h-5"/>
             {item.label}
           </Link>
         ))}
