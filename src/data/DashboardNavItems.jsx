@@ -42,9 +42,9 @@ export const dashboardNavItems = [
     roles: ["user"],
   },
   {
-    label: "My added pets",
+    label: "My added pets (X)",
     href: "/dashboard/my-added-pets",
-    icon: PlusCircle,
+    icon: PawPrint,
     roles: ["user"],
   },
   {
@@ -60,13 +60,13 @@ export const dashboardNavItems = [
     roles: ["user"],
   },
   {
-    label: "My donation Campaigns",
+    label: "My donation Campaigns (X)",
     href: "/dashboard/my-campaigns",
     icon: FolderHeart,
     roles: ["user"],
   },
   {
-    label: "My donations",
+    label: "My donations (X)",
     href: "/dashboard/my-donations",
     icon: HandHeart,
     roles: ["user"],
