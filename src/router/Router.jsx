@@ -29,6 +29,7 @@ export const router = createBrowserRouter([
       {
         path: "campaigns",
         Component: Campaigns,
+        loader: async() => await fetch("http://localhost:8000/api/campaigns")
       },
       {
         path: "contact-us",
