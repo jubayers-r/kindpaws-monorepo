@@ -1,0 +1,211 @@
+import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { motion } from "motion/react";
+import { toast } from "sonner";
+import Select from "react-select";
+import { useMutation } from "@tanstack/react-query";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+const categoryOptions = [
+  { value: "dog", label: "Dog" },
+  { value: "cat", label: "Cat" },
+  { value: "bird", label: "Bird" },
+  { value: "rabbit", label: "Rabbit" },
+];
+
+const AddPetForm = () => {
+  const [imageURL, setImageURL] = useState("");
+  const [uploading, setUploading] = useState(false);
+
+  const mutation = useMutation({
+    mutationFn: async (payload) => {
+      const res = await fetch("/api/pets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Failed to submit");
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("Pet added successfully!");
+      formik.resetForm();
+      editor?.commands.setContent("");
+      setImageURL("");
+    },
+    onError: () => {
+      toast.error("Failed to add pet. Try again.");
+    },
+  });
+
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: "",
+    onUpdate: ({ editor }) => {
+      formik.setFieldValue("longDescription", editor.getHTML());
+    },
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      age: "",
+      category: null,
+      location: "",
+      shortDescription: "",
+      longDescription: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Required"),
+      age: Yup.string().required("Required"),
+      category: Yup.object().required("Required"),
+      location: Yup.string().required("Required"),
+      shortDescription: Yup.string().required("Required"),
+      longDescription: Yup.string().required("Required"),
+    }),
+    onSubmit: (values) => {
+      const payload = {
+        ...values,
+        category: values.category.value,
+        image: imageURL,
+        adopted: false,
+        createdAt: new Date().toISOString(),
+      };
+      mutation.mutate(payload);
+    },
+  });
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "YOUR_CLOUDINARY_PRESET");
+
+    try {
+      setUploading(true);
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+      setImageURL(data.secure_url);
+      toast.success("Image uploaded!");
+    } catch (err) {
+      toast.error("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="max-w-2xl mx-auto p-6 border rounded-2xl shadow-md bg-white"
+    >
+      <h2 className="text-2xl font-semibold mb-6 text-gray-800">Add a Pet</h2>
+
+      <div className="mb-4">
+        <label className="block font-medium text-sm text-gray-700">Pet Image</label>
+        <input type="file" onChange={handleImageUpload} className="mt-1 block w-full" />
+        {uploading && <p className="text-sm text-blue-600 mt-2">Uploading...</p>}
+        {imageURL && (
+          <img src={imageURL} alt="Pet preview" className="w-32 mt-2 rounded-md" />
+        )}
+      </div>
+
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
+        <div>
+          <label className="block font-medium text-sm text-gray-700">Pet Name</label>
+          <input
+            id="name"
+            type="text"
+            {...formik.getFieldProps("name")}
+            className="mt-1 block w-full border rounded-md p-2"
+          />
+          {formik.touched.name && formik.errors.name && (
+            <div className="text-red-500 text-sm">{formik.errors.name}</div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-gray-700">Pet Age</label>
+          <input
+            id="age"
+            type="text"
+            {...formik.getFieldProps("age")}
+            className="mt-1 block w-full border rounded-md p-2"
+          />
+          {formik.touched.age && formik.errors.age && (
+            <div className="text-red-500 text-sm">{formik.errors.age}</div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-gray-700">Pet Category</label>
+          <Select
+            id="category"
+            options={categoryOptions}
+            value={formik.values.category}
+            onChange={(val) => formik.setFieldValue("category", val)}
+          />
+          {formik.touched.category && formik.errors.category && (
+            <div className="text-red-500 text-sm">{formik.errors.category}</div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-gray-700">Location</label>
+          <input
+            id="location"
+            type="text"
+            {...formik.getFieldProps("location")}
+            className="mt-1 block w-full border rounded-md p-2"
+          />
+          {formik.touched.location && formik.errors.location && (
+            <div className="text-red-500 text-sm">{formik.errors.location}</div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-gray-700">Short Description</label>
+          <textarea
+            id="shortDescription"
+            {...formik.getFieldProps("shortDescription")}
+            className="mt-1 block w-full border rounded-md p-2"
+          />
+          {formik.touched.shortDescription && formik.errors.shortDescription && (
+            <div className="text-red-500 text-sm">{formik.errors.shortDescription}</div>
+          )}
+        </div>
+
+        <div>
+          <label className="block font-medium text-sm text-gray-700">Long Description</label>
+          <div className="border rounded-md p-2 min-h-[150px] mt-1">
+            <EditorContent editor={editor} />
+          </div>
+          {formik.touched.longDescription && formik.errors.longDescription && (
+            <div className="text-red-500 text-sm">{formik.errors.longDescription}</div>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={mutation.isPending || uploading}
+          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800"
+        >
+          {mutation.isPending ? "Submitting..." : "Submit"}
+        </button>
+      </form>
+    </motion.div>
+  );
+};
+
+export default AddPetForm;

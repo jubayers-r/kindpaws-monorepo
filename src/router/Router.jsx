@@ -14,6 +14,9 @@ import PrivetRoute from "./PrivetRoute";
 import UserTable from "@/pages/Dashboard/Admin/UsersTable/UsersTable";
 import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
 import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDonationsTable";
+import AddPetForm from "@/pages/Dashboard/User/AddPet/AddPet";
+import AdoptionRequests from "@/pages/Dashboard/User/AdoptRequest/AdoptRequest";
+import CreateCampaignForm from "@/pages/Dashboard/User/CreateDonationCampaign/CreateDonationCampaign";
 
 export const router = createBrowserRouter([
   {
@@ -66,6 +69,7 @@ export const router = createBrowserRouter([
         index: true,
         Component: Dashboard,
       },
+      // admin
       {
         path: "users",
         Component: UserTable,
@@ -82,6 +86,20 @@ export const router = createBrowserRouter([
         path: "all-donations",
         Component: AllDonationsTable,
       },
+      // user
+      {
+        path: "add-pet",
+        Component: AddPetForm,
+      },
+      {
+        path: "adoption-requests",
+        Component: AdoptionRequests,
+      },
+      {
+        path: "create-campaign",
+        Component: CreateCampaignForm,
+      },
+
     ],
   },
 ]);
