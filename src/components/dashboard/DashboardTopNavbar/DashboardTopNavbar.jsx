@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AuthContext } from "@/context/auth/AuthContext";
+import { dashboardNavItems } from "@/data/DashboardNavItems";
+import { useLocation } from "react-router";
 // import { dashboardNavItems } from "../DashboardNavItems";
 // import clsx from "clsx";
 // import { home } from "@/layouts/DashboardLayout/DashboardLayout";
@@ -13,11 +15,20 @@ import { AuthContext } from "@/context/auth/AuthContext";
 
 const DashboardTopNavbar = () => {
   const { user, logOut } = useAuth(); // assume logout is available
+  const location = useLocation();
+  const activeItem = dashboardNavItems.find((item) =>
+    item.href.includes(location.pathname)
+  );
 
   return (
-    <header className="w-full flex items-center justify-between p-4 border-b bg-background sticky top-0 z-30">
+    <header className="w-full flex items-center justify-between px-4 border-b bg-background sticky top-0 z-30">
       {/* Center / Title (optional) */}
-      <h2 className="text-lg font-semibold hidden sm:block">Dashboard</h2>
+
+      {activeItem && (
+        <h2 className="text-lg font-semibold ">
+          {activeItem.label}
+        </h2>
+      )}
 
       {/* Right side: user info + logout */}
       <div className="flex items-center gap-3">

@@ -12,11 +12,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
+import axios from "axios";
 
 export default function UserTable() {
+  const authUser = useAuth().user;
+
   const queryClient = useQueryClient();
 
-  const { data: users = [], isLoading } = useQuery({
+  const {
+    data: users = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await fetch("http://localhost:8000/api/users");
@@ -27,12 +35,28 @@ export default function UserTable() {
 
   const makeAdminMutation = useMutation({
     mutationFn: async (userId) => {
-      const res = await fetch(`/api/users/${userId}/role`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: "admin" }),
-      });
+      const res = await axios.patch(
+        `http://localhost:8000/api/users/promote?uid=${userId}`
+      );
+      refetch();
       if (!res.ok) throw new Error("Failed to promote user");
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("User promoted to admin");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      toast.error("Something went wrong while promoting");
+    },
+  });
+  const makeUserMutation = useMutation({
+    mutationFn: async (userId) => {
+      const res = await axios.patch(
+        `http://localhost:8000/api/users/demote?uid=${userId}`
+      );
+      refetch();
+      if (!res.ok) throw new Error("Failed to demote user");
       return res.json();
     },
     onSuccess: () => {
@@ -46,11 +70,27 @@ export default function UserTable() {
 
   const banUserMutation = useMutation({
     mutationFn: async (userId) => {
-      const res = await fetch(`/api/users/${userId}/ban`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ banned: true }),
-      });
+      const res = await axios.patch(
+        `http://localhost:8000/api/users/ban?uid=${userId}`
+      );
+      refetch();
+      if (!res.ok) throw new Error("Failed to ban user");
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("User has been banned");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: () => {
+      toast.error("Failed to ban user");
+    },
+  });
+  const unbanUserMutation = useMutation({
+    mutationFn: async (userId) => {
+      const res = await axios.patch(
+        `http://localhost:8000/api/users/unban?uid=${userId}`
+      );
+      refetch();
       if (!res.ok) throw new Error("Failed to ban user");
       return res.json();
     },
@@ -73,7 +113,7 @@ export default function UserTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="min-w-[200px]">Profile</TableHead>
+            <TableHead className="min-w-[50px]">Profile</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
@@ -98,7 +138,7 @@ export default function UserTable() {
               <TableRow key={user._id}>
                 <TableCell>
                   <img
-                    src={user.photoURL || "/placeholder.jpg"}
+                    src={user.image || "/placeholder.jpg"}
                     alt={user.name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
@@ -123,26 +163,43 @@ export default function UserTable() {
                   {user.role !== "admin" && !user.banned && (
                     <Button
                       size="sm"
-                      onClick={() => makeAdminMutation.mutate(user._id)}
+                      onClick={() => makeAdminMutation.mutate(user.uid)}
                       disabled={makeAdminMutation.isLoading}
                     >
                       Make Admin
                     </Button>
                   )}
-                  {!user.banned && (
+                  {user.role === "admin" && user.uid !== authUser.uid && (
+                    <Button
+                      size="sm"
+                      onClick={() => makeUserMutation.mutate(user.uid)}
+                      disabled={makeUserMutation.isLoading}
+                    >
+                      Make User
+                    </Button>
+                  )}
+                  {!user.banned && user.uid !== authUser.uid && (
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => banUserMutation.mutate(user._id)}
+                      onClick={() => banUserMutation.mutate(user.uid)}
                       disabled={banUserMutation.isLoading}
                     >
                       Ban
                     </Button>
                   )}
                   {user.banned && (
-                    <span className="text-muted-foreground text-sm">
-                      Banned
-                    </span>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => unbanUserMutation.mutate(user.uid)}
+                      disabled={unbanUserMutation.isLoading}
+                    >
+                      Unban
+                    </Button>
+                  )}
+                  {user.uid === authUser.uid && user.role === "admin" && (
+                    <span className="text-black italic">You are an admin</span>
                   )}
                 </TableCell>
               </TableRow>

@@ -49,11 +49,10 @@ const DashboardLayout = () => {
     <div>
       {/* Mobile: Only show on small screens */}
 
-      <Sheet>
+      <Sheet >
         <SheetTrigger asChild>
-          <Button variant="ghost">
+          <Button variant="ghost" className="sm:hidden">
             <Menu />
-            Dashboard
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 sm:hidden">
@@ -72,11 +71,12 @@ const DashboardLayout = () => {
           ))}
           {home}
         </SheetContent>
+          {home}
       </Sheet>
 
       {/* Desktop: Always visible */}
       <aside className="hidden sm:flex flex-col w-64 p-4 border-r bg-muted h-screen fixed top-0 left-0 z-40 gap-2">
-        <h3>Dashboard</h3>
+
         {filteredNavItems.map((item, i) => (
           <Link
             key={i}
