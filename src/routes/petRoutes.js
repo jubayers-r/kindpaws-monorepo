@@ -1,8 +1,10 @@
 import express from "express";
 import Pet from "../models/Pet.js";
 import { error, notFound, success } from "../utils/responseUtils.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { deleteById, toggleBooleanField } from "../utils/dbHelpers.js";
 
-export const router = express.Router();
+const router = express.Router();
 
 // get all pets
 router.get("/", async (req, res) => {
@@ -40,7 +42,7 @@ router.put("/:id", async (req, res) => {
     const id = req.params.id;
     const petData = req.body;
 
-    const pet = await Pet.findByIdAndUpdate(id, petData, {new: true});
+    const pet = await Pet.findByIdAndUpdate(id, petData, { new: true });
     if (!pet) {
       return notFound(res, "Pet");
     }
@@ -50,39 +52,24 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// pet adoption status toggle by admin
-router.patch("/statusToggle", async (req, res) => {
-  try {
+// pet adoption status toggle by admin (from dbHelper)
+router.patch(
+  "/statusToggle",
+  asyncHandler(async (req, res) => {
     const id = req.query.id;
+   toggleBooleanField({ model: Pet, id, res, resourceName: "Pet" });
 
-    const toggle = await Pet.findOneAndUpdate(
-      { _id: id },
-      [{ $set: { isAdopted: { $not: "$isAdopted" } } }],
-      { new: true }
-    );
-    if (!toggle) {
-      return notFound(res, "Pet");
-    }
-    success(res, toggle);
-  } catch (err) {
-    error(res, err);
-  }
-});
+  })
+);
 
-// pet delete
-router.delete("/delete", async (req, res) => {
-  try {
-    const petId = req.query.id;
-
-    const deletePet = await Pet.findByIdAndDelete(petId);
-    if (!deletePet) {
-      return notFound(res, "Pet");
-    }
-    success(res, deletePet);
-  } catch (err) {
-    error(res, err);
-  }
-});
+// pet delete (from dbHelper)
+router.delete(
+  "/delete",
+  asyncHandler(async (req, res) => {
+    const id = req.query.id;
+    deleteById({ model: Pet, id, res, resourceName: "Pet" });
+  })
+);
 
 // add a pet
 router.post("/add-pet", async (req, res) => {
