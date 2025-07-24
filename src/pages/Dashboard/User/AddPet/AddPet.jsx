@@ -7,6 +7,8 @@ import Select from "react-select";
 import { useMutation } from "@tanstack/react-query";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import axios from "axios";
+import { useAuth } from "@/hooks/useAuth";
 
 const categoryOptions = [
   { value: "dog", label: "Dog" },
@@ -16,20 +18,20 @@ const categoryOptions = [
 ];
 
 const AddPetForm = () => {
+  const { user } = useAuth();
+
   const [imageURL, setImageURL] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [imageError, setImageError] = useState("");
 
   const mutation = useMutation({
     mutationFn: async (payload) => {
-      const res = await fetch("/api/pets", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("Failed to submit");
-      return res.json();
+      const res = await axios.post(
+        "http://localhost:8000/api/pets/add-pet",
+        payload,
+        { params: { uid: user.uid } }
+      );
+      return res.data;
     },
     onSuccess: () => {
       toast.success("Pet added successfully!");
@@ -54,6 +56,7 @@ const AddPetForm = () => {
     initialValues: {
       name: "",
       age: "",
+      gender: "",
       category: null,
       location: "",
       shortDescription: "",
@@ -62,40 +65,55 @@ const AddPetForm = () => {
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
       age: Yup.string().required("Required"),
+      gender: Yup.string().required("Required"),
       category: Yup.object().required("Required"),
       location: Yup.string().required("Required"),
       shortDescription: Yup.string().required("Required"),
       longDescription: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
+      if (!imageURL) {
+        setImageError("Image is required");
+        return; // stop submit
+      }
+
+      setImageError(""); // clear error if image is present
+
       const payload = {
         ...values,
-        category: values.category.value,
+        category: values.category.label,
         image: imageURL,
         adopted: false,
-        createdAt: new Date().toISOString(),
       };
       mutation.mutate(payload);
     },
   });
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const imageFile = e.target.files[0];
+    if (!imageFile) return;
 
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "YOUR_CLOUDINARY_PRESET");
-
+    formData.append("image", imageFile);
     try {
       setUploading(true);
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload",
-        { method: "POST", body: formData }
-      );
-      const data = await res.json();
-      setImageURL(data.secure_url);
-      toast.success("Image uploaded!");
+
+      const imgUpload = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_imgbb_apiKey
+      }`;
+
+      const res = await axios.post(imgUpload, formData);
+
+      const data = await res.data;
+
+      if (data.success) {
+        const imgUrl = data.data.url;
+        setImageURL(imgUrl);
+        toast.success("Image uploaded!");
+        return imgUrl; // The direct image URL
+      } else {
+        throw new Error("Image upload failed");
+      }
     } catch (err) {
       toast.error("Image upload failed");
     } finally {
@@ -108,22 +126,39 @@ const AddPetForm = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="max-w-2xl mx-auto p-6 border rounded-2xl shadow-md bg-white"
+      className="max-w-2xl mx-auto p-6 border rounded-2xl shadow-md bg-white my-10"
     >
       <h2 className="text-2xl font-semibold mb-6 text-gray-800">Add a Pet</h2>
 
       <div className="mb-4">
-        <label className="block font-medium text-sm text-gray-700">Pet Image</label>
-        <input type="file" onChange={handleImageUpload} className="mt-1 block w-full" />
-        {uploading && <p className="text-sm text-blue-600 mt-2">Uploading...</p>}
+        <label className="block font-medium text-sm text-gray-700">
+          Pet Image
+        </label>
+        <input
+          type="file"
+          onChange={handleImageUpload}
+          className="mt-1 block w-full"
+        />
+        {uploading && (
+          <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+        )}
         {imageURL && (
-          <img src={imageURL} alt="Pet preview" className="w-32 mt-2 rounded-md" />
+          <img
+            src={imageURL}
+            alt="Pet preview"
+            className="w-32 mt-2 rounded-md"
+          />
+        )}
+        {imageError && (
+          <p className="text-red-500 text-sm mt-1">{imageError}</p>
         )}
       </div>
 
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-medium text-sm text-gray-700">Pet Name</label>
+          <label className="block font-medium text-sm text-gray-700">
+            Pet Name
+          </label>
           <input
             id="name"
             type="text"
@@ -136,7 +171,9 @@ const AddPetForm = () => {
         </div>
 
         <div>
-          <label className="block font-medium text-sm text-gray-700">Pet Age</label>
+          <label className="block font-medium text-sm text-gray-700">
+            Pet Age
+          </label>
           <input
             id="age"
             type="text"
@@ -147,9 +184,25 @@ const AddPetForm = () => {
             <div className="text-red-500 text-sm">{formik.errors.age}</div>
           )}
         </div>
+        <div>
+          <label className="block font-medium text-sm text-gray-700">
+            Pet Gender
+          </label>
+          <input
+            id="gender"
+            type="text"
+            {...formik.getFieldProps("gender")}
+            className="mt-1 block w-full border rounded-md p-2"
+          />
+          {formik.touched.gender && formik.errors.gender && (
+            <div className="text-red-500 text-sm">{formik.errors.gender}</div>
+          )}
+        </div>
 
         <div>
-          <label className="block font-medium text-sm text-gray-700">Pet Category</label>
+          <label className="block font-medium text-sm text-gray-700">
+            Pet Category
+          </label>
           <Select
             id="category"
             options={categoryOptions}
@@ -162,7 +215,9 @@ const AddPetForm = () => {
         </div>
 
         <div>
-          <label className="block font-medium text-sm text-gray-700">Location</label>
+          <label className="block font-medium text-sm text-gray-700">
+            Location
+          </label>
           <input
             id="location"
             type="text"
@@ -175,24 +230,33 @@ const AddPetForm = () => {
         </div>
 
         <div>
-          <label className="block font-medium text-sm text-gray-700">Short Description</label>
+          <label className="block font-medium text-sm text-gray-700">
+            Short Description
+          </label>
           <textarea
             id="shortDescription"
             {...formik.getFieldProps("shortDescription")}
             className="mt-1 block w-full border rounded-md p-2"
           />
-          {formik.touched.shortDescription && formik.errors.shortDescription && (
-            <div className="text-red-500 text-sm">{formik.errors.shortDescription}</div>
-          )}
+          {formik.touched.shortDescription &&
+            formik.errors.shortDescription && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.shortDescription}
+              </div>
+            )}
         </div>
 
         <div>
-          <label className="block font-medium text-sm text-gray-700">Long Description</label>
+          <label className="block font-medium text-sm text-gray-700">
+            Long Description
+          </label>
           <div className="border rounded-md p-2 min-h-[150px] mt-1">
             <EditorContent editor={editor} />
           </div>
           {formik.touched.longDescription && formik.errors.longDescription && (
-            <div className="text-red-500 text-sm">{formik.errors.longDescription}</div>
+            <div className="text-red-500 text-sm">
+              {formik.errors.longDescription}
+            </div>
           )}
         </div>
 
