@@ -20,10 +20,21 @@ const petSchema = new mongoose.Schema(
     isFeatured: Boolean,
     isAdopted: Boolean,
 
-    // 🔗 Reference the owner
     ownerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      required: true,
+    },
+    ownerName: {
+      type: String,
+      required: true,
+    },
+    ownerEmail: {
+      type: String,
+      required: true,
+    },
+    ownerPhoto: {
+      type: String,
+      required: true,
     },
 
     // 🔗 Reference multiple adoption requests
