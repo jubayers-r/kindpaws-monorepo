@@ -8,7 +8,7 @@ import { LogoBlack } from "@/assets/Logo";
 import { dashboardNavItems } from "@/data/DashboardNavItems";
 import DashboardTopNavbar from "@/components/dashboard/DashboardTopNavbar/DashboardTopNavbar";
 import { useEffect, useState } from "react";
-
+import { Toaster } from 'sonner';
 import axios from "axios";
 import { AuthRoleProvider } from "@/context/role/AuthRoleProvider";
 import { useAuth } from "@/hooks/useAuth";
@@ -96,6 +96,7 @@ const DashboardLayout = () => {
         <DashboardTopNavbar />
         <AuthRoleProvider user={user}>
         <Outlet />
+        <Toaster />
         </AuthRoleProvider>
       </main>
     </div>

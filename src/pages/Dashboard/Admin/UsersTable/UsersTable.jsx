@@ -38,13 +38,12 @@ export default function UserTable() {
       const res = await axios.patch(`http://localhost:8000/api/users/promote`, {}, {
         params: { uid: userId },
       });
-      refetch();
-      if (!res.ok) throw new Error("Failed to promote user");
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
       toast.success("User promoted to admin");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      refetch();
+
     },
     onError: () => {
       toast.error("Something went wrong while promoting");
@@ -55,16 +54,14 @@ export default function UserTable() {
       const res = await axios.patch(`http://localhost:8000/api/users/demote`, {}, {
         params: { uid: userId },
       });
-      refetch();
-      if (!res.ok) throw new Error("Failed to demote user");
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
-      toast.success("User promoted to admin");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success("Admin demoted to user");
+      refetch();
     },
     onError: () => {
-      toast.error("Something went wrong while promoting");
+      toast.error("Something went wrong while demoting");
     },
   });
 
@@ -73,13 +70,11 @@ export default function UserTable() {
       const res = await axios.patch(`http://localhost:8000/api/users/ban`, {}, {
         params: { uid: userId },
       });
-      refetch();
-      if (!res.ok) throw new Error("Failed to ban user");
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
       toast.success("User has been banned");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      refetch();
     },
     onError: () => {
       toast.error("Failed to ban user");
@@ -90,13 +85,11 @@ export default function UserTable() {
       const res = await axios.patch(`http://localhost:8000/api/users/unban`, {}, {
         params: { uid: userId },
       });
-      refetch();
-      if (!res.ok) throw new Error("Failed to ban user");
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
-      toast.success("User has been banned");
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success("User has been unbanned");
+      refetch();
     },
     onError: () => {
       toast.error("Failed to ban user");
