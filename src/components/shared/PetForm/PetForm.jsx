@@ -24,8 +24,6 @@ const PetForm = ({ initialData = null, onSubmit }) => {
   const location = useLocation();
   const { id } = useParams();
 
-  console.log(id);
-
   const [imageURL, setImageURL] = useState(initialData?.image || "");
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState("");
@@ -94,7 +92,12 @@ const PetForm = ({ initialData = null, onSubmit }) => {
         category: values.category.label,
         image: imageURL,
         adopted: initialData?.adopted || false,
+        ownerId: initialData?.ownerId || user?.uid,
+        ownerName: initialData?.ownerName || user?.displayName,
+        ownerEmail: initialData?.ownerEmail || user?.email,
+        ownerPhoto: initialData?.ownerPhoto || user?.photoURL,
       };
+      console.log(payload);
       onSubmit(payload);
     },
   });
