@@ -14,9 +14,22 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pencil, Trash2, Repeat } from "lucide-react";
 import axios from "axios";
+import { useState } from "react";
+import AddPetForm from "../../User/AddPet/AddPet";
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog"; // adjust this import according to your shadcn setup
+import { Link } from "react-router";
 
 export default function AllPetsTable() {
-
+  const [open, setOpen] = useState(false);
   const {
     data: pets = [],
     isLoading,
@@ -137,14 +150,12 @@ export default function AllPetsTable() {
                   </Button>
 
                   {/* Edit (connect this to a modal or update form logic) */}
-                  <Button
-                    size="sm"
-                    variant="default"
-                    onClick={() => console.log("open edit modal for:", pet._id)}
-                  >
-                    <Pencil className="w-4 h-4 mr-1" /> Edit
-                  </Button>
 
+                  <Link to={`/dashboard/update-pet/${pet._id}`}>
+                    <Button size="sm" variant="default">
+                      <Pencil className="w-4 h-4 mr-1" /> Edit
+                    </Button>
+                  </Link>
                   {/* Delete */}
                   <Button
                     size="sm"

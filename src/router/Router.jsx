@@ -19,6 +19,8 @@ import AdoptionRequests from "@/pages/Dashboard/User/AdoptRequest/AdoptRequest";
 import CreateCampaignForm from "@/pages/Dashboard/User/CreateDonationCampaign/CreateDonationCampaign";
 import MyDonationCampaigns from "@/pages/Dashboard/User/MyDonationCampaigns/MyDonationCampaigns";
 import MyDonations from "@/pages/Dashboard/User/MyDonations/MyDonations";
+import AddPetPage from "@/pages/Dashboard/User/AddPet/AddPet";
+import EditPetPage from "@/components/dashboard/EditPetPage";
 
 export const router = createBrowserRouter([
   {
@@ -88,10 +90,14 @@ export const router = createBrowserRouter([
         path: "all-donations",
         Component: AllDonationsTable,
       },
+      {
+        path: "update-pet/:id",
+        Component: EditPetPage,
+      },
       // user
       {
         path: "add-pet",
-        Component: AddPetForm,
+        Component: AddPetPage,
       },
       {
         path: "adoption-requests",
