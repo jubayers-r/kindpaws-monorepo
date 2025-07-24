@@ -4,7 +4,6 @@ import { error, notFound, success } from "../utils/responseUtils.js";
 
 export const router = express.Router();
 
-
 // get all users
 router.get("/", async (req, res) => {
   try {
@@ -50,6 +49,20 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
-
+// add a pet
+router.post("/add-pet", async (req, res) => {
+  try {
+    const userId = req.query.uid;
+    const petData = req.body;
+    console.log(petData);
+    const pet = await Pet.create({ ...petData, uid: userId });
+    if (!pet) {
+      return notFound(res, "Pet");
+    }
+    success(res, pet);
+  } catch (err) {
+    error(res, err);
+  }
+});
 
 export default router;
