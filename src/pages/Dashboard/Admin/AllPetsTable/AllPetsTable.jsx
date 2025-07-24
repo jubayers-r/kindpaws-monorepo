@@ -13,11 +13,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pencil, Trash2, Repeat } from "lucide-react";
+import axios from "axios";
 
 export default function AllPetsTable() {
-  const queryClient = useQueryClient();
 
-  const { data: pets = [], isLoading } = useQuery({
+  const {
+    data: pets = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["allPets"],
     queryFn: async () => {
       const res = await fetch("http://localhost:8000/api/pets");
@@ -28,33 +32,32 @@ export default function AllPetsTable() {
 
   const deletePet = useMutation({
     mutationFn: async (petId) => {
-      const res = await fetch(`/api/pets/${petId}`, {
-        method: "DELETE",
+      const res = await axios.delete(`http://localhost:8000/api/pets/delete`, {
+        params: { id: petId },
       });
-      if (!res.ok) throw new Error("Failed to delete pet");
-      return res.json();
+      return res.data;
     },
     onSuccess: () => {
       toast.success("Pet deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["allPets"] });
+      refetch();
     },
     onError: () => toast.error("Failed to delete pet"),
   });
 
   const toggleStatus = useMutation({
-    mutationFn: async (pet) => {
-      const newStatus = pet.status === "adopted" ? "available" : "adopted";
-      const res = await fetch(`/api/pets/${pet._id}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!res.ok) throw new Error("Failed to update pet status");
-      return res.json();
+    mutationFn: async (petId) => {
+      const res = await axios.patch(
+        `http://localhost:8000/api/pets/statusToggle`,
+        {},
+        {
+          params: { id: petId },
+        }
+      );
+      return res.data;
     },
     onSuccess: () => {
       toast.success("Pet status updated");
-      queryClient.invalidateQueries({ queryKey: ["allPets"] });
+      refetch();
     },
     onError: () => toast.error("Failed to update pet status"),
   });
@@ -73,6 +76,7 @@ export default function AllPetsTable() {
             <TableHead>Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Owner Picture</TableHead>
             <TableHead>Owner</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -100,20 +104,25 @@ export default function AllPetsTable() {
                   />
                 </TableCell>
                 <TableCell>{pet.name}</TableCell>
-                <TableCell className="capitalize">{pet.type}</TableCell>
+                <TableCell className="capitalize">{pet.category}</TableCell>
                 <TableCell>
-                  <Badge
-                    variant={pet.status === "adopted" ? "secondary" : "default"}
-                  >
-                    {pet.status}
+                  <Badge variant={pet.isAdopted ? "secondary" : "default"}>
+                    {pet.isAdopted ? "Adopted" : "Not Adopted"}
                   </Badge>
                 </TableCell>
                 <TableCell>
+                  <img
+                    src={pet.ownerPhoto}
+                    alt={pet.ownerName || "N/A"}
+                    className="w-12 h-12"
+                  />
+                </TableCell>
+                <TableCell>
                   <div className="text-sm font-medium">
-                    {pet.owner?.name || "N/A"}
+                    {pet.ownerName || "N/A"}
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {pet.owner?.email}
+                    {pet.ownerName || "N/A"}
                   </div>
                 </TableCell>
                 <TableCell className="flex justify-end gap-2">
@@ -121,10 +130,10 @@ export default function AllPetsTable() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => toggleStatus.mutate(pet)}
+                    onClick={() => toggleStatus.mutate(pet._id)}
                   >
                     <Repeat className="w-4 h-4 mr-1" />
-                    {pet.status === "adopted" ? "Unadopt" : "Adopt"}
+                    {pet.isAdopted ? "Unadopt" : "Adopt"}
                   </Button>
 
                   {/* Edit (connect this to a modal or update form logic) */}
