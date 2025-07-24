@@ -35,9 +35,9 @@ export default function UserTable() {
 
   const makeAdminMutation = useMutation({
     mutationFn: async (userId) => {
-      const res = await axios.patch(
-        `http://localhost:8000/api/users/promote?uid=${userId}`
-      );
+      const res = await axios.patch(`http://localhost:8000/api/users/promote`, {}, {
+        params: { uid: userId },
+      });
       refetch();
       if (!res.ok) throw new Error("Failed to promote user");
       return res.json();
@@ -52,9 +52,9 @@ export default function UserTable() {
   });
   const makeUserMutation = useMutation({
     mutationFn: async (userId) => {
-      const res = await axios.patch(
-        `http://localhost:8000/api/users/demote?uid=${userId}`
-      );
+      const res = await axios.patch(`http://localhost:8000/api/users/demote`, {}, {
+        params: { uid: userId },
+      });
       refetch();
       if (!res.ok) throw new Error("Failed to demote user");
       return res.json();
@@ -70,9 +70,9 @@ export default function UserTable() {
 
   const banUserMutation = useMutation({
     mutationFn: async (userId) => {
-      const res = await axios.patch(
-        `http://localhost:8000/api/users/ban?uid=${userId}`
-      );
+      const res = await axios.patch(`http://localhost:8000/api/users/ban`, {}, {
+        params: { uid: userId },
+      });
       refetch();
       if (!res.ok) throw new Error("Failed to ban user");
       return res.json();
@@ -87,9 +87,9 @@ export default function UserTable() {
   });
   const unbanUserMutation = useMutation({
     mutationFn: async (userId) => {
-      const res = await axios.patch(
-        `http://localhost:8000/api/users/unban?uid=${userId}`
-      );
+      const res = await axios.patch(`http://localhost:8000/api/users/unban`, {}, {
+        params: { uid: userId },
+      });
       refetch();
       if (!res.ok) throw new Error("Failed to ban user");
       return res.json();
