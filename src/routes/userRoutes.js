@@ -1,8 +1,34 @@
 import express from "express";
 import User from "../models/User.js";
+import { error, notFound, success } from "../utils/responseUtils.js";
 
-export const router = express.Router();
+const router = express.Router();
 
+// fetch all users
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find();
+    success(res, users);
+  } catch (err) {
+    error(res, err);
+  }
+});
+
+// fetch role
+router.get("/role", async (req, res) => {
+  try {
+    const userId = req.query.uid;
+    const user = await User.findOne({ uid: userId });
+    if (!user) {
+      return notFound(res, "User");
+    }
+    success(res, user);
+  } catch (err) {
+    error(res, err);
+  }
+});
+
+// register
 router.post("/register", async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -11,6 +37,8 @@ router.post("/register", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+// log last login
 router.patch("/last-login/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -21,35 +49,53 @@ router.patch("/last-login/:id", async (req, res) => {
       { new: true }
     );
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      return notFound(res, "User");
     }
-
-    res.status(200).json(updatedUser);
+    success(res, updatedUser);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    error(res, err);
   }
 });
 
-router.get("/role", async (req, res) => {
+// ban/make admin
+router.patch("/:action", async (req, res) => {
   try {
+    const action = req.params.action;
     const userId = req.query.uid;
-    const user = await User.findOne({ uid: userId });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    let userUpdate;
+    if (action === "promote") {
+      userUpdate = await User.findOneAndUpdate(
+        { uid: userId },
+        { role: "admin" },
+        { new: true }
+      );
+    } else if (action === "demote") {
+      userUpdate = await User.findOneAndUpdate(
+        { uid: userId },
+        { role: "user" },
+        { new: true }
+      );
+    } else if (action === "ban") {
+      userUpdate = await User.findOneAndUpdate(
+        { uid: userId },
+        { banned: true },
+        { new: true }
+      );
+    } else if (action === "unban") {
+      userUpdate = await User.findOneAndUpdate(
+        { uid: userId },
+        { banned: false },
+        { new: true }
+      );
+    } else {
+      return res.status(400).json({ error: "Invalid Action" });
     }
-
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-router.get("/", async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ message: err.message });
+    if (!userUpdate) {
+      return notFound(res, "User");
+    }
+    success(res, userUpdate);
+  } catch (err) {
+    error(res, err);
   }
 });
 
