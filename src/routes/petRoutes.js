@@ -4,14 +4,49 @@ import { error, notFound, success } from "../utils/responseUtils.js";
 
 export const router = express.Router();
 
-// get all users
+// get all pets
 router.get("/", async (req, res) => {
   try {
     const pets = await Pet.find();
-    res.status(200).json(pets);
+    if (!pets) {
+      return notFound(res, "Pets");
+    }
+    success(res, pets);
   } catch (err) {
     console.error("Failed to fetch pets:", err.message);
     res.status(500).json({ message: "Server Error: Unable to fetch pets" });
+  }
+});
+
+// get pet by id
+
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const petData = await Pet.findById(id);
+    if (!petData) {
+      return notFound(res, "Pet");
+    }
+    success(res, petData);
+  } catch (err) {
+    error(res, err);
+  }
+});
+
+// put by id
+router.put("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const petData = req.body;
+
+    const pet = await Pet.findByIdAndUpdate(id, petData, {new: true});
+    if (!pet) {
+      return notFound(res, "Pet");
+    }
+    success(res, pet);
+  } catch (err) {
+    error(res, err);
   }
 });
 
@@ -54,7 +89,6 @@ router.post("/add-pet", async (req, res) => {
   try {
     const userId = req.query.uid;
     const petData = req.body;
-    console.log(petData);
     const pet = await Pet.create({ ...petData, uid: userId });
     if (!pet) {
       return notFound(res, "Pet");
