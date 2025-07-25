@@ -17,8 +17,8 @@ const petSchema = new mongoose.Schema(
     shortDescription: String,
     longDescription: String,
     tags: [String],
-    isFeatured: Boolean,
-    isAdopted: Boolean,
+    isFeatured: { type: Boolean, default: false },
+    isAdopted: { type: Boolean, required: true, default: false },
 
     ownerId: {
       type: String,
