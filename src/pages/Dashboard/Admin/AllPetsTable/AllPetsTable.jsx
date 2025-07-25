@@ -14,22 +14,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pencil, Trash2, Repeat } from "lucide-react";
 import axios from "axios";
-import { useState } from "react";
-import AddPetForm from "../../User/AddPet/AddPet";
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from "@/components/ui/dialog"; // adjust this import according to your shadcn setup
+
 import { Link } from "react-router";
 
 export default function AllPetsTable() {
-  const [open, setOpen] = useState(false);
   const {
     data: pets = [],
     isLoading,

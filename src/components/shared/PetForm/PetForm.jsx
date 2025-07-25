@@ -32,8 +32,7 @@ const PetForm = ({ initialData = null, onSubmit }) => {
     mutationFn: async (payload) => {
       const res = await axios.post(
         "http://localhost:8000/api/pets/add-pet",
-        payload,
-        { params: { uid: user.uid } }
+        payload
       );
       return res.data;
     },
