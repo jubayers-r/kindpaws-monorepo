@@ -4,6 +4,7 @@ import { error, notFound, success } from "../utils/responseUtils.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { deleteById, toggleBooleanField } from "../utils/dbHelpers.js";
 import AdoptionRequest from "../models/AdoptionRequest.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -46,12 +47,43 @@ router.patch(
 router.get(
   "/adoption-requests",
   asyncHandler(async (req, res) => {
-    const requests = await AdoptionRequest.find();
+    const { userId } = req.query;
 
-    if (!requests) {
-      return notFound(res, "Request");
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ message: "userId query param is required." });
     }
-    success(res, requests);
+
+    const user = await User.findOne({ uid: userId });
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    // ✅ If admin, show all adoption requests
+    if (user.role === "admin") {
+      const allRequests = await AdoptionRequest.find();
+      return res.json(allRequests);
+    } else {
+      const requests = await AdoptionRequest.find()
+        .populate({
+          path: "petId",
+          select: "ownerId", // add any pet fields you need
+        })
+        .lean();
+
+      // Filter only those requests where pet.ownerId === userId
+      const filteredRequests = requests.filter(
+        (request) => request.petId?.ownerId === userId
+      );
+
+      if (!filteredRequests.length) {
+        return res
+          .status(404)
+          .json({ message: "No adoption requests found for this user." });
+      }
+
+      return res.status(200).json(filteredRequests);
+    }
   })
 );
 

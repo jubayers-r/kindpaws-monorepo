@@ -4,6 +4,7 @@ const adoptionRequestSchema = new mongoose.Schema(
   {
     petId: {
       type: mongoose.Schema.Types.ObjectId,
+       ref: "Pet",
       required: true,
     },
     userId: String,
