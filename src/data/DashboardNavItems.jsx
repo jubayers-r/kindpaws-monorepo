@@ -42,7 +42,7 @@ export const dashboardNavItems = [
     roles: ["user"],
   },
   {
-    label: "My added pets (X)",
+    label: "My added pets",
     href: "/dashboard/my-added-pets",
     icon: PawPrint,
     roles: ["user"],
