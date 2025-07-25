@@ -15,6 +15,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "motion/react";
 import { toast } from "sonner";
+import CampaignDonationModal from "@/components/campaignPage/CampaignDonationModal";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 const CampaignDetailsPage = () => {
   const { id } = useParams();
@@ -52,6 +55,8 @@ const CampaignDetailsPage = () => {
       </div>
     );
   }
+
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
   return (
     <motion.div
@@ -92,41 +97,11 @@ const CampaignDetailsPage = () => {
         </div>
       </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <motion.div
-            className="w-fit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button>Donate Now</Button>
-          </motion.div>
-        </DialogTrigger>
-        <DialogContent>
-          <motion.div
-            initial={{ opacity: 0, y: -30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="space-y-5"
-          >
-            <DialogHeader>
-              <DialogTitle>Donate to {campaign.title}</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label>Amount</Label>
-                <Input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-              </div>
-              {/* Replace this with Stripe CardElement */}
-              <Button onClick={handleDonate}>Submit Donation</Button>
-            </div>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
+      {/* stripe */}
+      <Elements stripe={stripePromise}>
+        <CampaignDonationModal campaign={campaign} />
+      </Elements>
+      {/* stripe */}
 
       <div
         className="prose max-w-none"
