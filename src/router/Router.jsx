@@ -16,7 +16,7 @@ import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
 import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDonationsTable";
 import AddPetForm from "@/pages/Dashboard/User/AddPet/AddPet";
 import AdoptionRequests from "@/pages/Dashboard/User/AdoptRequest/AdoptRequest";
-import CreateCampaignForm from "@/components/shared/CreateCampaignForm/CreateCampaignForm";
+
 import MyDonationCampaigns from "@/pages/Dashboard/User/MyDonationCampaigns/MyDonationCampaigns";
 import MyDonations from "@/pages/Dashboard/User/MyDonations/MyDonations";
 import AddPetPage from "@/pages/Dashboard/User/AddPet/AddPet";
@@ -25,6 +25,7 @@ import CreateDonationCampaign from "@/pages/Dashboard/User/CreateDonationCampaig
 import MyAddedPets from "@/pages/Dashboard/User/MyAddedPets/MyAddedPets";
 import PetDetailsPage from "@/pages/Adopt/PetDetails/PetDetails";
 import CampaignDetailsPage from "@/pages/Campaigns/CampaignDetails/CampaignDetails";
+import EditCampaign from "@/pages/Dashboard/shared/EditCampaign";
 
 export const router = createBrowserRouter([
   {
@@ -89,7 +90,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "update-campaign/:id",
-        Component: CreateDonationCampaign,
+        Component: EditCampaign,
       },
       // admin
       {
