@@ -3,8 +3,57 @@ import Pet from "../models/Pet.js";
 import { error, notFound, success } from "../utils/responseUtils.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { deleteById, toggleBooleanField } from "../utils/dbHelpers.js";
+import AdoptionRequest from "../models/AdoptionRequest.js";
 
 const router = express.Router();
+
+// find pet adoption requests
+router.patch(
+  "/adoption-requests",
+  asyncHandler(async (req, res) => {
+    const adoptionRequestId = req.query.id;
+    const { status } = req.body;
+
+    // 1. Update the adoption request
+    const request1 = await AdoptionRequest.findByIdAndUpdate(
+      adoptionRequestId,
+      { status },
+      { new: true }
+    );
+
+    if (!request1) {
+      return notFound(res, "Adoption request");
+    }
+
+    // 2. Update the pet using the petId from the adoption request
+    const request2 = await Pet.findByIdAndUpdate(
+      request1.petId,
+      {
+        isAdopted: status === "Approved" ? true : false,
+      },
+      { new: true }
+    );
+
+    if (!request2) {
+      return notFound(res, "Pet");
+    }
+
+    // 3. Send back success
+    success(res, request1);
+  })
+);
+// get all adoption requests
+router.get(
+  "/adoption-requests",
+  asyncHandler(async (req, res) => {
+    const requests = await AdoptionRequest.find();
+
+    if (!requests) {
+      return notFound(res, "Request");
+    }
+    success(res, requests);
+  })
+);
 
 // get all pets (make it resusable)
 router.get("/", async (req, res) => {
@@ -83,5 +132,20 @@ router.post("/add-pet", async (req, res) => {
     error(res, err);
   }
 });
+
+// pet adotion request
+router.post(
+  "/:id/adoption-request",
+  asyncHandler(async (req, res) => {
+    const petId = req.params.id;
+    const data = req.body;
+    const adoptionReq = await AdoptionRequest.create({ ...data, petId: petId });
+
+    if (!adoptionReq) {
+      return notFound(res, "Adoption Request");
+    }
+    success(res, adoptionReq);
+  })
+);
 
 export default router;
