@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router";
 import PetCardComponent from "./PetCardDescription";
 import CampaignCardDescription from "./CampaignCardDescription";
 
-const CardComponent = ({ data }) => {
+const CardComponent = ({ data, type }) => {
   const { image, name } = data;
   const location = useLocation();
 
@@ -51,7 +51,11 @@ const CardComponent = ({ data }) => {
   };
 
   return (
-    <Link to="" className="block" aria-label={`See details about ${name}`}>
+    <Link
+      to={`/${type}/details/${data._id}`}
+      className="block"
+      aria-label={`See details about ${name}`}
+    >
       <motion.div
         tabIndex={0}
         role="link"

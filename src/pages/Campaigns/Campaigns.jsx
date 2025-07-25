@@ -12,7 +12,7 @@ const Campaigns = () => {
       </h1>
       <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-5">
         {campaignData.map((campaign) => (
-          <CardComponent data={campaign} />
+          <CardComponent data={campaign} type={"campaign"} />
         ))}
       </div>
     </>

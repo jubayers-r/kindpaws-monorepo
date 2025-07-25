@@ -11,7 +11,7 @@ const Adopt = () => {
       </h1>
       <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
         {petData ? (
-          petData.map((pet) => <CardComponent data={pet} />)
+          petData.map((pet) => <CardComponent data={pet} type={"pet"} />)
         ) : (
           <SkeletonCardComponent />
         )}

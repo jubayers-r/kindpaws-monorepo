@@ -5,6 +5,7 @@ import Hero from "../../components/homePage/Hero/Hero";
 import SwiperComponent from "@/components/homePage/SwiperComponent/SwiperComponent";
 import HeroElseComponent from "@/components/shared/HeroElseComponent/HeroElseComponent";
 import CopyrightComponent from "./Footer/CopyrightComponent";
+import { Toaster } from "sonner";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const MainLayout = () => {
         <Hero>{heroContent}</Hero>
         <main className="flex-grow flex flex-col justify-center mb-15 2xl:w-9/11 w-[95%] mx-auto ">
           <Outlet />
+          <Toaster/>
         </main>
       </div>
       <Footer />
