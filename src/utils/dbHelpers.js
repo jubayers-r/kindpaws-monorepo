@@ -26,15 +26,16 @@ export const deleteById = async ({ model, id, res, resourceName = "Item" }) => {
   return success(res, deletedDoc);
 };
 
-// export router.delete("/delete", async (req, res) => {
-//   try {
-//     const petId = req.query.id;
 
-//     const deletePet = await Pet.findByIdAndDelete(petId);
-//     if (!deletePet) {
+// router.post("/add-pet", async (req, res) => {
+//   try {
+//     const userId = req.query.uid;
+//     const petData = req.body;
+//     const pet = await Pet.create({ ...petData, uid: userId });
+//     if (!pet) {
 //       return notFound(res, "Pet");
 //     }
-//     success(res, deletePet);
+//     success(res, pet);
 //   } catch (err) {
 //     error(res, err);
 //   }

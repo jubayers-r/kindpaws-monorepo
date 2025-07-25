@@ -6,7 +6,7 @@ import { deleteById, toggleBooleanField } from "../utils/dbHelpers.js";
 
 const router = express.Router();
 
-// get all pets
+// get all pets (make it resusable)
 router.get("/", async (req, res) => {
   try {
     const pets = await Pet.find();
@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// put by id
+// put by id (make it resusable)
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
@@ -57,8 +57,7 @@ router.patch(
   "/statusToggle",
   asyncHandler(async (req, res) => {
     const id = req.query.id;
-   toggleBooleanField({ model: Pet, id, res, resourceName: "Pet" });
-
+    toggleBooleanField({ model: Pet, id, res, resourceName: "Pet" });
   })
 );
 
@@ -74,9 +73,8 @@ router.delete(
 // add a pet
 router.post("/add-pet", async (req, res) => {
   try {
-    const userId = req.query.uid;
     const petData = req.body;
-    const pet = await Pet.create({ ...petData, uid: userId });
+    const pet = await Pet.create({ ...petData });
     if (!pet) {
       return notFound(res, "Pet");
     }
