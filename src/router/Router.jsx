@@ -16,11 +16,15 @@ import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
 import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDonationsTable";
 import AddPetForm from "@/pages/Dashboard/User/AddPet/AddPet";
 import AdoptionRequests from "@/pages/Dashboard/User/AdoptRequest/AdoptRequest";
-import CreateCampaignForm from "@/pages/Dashboard/User/CreateDonationCampaign/CreateDonationCampaign";
+import CreateCampaignForm from "@/components/shared/CreateCampaignForm/CreateCampaignForm";
 import MyDonationCampaigns from "@/pages/Dashboard/User/MyDonationCampaigns/MyDonationCampaigns";
 import MyDonations from "@/pages/Dashboard/User/MyDonations/MyDonations";
 import AddPetPage from "@/pages/Dashboard/User/AddPet/AddPet";
-import EditPetPage from "@/components/dashboard/EditPetPage";
+import EditPetPage from "@/pages/Dashboard/shared/EditPetPage";
+import CreateDonationCampaign from "@/pages/Dashboard/User/CreateDonationCampaign/CreateDonationCampaign";
+import MyAddedPets from "@/pages/Dashboard/User/MyAddedPets/MyAddedPets";
+import PetDetailsPage from "@/pages/Adopt/PetDetails/PetDetails";
+import CampaignDetailsPage from "@/pages/Campaigns/CampaignDetails/CampaignDetails";
 
 export const router = createBrowserRouter([
   {
@@ -37,9 +41,19 @@ export const router = createBrowserRouter([
         loader: async () => await fetch("http://localhost:8000/api/pets"),
       },
       {
+        path: "pet/details/:id",
+        Component: PetDetailsPage,
+
+      },
+      {
         path: "campaigns",
         Component: Campaigns,
         loader: async () => await fetch("http://localhost:8000/api/campaigns"),
+      },
+      {
+        path: "campaign/details/:id",
+        Component: CampaignDetailsPage,
+        loader: async ({params}) => await fetch(`http://localhost:8000/api/campaigns/${params.id}`),
       },
       {
         path: "contact-us",
@@ -73,6 +87,10 @@ export const router = createBrowserRouter([
         index: true,
         Component: Dashboard,
       },
+      {
+        path: "update-campaign/:id",
+        Component: CreateDonationCampaign,
+      },
       // admin
       {
         path: "users",
@@ -90,6 +108,7 @@ export const router = createBrowserRouter([
         path: "all-donations",
         Component: AllDonationsTable,
       },
+
       {
         path: "update-pet/:id",
         Component: EditPetPage,
@@ -105,7 +124,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "create-campaign",
-        Component: CreateCampaignForm,
+        Component: CreateDonationCampaign,
       },
       {
         path: "my-campaigns",
@@ -115,7 +134,10 @@ export const router = createBrowserRouter([
         path: "my-donations",
         Component: MyDonations,
       },
-
+      {
+        path: "my-added-pets",
+        Component: MyAddedPets,
+      },
     ],
   },
 ]);
