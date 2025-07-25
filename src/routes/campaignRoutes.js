@@ -3,8 +3,10 @@ import Campaign from "../models/Campaign.js";
 import { error, success } from "../utils/responseUtils.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { deleteById, toggleBooleanField } from "../utils/dbHelpers.js";
+import Stripe from "stripe";
 
 export const router = express.Router();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // get all campaigns (make it resusable)
 router.get("/", async (req, res) => {
@@ -61,9 +63,11 @@ router.post("/add-campaign", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-   const campaignData = req.body;
+    const campaignData = req.body;
 
-    const campaign = await Campaign.findByIdAndUpdate(id, campaignData, { new: true });
+    const campaign = await Campaign.findByIdAndUpdate(id, campaignData, {
+      new: true,
+    });
     if (!campaign) {
       return notFound(res, "Campaign");
     }
@@ -72,7 +76,6 @@ router.put("/:id", async (req, res) => {
     error(res, err);
   }
 });
-
 
 // get campain by id (make it resusable)
 
@@ -90,7 +93,13 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
-
+router.post("/create-payment-intent", async (req, res) => {
+  const { amount } = req.body;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: amount * 100, // Convert to cents
+    currency: "usd",
+  });
+  res.send({ clientSecret: paymentIntent.client_secret });
+});
 
 export default router;
