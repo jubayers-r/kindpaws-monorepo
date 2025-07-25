@@ -45,7 +45,6 @@ const EditCampaign = () => {
 
   return (
     <>
-      <h3 className="font-bold text-2xl text-center mt-6">Update Campaign</h3>
       <CreateCampaignForm
         initialData={campaign}
         onSubmit={(payload) => mutation.mutate(payload)}

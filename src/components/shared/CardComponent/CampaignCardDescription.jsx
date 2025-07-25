@@ -26,31 +26,13 @@ const CampaignCardDescription = ({ campaign }) => {
 
   return (
     <>
-      {/* Image */}
-      {/* <div className="relative h-52 w-full overflow-hidden"> */}
 
-      {/* Featured Tag */}
-      {/* {isFeatured && (
-          <div className="absolute top-3 left-3">
-            <Badge variant="destructive">Featured</Badge>
-          </div>
-        )} */}
-
-      {/* Tag */}
-      {/* {tags?.[0] && (
-          <div className="absolute bottom-3 left-3">
-            <Badge variant="outline" className="bg-primary/90 text-white">
-              #{tags[0]}
-            </Badge>
-          </div>
-        )} */}
-      {/* </div> */}
 
       <CardContent className="space-y-3">
         <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
         {/* must no more than 5 words */}
 
-        <p className="text-sm text-muted-foreground line-clamp-2">
+        <p className="text-sm text-muted-foreground line-clamp-2 h-10">
           {shortDescription}
         </p>
 
