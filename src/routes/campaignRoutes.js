@@ -12,38 +12,41 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // @route GET /api/donations/my
 // @desc Get logged-in user's donations
 // @access Private
-// router.get("/my", async (req, res) => {
-//   try {
-//     const userId = req.query.id;
+router.get("/my", async (req, res) => {
+  const { id: uid } = req.query;
 
-//     console.log(userId);
+  const donations = await Donation.find({ donorId: uid }).sort({
+    createdAt: -1,
+  });
 
-//     const donations = await Donation.find({ donorId: userId })
-//       .sort({ createdAt: -1 })
-//       .populate({
-//         path: "campaignId",
-//         select: "title image petName",
-//       })
-//       .lean();
+  res.json(donations);
+});
 
-//     const enriched = donations.map((donation) => ({
-//       _id: donation._id,
-//       amount: donation.amount,
-//       isRefunded: donation.isRefunded || false,
-//       createdAt: donation.createdAt,
-//       campaignSnapshot: {
-//         title: donation.campaignId?.title || "[Deleted]",
-//         petName: donation.campaignId?.petName || "[Unknown Pet]",
-//         image: donation.campaignId?.image || "https://via.placeholder.com/150",
-//       },
-//     }));
+router.patch("/refund/:id", async (req, res) => {
+  const donation = await Donation.findById(req.params.id);
 
-//     res.json(enriched);
-//   } catch (err) {
-//     console.error("[MyDonations] Error:", err);
-//     res.status(500).json({ error: "Failed to fetch donation history." });
-//   }
-// });
+  if (!donation) return res.status(404).json({ message: "Donation not found" });
+  if (donation.isRefunded)
+    return res.status(400).json({ message: "Already refunded" });
+
+  try {
+    // 1. (Optional) Stripe Refund
+    if (donation.paymentIntentId) {
+      await stripe.refunds.create({
+        payment_intent: donation.paymentIntentId,
+      });
+    }
+
+    // 2. Update in DB
+    donation.isRefunded = true;
+    await donation.save();
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Refund failed" });
+  }
+});
 
 // get all campaigns (make it resusable)
 router.get("/", async (req, res) => {
@@ -149,6 +152,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// stripe
+
 router.post("/create-payment-intent", async (req, res) => {
   const { amount } = req.body;
   const paymentIntent = await stripe.paymentIntents.create({
@@ -158,28 +163,38 @@ router.post("/create-payment-intent", async (req, res) => {
   res.send({ clientSecret: paymentIntent.client_secret });
 });
 
-// @route DELETE /api/donations/:id
-// @desc Refund (delete) a donation by ID
-// @access Private
-// router.delete("/:id", async (req, res) => {
-//   try {
-//     const donation = await Donation.findById(req.params.id);
+router.post("/donations", async (req, res) => {
+  const { amount, campaignId, donorId, paymentId } = req.body;
 
-//     if (!donation)
-//       return res.status(404).json({ error: "Donation not found." });
-//     if (donation.donorId.toString() !== req.user.id)
-//       return res.status(403).json({ error: "Unauthorized action." });
+  try {
+    // 🔥 You forgot this line!
+    const campaign = await Campaign.findById(campaignId).lean();
 
-//     // OPTIONAL: mark as refunded instead of deleting
-//     // donation.isRefunded = true;
-//     // await donation.save();
-//     await donation.deleteOne();
+    if (!campaign) {
+      return res.status(404).json({ message: "Campaign not found" });
+    }
 
-//     res.json({ message: "Donation refunded." });
-//   } catch (err) {
-//     console.error("[RefundDonation] Error:", err);
-//     res.status(500).json({ error: "Failed to process refund." });
-//   }
-// });
+    const donation = await Donation.create({
+      amount,
+      campaignId,
+      donorId,
+      paymentId,
+      campaignSnapshot: {
+        title: campaign.title,
+        image: campaign.image,
+        petName: campaign.petName, // Optional: only if your schema has this
+      },
+    });
+
+    await Campaign.findByIdAndUpdate(campaignId, {
+      $inc: { raisedAmount: amount },
+    });
+
+    res.status(201).json({ message: "Donation saved." });
+  } catch (error) {
+    console.error("Error saving donation:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 export default router;
