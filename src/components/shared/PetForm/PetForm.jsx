@@ -90,7 +90,7 @@ const PetForm = ({ initialData = null, onSubmit }) => {
         ...values,
         category: values.category.label,
         image: imageURL,
-        adopted: initialData?.adopted || false,
+        isAdopted: initialData?.isAdopted || false,
         ownerId: initialData?.ownerId || user?.uid,
         ownerName: initialData?.ownerName || user?.displayName,
         ownerEmail: initialData?.ownerEmail || user?.email,
@@ -197,24 +197,27 @@ const PetForm = ({ initialData = null, onSubmit }) => {
             <div className="text-red-500 text-sm">{formik.errors.age}</div>
           )}
         </div>
-      <div>
-  <label className="block font-medium text-sm text-gray-700" htmlFor="gender">
-    Pet Gender
-  </label>
-  <select
-    id="gender"
-    {...formik.getFieldProps("gender")}
-    className="mt-1 block w-full border rounded-md p-2"
-  >
-    <option value="" label="Select gender" />
-    <option value="male" label="Male" />
-    <option value="female" label="Female" />
-    <option value="other" label="Other" />
-  </select>
-  {formik.touched.gender && formik.errors.gender && (
-    <div className="text-red-500 text-sm">{formik.errors.gender}</div>
-  )}
-</div>
+        <div>
+          <label
+            className="block font-medium text-sm text-gray-700"
+            htmlFor="gender"
+          >
+            Pet Gender
+          </label>
+          <select
+            id="gender"
+            {...formik.getFieldProps("gender")}
+            className="mt-1 block w-full border rounded-md p-2"
+          >
+            <option value="" label="Select gender" />
+            <option value="Male" label="Male" />
+            <option value="Female" label="Female" />
+            <option value="Other" label="Other" />
+          </select>
+          {formik.touched.gender && formik.errors.gender && (
+            <div className="text-red-500 text-sm">{formik.errors.gender}</div>
+          )}
+        </div>
 
         <div>
           <label className="block font-medium text-sm text-gray-700">
