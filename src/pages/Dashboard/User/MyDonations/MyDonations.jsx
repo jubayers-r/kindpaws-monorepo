@@ -1,84 +1,137 @@
-import { useState } from "react";
-import { motion } from "motion/react";
-import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const mockDonations = [
-  {
-    id: "don1",
-    petName: "Milo",
-    petImage: "https://placekitten.com/80/80",
-    amount: 1000,
-  },
-  {
-    id: "don2",
-    petName: "Bella",
-    petImage: "https://placekitten.com/81/81",
-    amount: 1500,
-  },
-];
+import { toast } from "sonner";
+import { motion } from "motion/react";
+import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/useAuth";
 
 const MyDonations = () => {
-  const [donations, setDonations] = useState(mockDonations);
+  const { user } = useAuth();
 
-  const handleRefund = (id) => {
-    const confirmed = confirm("Are you sure you want to request a refund?");
-    if (!confirmed) return;
+  const queryClient = useQueryClient();
 
-    // Simulate refund by removing from mock state (replace with mutation)
-    setDonations((prev) => prev.filter((donation) => donation.id !== id));
-    toast.success("Refund requested successfully.");
-  };
+  const { data: donations, isLoading } = useQuery({
+    queryKey: ["my-donations"],
+    queryFn: async () => {
+      const res = await axios.get("http://localhost:8000/api/campaigns/my", {
+        params: { id: user.uid },
+      });
+      return res.data;
+    },
+  });
+
+  const refundMutation = useMutation({
+    mutationFn: async (id) => {
+      await axios.patch(`http://localhost:8000/api/campaigns/refund/${id}`);
+    },
+    onSuccess: () => {
+      toast.success("Refund processed");
+      queryClient.invalidateQueries(["my-donations"]);
+    },
+    onError: () => toast.error("Refund failed"),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="p-6 space-y-4">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-20 w-full rounded-xl" />
+        ))}
+      </div>
+    );
+  }
+
+  if (!donations?.length) {
+    return (
+      <p className="text-center text-muted-foreground mt-10">
+        You haven't made any donations yet.
+      </p>
+    );
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      className="p-6 max-w-6xl mx-auto"
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="max-w-5xl mx-auto px-4 py-8"
+      transition={{ duration: 0.5 }}
     >
-      <h2 className="text-3xl font-semibold mb-6">My Donations</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">My Donations</h2>
 
-      {donations.length === 0 ? (
-        <p className="text-center text-gray-500">You haven’t donated yet.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border border-gray-200 rounded-md text-left">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-3">Pet</th>
-                <th className="p-3">Name</th>
-                <th className="p-3">Amount Donated</th>
-                <th className="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
+      <Card className="overflow-x-auto">
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Pet</TableHead>
+                <TableHead>Campaign</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
               {donations.map((donation) => (
-                <tr key={donation.id} className="border-t">
-                  <td className="p-3">
+                <TableRow key={donation._id} className="hover:bg-muted">
+                  <TableCell>
                     <img
-                      src={donation.petImage}
-                      alt={donation.petName}
-                      className="w-14 h-14 object-cover rounded-md"
+                      src={donation.campaignSnapshot.image}
+                      alt="Pet"
+                      className="h-16 w-16 rounded-xl object-cover"
                     />
-                  </td>
-                  <td className="p-3 font-medium">{donation.petName}</td>
-                  <td className="p-3">৳{donation.amount}</td>
-                  <td className="p-3">
+                  </TableCell>
+                  <TableCell>
+                    <div className="font-medium">
+                      {donation.campaignSnapshot.petName}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {donation.campaignSnapshot.title}
+                    </div>
+                  </TableCell>
+                  <TableCell>${donation.amount}</TableCell>
+                  <TableCell>
+                    {new Date(donation.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {donation.isRefunded ? (
+                      <Badge variant="destructive">Refunded</Badge>
+                    ) : (
+                      <Badge variant="success">Success</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
                     <Button
-                      variant="destructive"
+                      variant="outline"
                       size="sm"
-                      onClick={() => handleRefund(donation.id)}
+                      disabled={donation.isRefunded}
+                      onClick={() => refundMutation.mutate(donation._id)}
                     >
                       Ask for Refund
                     </Button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 };
