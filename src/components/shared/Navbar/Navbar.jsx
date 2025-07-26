@@ -6,9 +6,10 @@ import NavLinks from "./NavLinks";
 import { Link } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
+import { AvatarDropdown } from "./AvatarDropdown";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
+  const { user } = useAuth();
 
   const loginRegister = (
     <>
@@ -35,20 +36,10 @@ const Navbar = () => {
         <NavLinks />
       </div>
       {/* navend starts */}
-      <div className=" flex items-center gap-4">
-        {user === null ? (
-          <>{loginRegister}</>
-        ) : (
-          <Button
-            onClick={logOut}
-            className=" py-4 hover:bg-white hover:text-black "
-          >
-            Logout
-          </Button>
-        )}
-        {/* <Button className="btn">Toggle</Button> */}
+      <div className=" flex items-center gap-4 ">
+        {user === null ? <>{loginRegister}</> : <AvatarDropdown />}
 
-        <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60" />
+        <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60 " />
         <Link to="/contact-us">
           <Button
             variant="none"
