@@ -154,7 +154,7 @@ const PetDetailsPage = () => {
         className="text-sm text-gray-600 flex flex-wrap gap-4"
         variants={fadeIn(0.5)}
       >
-        <span>📅 Added on: {new Date(pet.dateAdded).toLocaleDateString()}</span>
+        <span>📅 Added on: {new Date(pet.dateAdded || pet.createdAt).toLocaleDateString()}</span>
         {pet.isFeatured && (
           <span className="text-yellow-600">🌟 Featured Pet</span>
         )}

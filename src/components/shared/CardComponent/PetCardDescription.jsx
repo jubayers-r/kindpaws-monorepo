@@ -12,7 +12,7 @@ const PetCardDescription = ({ pet }) => {
     <>
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-bold text-secondary hover:text-primary hover:underline cursor-pointer">
-          {name}
+          {name}, <span className="text-sm">{pet.age}</span>
         </h3>
       </div>
       <div className="text-sm text-muted-foreground flex flex-wrap items-center justify-between">
