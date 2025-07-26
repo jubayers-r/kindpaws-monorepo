@@ -7,7 +7,16 @@ const router = express.Router();
 // fetch all users
 router.get("/", async (req, res) => {
   try {
-    const users = await User.find();
+
+    const filter = {}
+    const {uid} = req.query;
+
+    if(uid){
+      filter.uid = uid;
+    }
+
+    const users = await User.find(filter);
+
     success(res, users);
   } catch (err) {
     error(res, err);
