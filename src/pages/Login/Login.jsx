@@ -11,9 +11,10 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { auth } from "@/firebase/firebase.init";
 import LoginOptions from "@/components/shared/LoginOptions/LoginOptions";
+import { toast, Toaster } from "sonner";
 
 export default function Login() {
-  const { logIn } = useAuth();
+  const { logIn, logOut, stateData } = useAuth();
 
   const {
     register,
@@ -21,7 +22,6 @@ export default function Login() {
     setError,
     formState: { errors },
   } = useForm();
-  const {stateData } = useAuth();
   const navigate = useNavigate();
 
   const updateLastLogin = async (userId) => {
@@ -39,6 +39,19 @@ export default function Login() {
       if (currentUser) {
         await updateLastLogin(currentUser.uid);
       }
+
+      const res = await axios.get("http://localhost:8000/api/users", {
+        params: { uid: currentUser.uid },
+      });
+
+      if (res.data[0].banned) {
+        await logOut(); // prefer direct here for clarity
+        toast.error("Your account has been banned.");
+        // Ensure redirect or reload happens to remove ghost auth state
+
+        return;
+      }
+
       navigate(stateData ? stateData : "/");
     } catch (error) {
       // Handle Firebase error
@@ -117,6 +130,7 @@ export default function Login() {
           </div>
         </motion.div>
       </div>
+      <Toaster />
     </div>
   );
 }
