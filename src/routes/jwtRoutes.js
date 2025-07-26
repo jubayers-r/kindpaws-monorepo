@@ -1,13 +1,20 @@
 import express from "express";
 import admin from "firebase-admin";
-import serviceAccount from "../firebaseServiceAccount.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
+const base64 = process.env.FIREBASE_CREDS_BASE64;
+
+if (!admin.apps.length && base64) {
+  const serviceAccount = JSON.parse(
+    Buffer.from(base64, "base64").toString("utf-8")
+  );
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 const router = express.Router();
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 // issue jwt
 router.post(
