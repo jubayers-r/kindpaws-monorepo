@@ -65,14 +65,12 @@ export default function PetsTable({ user, role }) {
   });
 
   // sort logic with filter logic
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const isAdmin = role === "admin";
 
   const isAllPetsLocation = pathname === "/dashboard/all-pets";
 
   const AllPetsLogic = isAdmin && isAllPetsLocation;
-
-
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
@@ -213,7 +211,7 @@ export default function PetsTable({ user, role }) {
                           {pet.ownerName || "N/A"}
                         </div>
                         <div className="text-xs text-muted-foreground">
-                          {pet.ownerName || "N/A"}
+                          {pet.ownerEmail || "N/A"}
                         </div>
                       </TableCell>
                     </>

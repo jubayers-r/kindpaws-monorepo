@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -88,7 +88,7 @@ export const SwiperComponent = () => {
                       <button className="px-6 py-2 rounded-full bg-primary hover:bg-primary/90 text-white font-semibold transition duration-300 text-sm sm:text-base">
                         Know More
                       </button>
-                
+
                       <button className="px-6 py-2 rounded-full border border-white hover:bg-white hover:text-black text-white font-semibold transition duration-300 text-sm sm:text-base">
                         Contact Us
                       </button>
