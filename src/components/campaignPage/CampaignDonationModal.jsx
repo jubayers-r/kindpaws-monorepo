@@ -11,11 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import axios from "axios";
 import CardComponent from "@/components/shared/CardComponent/CardComponent";
+import { useAuth } from "@/hooks/useAuth";
 
 const CampaignDonationModal = ({ campaign }) => {
+  const { user } = useAuth();
+
   const stripe = useStripe();
   const elements = useElements();
 
@@ -53,10 +56,27 @@ const CampaignDonationModal = ({ campaign }) => {
       if (result.error) {
         toast.error(result.error.message);
       } else if (result.paymentIntent.status === "succeeded") {
-        toast.success("Donation successful!");
-        setDonationSuccess(true);
-        setAmount("100");
-        fetchRecommendedCampaigns();
+        try {
+          await axios.post("http://localhost:8000/api/campaigns/donations", {
+            amount: parseInt(amount),
+            campaignId: campaign._id,
+            donorId: user.uid,
+            paymentId: result.paymentIntent.id,
+            campaignSnapshot: {
+              title: campaign.title,
+              image: campaign.image,
+              petName: campaign.petName, // Make sure this field exists
+            },
+          });
+
+          toast.success("Donation successful!");
+          setDonationSuccess(true);
+          setAmount("100");
+          fetchRecommendedCampaigns();
+        } catch (err) {
+          toast.error("Payment succeeded but saving donation failed.");
+          console.error(err);
+        }
       }
     } catch (error) {
       toast.error("Something went wrong during donation.");
