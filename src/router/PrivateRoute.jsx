@@ -1,10 +1,15 @@
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
+import { useEffect } from "react";
 
-const PrivetRoute = ({ children }) => {
-  const { loading, user } = useAuth();
+const PrivateRoute = ({ children }) => {
+  const { loading, user, setStateData } = useAuth();
+  const location = useLocation();
+  useEffect(() => {
+    setStateData(location.pathname);
+  }, []);
 
   if (loading) {
     return (
@@ -19,4 +24,4 @@ const PrivetRoute = ({ children }) => {
   return children;
 };
 
-export default PrivetRoute;
+export default PrivateRoute;

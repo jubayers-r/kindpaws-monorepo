@@ -12,7 +12,7 @@ import ContactUs from "@/pages/ContactUs/ContactUs";
 import Login from "@/pages/Login/Login";
 import Register from "@/pages/Register/Register";
 import Dashboard from "@/pages/Dashboard/Dashboard";
-import PrivetRoute from "./PrivetRoute";
+import PrivateRoute from "./PrivateRoute";
 import UserTable from "@/pages/Dashboard/Admin/UsersTable/UsersTable";
 import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
 import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDonationsTable";
@@ -50,7 +50,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "pet/details/:id",
-        Component: PetDetailsPage,
+        element: (
+          <PrivateRoute>
+            <PetDetailsPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "campaigns",
@@ -59,7 +63,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "campaign/details/:id",
-        Component: CampaignDetailsPage,
+        element: (
+          <PrivateRoute>
+            <CampaignDetailsPage />
+          </PrivateRoute>
+        ),
         loader: async ({ params }) =>
           await fetch(`http://localhost:8000/api/campaigns/${params.id}`),
       },
@@ -73,7 +81,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
       <Suspense fallback={<LoadingScreen isLoading={true} />}>
-        <AuthLayout />{" "}
+        <AuthLayout />
       </Suspense>
     ),
     children: [
@@ -90,11 +98,11 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: (
-      <PrivetRoute>
+      <PrivateRoute>
         <Suspense fallback={<LoadingScreen isLoading={true} />}>
           <DashboardLayout />
         </Suspense>
-      </PrivetRoute>
+      </PrivateRoute>
     ),
     children: [
       {

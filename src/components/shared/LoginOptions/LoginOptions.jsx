@@ -1,7 +1,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { FaGithub, FaGoogle } from "react-icons/fa6";
+import { FaArrowLeft, FaGithub, FaGoogle } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 
 const LoginOptions = () => {
@@ -36,7 +36,7 @@ const LoginOptions = () => {
           </Button>
         </div>
       </div>
-      {/* github signup */}
+      {/* github */}
       <div className="mt-6 w-full">
         <div className="flex justify-center">
           <Button
@@ -51,6 +51,30 @@ const LoginOptions = () => {
           >
             <FaGithub className="w-5 h-5 text-primary" />
             Continue with Github
+          </Button>
+        </div>
+      </div>
+      {/* back to homepage*/}
+      <div className="mt-6 w-full">
+        <div className="flex justify-center">
+          <Button
+            type="submit"
+            variant="outline"
+            className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
+            onClick={() => {
+              if (
+                stateData === null ||
+                stateData === "/login" ||
+                stateData === "/register"
+              ) {
+                navigate("/");
+              } else {
+                navigate(stateData);
+              }
+            }}
+          >
+            <FaArrowLeft className="w-5 h-5 text-primary" />
+            Go back
           </Button>
         </div>
       </div>
