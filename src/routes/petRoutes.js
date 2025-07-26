@@ -155,6 +155,7 @@ router.delete(
 router.post("/add-pet", async (req, res) => {
   try {
     const petData = req.body;
+    console.log(petData);
     const pet = await Pet.create({ ...petData });
     if (!pet) {
       return notFound(res, "Pet");

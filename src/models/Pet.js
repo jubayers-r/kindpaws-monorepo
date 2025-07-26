@@ -7,7 +7,7 @@ const petSchema = new mongoose.Schema(
     age: String,
     gender: {
       type: String,
-      enum: ["Male", "Female", "Unknown"],
+      enum: ["Male", "Female", "Other"],
     },
     location: String,
     category: {
@@ -18,7 +18,7 @@ const petSchema = new mongoose.Schema(
     longDescription: String,
     tags: [String],
     isFeatured: { type: Boolean, default: false },
-    isAdopted: { type: Boolean, required: true, default: false },
+    isAdopted: { type: Boolean, default: false },
 
     ownerId: {
       type: String,
