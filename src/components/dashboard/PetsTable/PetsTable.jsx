@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { Pencil, Trash2, Repeat } from "lucide-react";
 import axios from "axios";
 
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useState } from "react";
 
 export default function PetsTable({ user, role }) {
@@ -65,11 +65,18 @@ export default function PetsTable({ user, role }) {
   });
 
   // sort logic with filter logic
+  const {pathname} = useLocation();
   const isAdmin = role === "admin";
+
+  const isAllPetsLocation = pathname === "/dashboard/all-pets";
+
+  const AllPetsLogic = isAdmin && isAllPetsLocation;
+
+
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
-  const filteredPets = isAdmin
+  const filteredPets = AllPetsLogic
     ? pets
     : pets.filter((pet) => pet?.ownerId === user?.uid);
   console.log(filteredPets);

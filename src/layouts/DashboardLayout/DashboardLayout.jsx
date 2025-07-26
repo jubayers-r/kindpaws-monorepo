@@ -8,7 +8,7 @@ import { LogoBlack } from "@/assets/Logo";
 import { dashboardNavItems } from "@/data/DashboardNavItems";
 import DashboardTopNavbar from "@/components/dashboard/DashboardTopNavbar/DashboardTopNavbar";
 import { useEffect, useState } from "react";
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
 import axios from "axios";
 import { AuthRoleProvider } from "@/context/role/AuthRoleProvider";
 import { useAuth } from "@/hooks/useAuth";
@@ -37,19 +37,19 @@ const DashboardLayout = () => {
         console.error("Axios error:", err);
       }
     };
-
     fetchUserRole();
   }, [user?.uid]);
 
-  const filteredNavItems = dashboardNavItems.filter((item) =>
-    item.roles.includes(role)
-  );
+  const filteredNavItems =
+    role === "admin"
+      ? dashboardNavItems
+      : dashboardNavItems.filter((item) => item.roles.includes(role));
 
   return (
     <div>
       {/* Mobile: Only show on small screens */}
 
-      <Sheet >
+      <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" className="sm:hidden">
             <Menu />
@@ -71,12 +71,11 @@ const DashboardLayout = () => {
           ))}
           {home}
         </SheetContent>
-          {home}
+        {home}
       </Sheet>
 
       {/* Desktop: Always visible */}
       <aside className="hidden sm:flex flex-col w-64 p-4 border-r bg-muted h-screen fixed top-0 left-0 z-40 gap-2">
-
         {filteredNavItems.map((item, i) => (
           <Link
             key={i}
@@ -86,7 +85,7 @@ const DashboardLayout = () => {
               location.pathname === item.href && "bg-white font-semibold"
             )}
           >
-            <item.icon className="w-5 h-5"/>
+            <item.icon className="w-5 h-5" />
             {item.label}
           </Link>
         ))}
@@ -95,8 +94,8 @@ const DashboardLayout = () => {
       <main className="sm:ml-64">
         <DashboardTopNavbar />
         <AuthRoleProvider user={user}>
-        <Outlet />
-        <Toaster />
+          <Outlet />
+          <Toaster />
         </AuthRoleProvider>
       </main>
     </div>

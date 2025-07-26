@@ -17,10 +17,17 @@ import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export default function DonationsTable({ user, role }) {
+  const {pathname} = useLocation();
+
   const isAdmin = role === "admin";
+
+  const isAllDonationsLocation = pathname === "/dashboard/all-donations";
+  const AllAllDonationsLogic = isAdmin && isAllDonationsLocation;
+
+
   const [filter, setFilter] = useState("all");
   const [ownerFilter, setOwnerFilter] = useState("");
 
@@ -62,7 +69,7 @@ export default function DonationsTable({ user, role }) {
   });
 
   const filteredCampaigns = campaigns
-    .filter((c) => (isAdmin || c?.ownerId === user?.uid))
+    .filter((c) => (AllAllDonationsLogic || c?.ownerId === user?.uid))
     .filter((c) => {
       if (filter === "active" && !c.isOpen) return false;
       if (filter === "paused" && c.isOpen) return false;
