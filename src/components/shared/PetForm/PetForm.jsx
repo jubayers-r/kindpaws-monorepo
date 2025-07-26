@@ -191,25 +191,30 @@ const PetForm = ({ initialData = null, onSubmit }) => {
             type="text"
             {...formik.getFieldProps("age")}
             className="mt-1 block w-full border rounded-md p-2"
+            placeholder="example: 5 months"
           />
           {formik.touched.age && formik.errors.age && (
             <div className="text-red-500 text-sm">{formik.errors.age}</div>
           )}
         </div>
-        <div>
-          <label className="block font-medium text-sm text-gray-700">
-            Pet Gender
-          </label>
-          <input
-            id="gender"
-            type="text"
-            {...formik.getFieldProps("gender")}
-            className="mt-1 block w-full border rounded-md p-2"
-          />
-          {formik.touched.gender && formik.errors.gender && (
-            <div className="text-red-500 text-sm">{formik.errors.gender}</div>
-          )}
-        </div>
+      <div>
+  <label className="block font-medium text-sm text-gray-700" htmlFor="gender">
+    Pet Gender
+  </label>
+  <select
+    id="gender"
+    {...formik.getFieldProps("gender")}
+    className="mt-1 block w-full border rounded-md p-2"
+  >
+    <option value="" label="Select gender" />
+    <option value="male" label="Male" />
+    <option value="female" label="Female" />
+    <option value="other" label="Other" />
+  </select>
+  {formik.touched.gender && formik.errors.gender && (
+    <div className="text-red-500 text-sm">{formik.errors.gender}</div>
+  )}
+</div>
 
         <div>
           <label className="block font-medium text-sm text-gray-700">

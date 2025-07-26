@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router"; // use `Link` if using Next.js
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export function AvatarDropdown() {
@@ -43,8 +43,12 @@ export function AvatarDropdown() {
         <Avatar className="h-12 w-12 ">
           <AvatarImage src={user.photoURL} alt="User Avatar" />
           <AvatarFallback>DP</AvatarFallback>
-          <ChevronDown className="absolute bottom-1 right-1.5 bg-white rounded-full shadow-md text-gray-500 " />
         </Avatar>
+        {open ? (
+          <ChevronUp className="absolute bottom-2 right-3 bg-white rounded-full shadow-md text-gray-500 z-10" />
+        ) : (
+          <ChevronDown className="absolute bottom-2 right-3 bg-white rounded-full shadow-md text-gray-500 z-10" />
+        )}
       </Button>
 
       <AnimatePresence>
