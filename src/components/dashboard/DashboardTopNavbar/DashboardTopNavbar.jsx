@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { dashboardNavItems } from "@/data/DashboardNavItems";
 import { useLocation } from "react-router";
+import DarkMode from "@/components/shared/DarkMode";
 // import { dashboardNavItems } from "../DashboardNavItems";
 // import clsx from "clsx";
 // import { home } from "@/layouts/DashboardLayout/DashboardLayout";
@@ -25,18 +26,19 @@ const DashboardTopNavbar = () => {
       {/* Center / Title (optional) */}
 
       {activeItem && (
-        <h2 className="text-lg font-semibold ">
+        <h2 className="text-lg font-semibold dark:text-primary-foreground">
           {activeItem.label}
         </h2>
       )}
 
       {/* Right side: user info + logout */}
       <div className="flex items-center gap-3">
-        <Avatar>
+        <DarkMode/>
+        <Avatar className={"dark:bg-white"}>
           <AvatarImage src={user?.photoURL || ""} />
-          <AvatarFallback>{user?.displayName?.[0] || "U"}</AvatarFallback>
+          <AvatarFallback >{user?.displayName?.[0] || "U"}</AvatarFallback>
         </Avatar>
-        <p className="hidden md:block">{user?.displayName}</p>
+        <p className="hidden md:block dark:text-primary-foreground">{user?.displayName}</p>
         <Button variant="destructive" size="sm" onClick={logOut}>
           <LogOut className="h-4 w-4 mr-1" />
           <span className="hidden sm:inline" onClick={logOut}>

@@ -48,7 +48,7 @@ const FAQ = () => {
             </span>{" "}
           </p>
         </div>
-        <h1 className="text-3xl sm:text-4xl/tight md:text-5xl/tight font-black text-secondary mb-10">
+        <h1 className="text-3xl sm:text-4xl/tight md:text-5xl/tight font-black text-secondary mb-10 dark:text-white">
           Why Choose Our Pet Adoption Community?
         </h1>
         <Accordion

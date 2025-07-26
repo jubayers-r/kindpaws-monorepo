@@ -61,7 +61,7 @@ const AdoptionRequests = () => {
       transition={{ duration: 0.4 }}
       className="max-w-7xl mx-auto px-4 py-8"
     >
-      <h2 className="text-3xl font-semibold mb-6 text-center lg:text-left">
+      <h2 className="text-3xl font-semibold mb-6 text-center lg:text-left dark:text-secondary-foreground">
         Adoption Requests
       </h2>
 
@@ -86,12 +86,12 @@ const AdoptionRequests = () => {
               <tbody>
                 {requests.map((req) => (
                   <tr key={req._id} className="border-t">
-                    <td className="p-3">{req.petName}</td>
-                    <td className="p-3">{req.userName}</td>
-                    <td className="p-3">{req.userEmail}</td>
-                    <td className="p-3">{req.phone}</td>
-                    <td className="p-3">{req.address}</td>
-                    <td className="p-3 capitalize">
+                    <td className="p-3 dark:text-primary-foreground">{req.petName}</td>
+                    <td className="p-3 dark:text-primary-foreground">{req.userName}</td>
+                    <td className="p-3 dark:text-primary-foreground">{req.userEmail}</td>
+                    <td className="p-3 dark:text-primary-foreground">{req.phone}</td>
+                    <td className="p-3 dark:text-primary-foreground">{req.address}</td>
+                    <td className="p-3 dark:text-primary-foreground capitalize">
                       <span
                         className={`px-2 py-1 rounded text-white text-xs ${
                           req.status === "Approved"

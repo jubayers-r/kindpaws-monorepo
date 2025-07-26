@@ -54,7 +54,7 @@ const MyDonations = () => {
   if (!donations?.length) {
     return (
       <motion.p
-        className="text-center text-muted-foreground mt-10"
+        className="text-center text-muted-foreground mt-10 dark:text-primary-foreground"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >

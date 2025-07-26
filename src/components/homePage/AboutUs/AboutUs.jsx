@@ -31,7 +31,7 @@ const features = [
 
 const AboutUs = () => {
   return (
-    <section className="bg-[#f9f5ef] py-16">
+    <section className="bg-[#f9f5ef] py-16 rounded-4xl" >
       <div className="w-[95%] max-w-7xl mx-auto text-center">
         {/* Title */}
         <div className="mb-8 ">

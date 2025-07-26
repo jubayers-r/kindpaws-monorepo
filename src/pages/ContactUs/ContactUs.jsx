@@ -72,7 +72,7 @@ export default function ContactUs() {
           <h2 className="text-3xl md:text-4xl font-extrabold text-primary mb-4">
             We’re Here for You and Your Future Pet
           </h2>
-          <p className="text-muted-foreground max-w-md">
+          <p className="text-muted-foreground max-w-md dark:text-primary-foreground">
             Have questions about adoption, campaigns, or caring for your new
             companion? Reach out — our team is ready to help you every paw-step
             of the way.
@@ -80,15 +80,17 @@ export default function ContactUs() {
           <div className="mt-6 space-y-5">
             {contactItems.map((item, idx) => (
               <div key={idx} className="flex items-center gap-4">
-                <span className="p-3 rounded-full bg-primary/10 text-primary">
+                <span className="p-3 rounded-full bg-primary/10 text-primary ">
                   {item.icon}
                 </span>
-                <p className="text-base text-muted-foreground">{item.label}</p>
+                <p className="text-base text-muted-foreground dark:text-white">
+                  {item.label}
+                </p>
               </div>
             ))}
           </div>
           <div className="mt-6 flex items-center gap-4">
-            <span className="p-3 rounded-full bg-primary/10 text-primary">
+            <span className="p-3 rounded-full bg-primary/10 text-primary ">
               <Share2 className="w-4 h-4" />
             </span>
             <div className="flex gap-4">
@@ -97,7 +99,7 @@ export default function ContactUs() {
                   href="https://pinterest.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 text-black flex items-center justify-center hover:text-primary"
+                  className="w-10 h-10 text-black flex items-center justify-center hover:text-primary dark:bg-white rounded-full"
                 >
                   {icon}
                 </a>

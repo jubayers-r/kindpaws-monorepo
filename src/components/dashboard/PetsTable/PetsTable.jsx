@@ -127,8 +127,8 @@ export default function PetsTable({ user, role }) {
       className="w-full"
     >
       {/* TABLE FOR DESKTOP */}
-      <div className="hidden overflow-x-auto lg:flex flex-col ">
-        <Table className={"flex-grow"}>
+      <div className="hidden overflow-x-auto lg:flex flex-col  dark:bg-primary-foreground">
+        <Table className={"flex-grow "}>
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>

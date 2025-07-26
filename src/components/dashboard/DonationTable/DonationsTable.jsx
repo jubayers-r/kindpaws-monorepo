@@ -25,7 +25,7 @@ export default function DonationsTable({ user, role }) {
   const isAdmin = role === "admin";
 
   const isAllDonationsLocation = pathname === "/dashboard/all-donations";
-  const AllAllDonationsLogic = isAdmin && isAllDonationsLocation;
+  const AllDonationsLogic = isAdmin && isAllDonationsLocation;
 
 
   const [filter, setFilter] = useState("all");
@@ -69,7 +69,7 @@ export default function DonationsTable({ user, role }) {
   });
 
   const filteredCampaigns = campaigns
-    .filter((c) => (AllAllDonationsLogic || c?.ownerId === user?.uid))
+    .filter((c) => (AllDonationsLogic || c?.ownerId === user?.uid))
     .filter((c) => {
       if (filter === "active" && !c.isOpen) return false;
       if (filter === "paused" && c.isOpen) return false;
@@ -142,7 +142,7 @@ export default function DonationsTable({ user, role }) {
                 const progress = Math.min(100, Math.round((c.collectedAmount / c.goalAmount) * 100));
                 return (
                   <TableRow key={c._id}>
-                    <TableCell className="font-medium">{c.title}</TableCell>
+                    <TableCell className="font-medium dark:text-primary-foreground">{c.title}</TableCell>
                     <TableCell>${c.goalAmount}</TableCell>
                     <TableCell>
                       <Progress value={progress} className="h-2" />
@@ -157,7 +157,7 @@ export default function DonationsTable({ user, role }) {
                     </TableCell>
                     {isAdmin && (
                       <TableCell>
-                        <div className="text-sm font-medium">{c.ownerName || "N/A"}</div>
+                        <div className="text-sm font-medium dark:text-primary-foreground">{c.ownerName || "N/A"}</div>
                       </TableCell>
                     )}
                     <TableCell className="space-x-2 whitespace-nowrap">
@@ -176,7 +176,7 @@ export default function DonationsTable({ user, role }) {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-muted-foreground dark:text-primary-foreground">
                   No campaigns found.
                 </TableCell>
               </TableRow>

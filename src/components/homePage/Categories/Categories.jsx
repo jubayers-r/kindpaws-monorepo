@@ -79,11 +79,11 @@ const Categories = () => {
   );
 
   return (
-    <div className="text-black overflow-hidden ">
-      <h3 className="font-bold sm:text-5xl text-3xl text-center sm:mt-20 mt-10">
+    <div className="text-secondary overflow-hidden ">
+      <h3 className="font-bold sm:text-5xl text-3xl text-center sm:mt-20 mt-10 dark:text-secondary-foreground">
         Find Your Best Match
       </h3>
-      <div className="xl:grid xl:grid-cols-6 xl:gap-5 hidden my-20 sm:my-30 ">
+      <div className="xl:grid xl:grid-cols-6 xl:gap-5 hidden my-20 sm:my-30 dark:text-secondary-foreground">
         {petCategories.map((item, i) => (
           <>{circle(i, "", item.color, item.img, item.category)}</>
         ))}

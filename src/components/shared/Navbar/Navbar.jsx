@@ -7,9 +7,13 @@ import { Link } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { AvatarDropdown } from "./AvatarDropdown";
+import { Sun, Moon } from "lucide-react";
+import { useEffect, useState } from "react";
+import DarkMode from "../DarkMode";
 
 const Navbar = () => {
   const { user } = useAuth();
+
 
   const loginRegister = (
     <>
@@ -38,6 +42,9 @@ const Navbar = () => {
       {/* navend starts */}
       <div className=" flex items-center gap-4 ">
         {user === null ? <>{loginRegister}</> : <AvatarDropdown />}
+
+        {/* Dark Mode Toggle Button */}
+       <DarkMode/>
 
         <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60 " />
         <Link to="/contact-us">
