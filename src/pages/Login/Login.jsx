@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { auth } from "@/firebase/firebase.init";
+import LoginOptions from "@/components/shared/LoginOptions/LoginOptions";
 
 export default function Login() {
   const { logIn } = useAuth();
@@ -20,7 +21,7 @@ export default function Login() {
     setError,
     formState: { errors },
   } = useForm();
-  const { googleLogin, stateData } = useAuth();
+  const {stateData } = useAuth();
   const navigate = useNavigate();
 
   const updateLastLogin = async (userId) => {
@@ -111,30 +112,7 @@ export default function Login() {
                   Register here
                 </Link>
               </p>
-              {/* google login */}
-              <div className="mt-6 w-full">
-                <div className="relative my-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="bg-white px-2 text-muted-foreground">
-                      Or
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex justify-center">
-                  <Button
-                    variant="outline"
-                    className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
-                    onClick={() => googleLogin()}
-                  >
-                    <FaGoogle className="w-5 h-5 text-primary" />
-                    Continue with Google
-                  </Button>
-                </div>
-              </div>
+              <LoginOptions />
             </div>
           </div>
         </motion.div>

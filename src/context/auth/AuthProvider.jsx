@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import {
   createUserWithEmailAndPassword,
+  GithubAuthProvider,
   GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -32,9 +33,11 @@ const AuthProvider = ({ children }) => {
   const logIn = (email, password) =>
     signInWithEmailAndPassword(auth, email, password);
 
-  const provider = new GoogleAuthProvider();
+  const googleProvider = new GoogleAuthProvider();
+  const githubProvider = new GithubAuthProvider();
 
-  const googleLogin = () => signInWithPopup(auth, provider);
+  const googleLogin = () => signInWithPopup(auth, googleProvider);
+  const githubLogin = () => signInWithPopup(auth, githubProvider)
 
   const forgotPassword = (email) => sendPasswordResetEmail(auth, email);
 
@@ -50,6 +53,7 @@ const AuthProvider = ({ children }) => {
     loading,
     setLoading,
     forgotPassword,
+    githubLogin
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };
