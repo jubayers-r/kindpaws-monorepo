@@ -41,7 +41,7 @@ export function AvatarDropdown() {
         onClick={() => setOpen((prev) => !prev)}
       >
         <Avatar className="h-12 w-12 ">
-          <AvatarImage src={user.photoURL} alt="User Avatar" />
+          <AvatarImage src={user.photoURL} alt="User Avatar" className={"object-cover"} />
           <AvatarFallback>DP</AvatarFallback>
         </Avatar>
         {open ? (
