@@ -32,7 +32,7 @@ const Navbar = () => {
         <Logo />
       </div>
       {/* navcenter */}
-      <div className="hidden xl:flex bg-white rounded-full px-8 py-2 shadow-sm">
+      <div className="hidden lg:flex bg-white rounded-full px-8 py-2 shadow-sm">
         <NavLinks />
       </div>
       {/* navend starts */}
