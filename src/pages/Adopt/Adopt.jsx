@@ -57,37 +57,38 @@ const Adopt = () => {
 
   return (
     <>
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-center sm:mb-20 mb-10">
-        Adopt a New Family Member
-      </h1>
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-8 sm:mb-12">
+  Adopt a New Family Member
+</h1>
 
-      {/* 🔍 Filter Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
-        <input
-          type="text"
-          placeholder="Search pets by name..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setVisibleCount(ITEMS_PER_PAGE); // reset on search
-          }}
-          className="input input-bordered w-full sm:max-w-sm bg-white rounded-2xl px-2 py-3"
-        />
-        <select
-          value={selectedCategory}
-          onChange={(e) => {
-            setSelectedCategory(e.target.value);
-            setVisibleCount(ITEMS_PER_PAGE); // reset on filter
-          }}
-          className="select select-bordered w-full sm:max-w-xs bg-white rounded-2xl px-2 py-3"
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+{/* 🔍 Filter Controls */}
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto">
+  <input
+    type="text"
+    placeholder="Search pets by name..."
+    value={searchTerm}
+    onChange={(e) => {
+      setSearchTerm(e.target.value);
+      setVisibleCount(ITEMS_PER_PAGE); // reset on search
+    }}
+    className="input input-bordered w-full bg-white rounded-xl px-4 py-3"
+  />
+  <select
+    value={selectedCategory}
+    onChange={(e) => {
+      setSelectedCategory(e.target.value);
+      setVisibleCount(ITEMS_PER_PAGE); // reset on filter
+    }}
+    className="select select-bordered w-full bg-white rounded-xl px-4 py-3"
+  >
+    {categories.map((cat) => (
+      <option key={cat} value={cat}>
+        {cat}
+      </option>
+    ))}
+  </select>
+</div>
+
 
       {/* 🐾 Pet Cards */}
       <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">

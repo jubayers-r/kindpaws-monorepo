@@ -26,8 +26,7 @@ const Campaigns = () => {
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
         const matchesCategory =
-          selectedCategory === "All" ||
-          campaign.category === selectedCategory;
+          selectedCategory === "All" || campaign.category === selectedCategory;
         return matchesName && matchesCategory;
       })
       .sort(
@@ -56,12 +55,12 @@ const Campaigns = () => {
 
   return (
     <>
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-center sm:mb-20 mb-10">
+      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-8 sm:mb-12">
         Save a Paw, Change a Life
       </h1>
 
-      {/* 🔍 Filters */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+      {/* 🔍 Filter Controls */}
+      <div className="w-full max-w-3xl mx-auto mb-10 px-4">
         <input
           type="text"
           placeholder="Search campaigns by title..."
@@ -70,33 +69,15 @@ const Campaigns = () => {
             setSearchTerm(e.target.value);
             setVisibleCount(ITEMS_PER_PAGE);
           }}
-          className="input input-bordered w-screen  bg-white rounded-2xl px-2 py-3 text-center"
+          className="input input-bordered w-full bg-white rounded-xl px-4 py-3"
         />
-        {/* <select
-          value={selectedCategory}
-          onChange={(e) => {
-            setSelectedCategory(e.target.value);
-            setVisibleCount(ITEMS_PER_PAGE);
-          }}
-          className="select select-bordered w-full sm:max-w-xs bg-white rounded-2xl px-2 py-3"
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select> */}
       </div>
 
       {/* 📦 Campaign Grid */}
       <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-5">
         {visibleCampaigns.length > 0 ? (
           visibleCampaigns.map((campaign) => (
-            <CardComponent
-              key={campaign._id}
-              data={campaign}
-              type="campaign"
-            />
+            <CardComponent key={campaign._id} data={campaign} type="campaign" />
           ))
         ) : (
           <SkeletonCardComponent />
