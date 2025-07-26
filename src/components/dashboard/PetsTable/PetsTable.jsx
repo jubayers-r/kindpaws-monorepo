@@ -16,10 +16,9 @@ import { Pencil, Trash2, Repeat } from "lucide-react";
 import axios from "axios";
 
 import { Link } from "react-router";
+import { useState } from "react";
 
 export default function PetsTable({ user, role }) {
-  const isAdmin = role === "admin";
-
   const {
     data: pets = [],
     isLoading,
@@ -32,11 +31,6 @@ export default function PetsTable({ user, role }) {
       return res.json();
     },
   });
-
-  const filteredPets = isAdmin
-    ? pets
-    : pets.filter((pet) => pet?.ownerId === user?.uid);
-  console.log(filteredPets);
 
   const deletePet = useMutation({
     mutationFn: async (petId) => {
@@ -70,6 +64,56 @@ export default function PetsTable({ user, role }) {
     onError: () => toast.error("Failed to update pet status"),
   });
 
+  // sort logic with filter logic
+  const isAdmin = role === "admin";
+
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+
+  const filteredPets = isAdmin
+    ? pets
+    : pets.filter((pet) => pet?.ownerId === user?.uid);
+  console.log(filteredPets);
+
+  const sortedPets = [...filteredPets];
+  if (sortConfig.key) {
+    sortedPets.sort((a, b) => {
+      const aValue = a[sortConfig.key]?.toString().toLowerCase() || "";
+      const bValue = b[sortConfig.key]?.toString().toLowerCase() || "";
+      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
+
+  const requestSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
+  const getSortArrow = (key) => {
+    if (sortConfig.key !== key) return "";
+    return sortConfig.direction === "asc" ? "▲" : "▼";
+  };
+
+  // pagination logic
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const petsPerPage = 10;
+
+  const totalPages = Math.ceil(sortedPets.length / petsPerPage);
+  const paginatedPets = sortedPets.slice(
+    (currentPage - 1) * petsPerPage,
+    currentPage * petsPerPage
+  );
+
+  const goToNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -78,21 +122,41 @@ export default function PetsTable({ user, role }) {
       className="w-full"
     >
       {/* TABLE FOR DESKTOP */}
-      <div className="hidden lg:block overflow-x-auto">
-        <Table>
+      <div className="hidden overflow-x-auto lg:flex flex-col ">
+        <Table className={"flex-grow"}>
           <TableHeader>
             <TableRow>
+              <TableHead>#</TableHead>
               <TableHead>Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead
+                onClick={() => requestSort("name")}
+                className="cursor-pointer"
+              >
+                Name {getSortArrow("name")}
+              </TableHead>
+              <TableHead
+                onClick={() => requestSort("category")}
+                className="cursor-pointer"
+              >
+                Type {getSortArrow("category")}
+              </TableHead>
+              <TableHead
+                onClick={() => requestSort("isAdopted")}
+                className="cursor-pointer"
+              >
+                Status {getSortArrow("isAdopted")}
+              </TableHead>
               {isAdmin && (
                 <>
                   <TableHead>Owner Picture</TableHead>
-                  <TableHead>Owner</TableHead>
+                  <TableHead
+                    onClick={() => requestSort("ownerName")}
+                    className="cursor-pointer"
+                  >
+                    Owner {getSortArrow("ownerName")}
+                  </TableHead>
                 </>
               )}
-
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -107,9 +171,12 @@ export default function PetsTable({ user, role }) {
                   ))}
                 </TableRow>
               ))
-            ) : filteredPets.length > 0 ? (
-              filteredPets.map((pet) => (
+            ) : sortedPets.length > 0 ? (
+              paginatedPets.map((pet, index) => (
                 <TableRow key={pet._id}>
+                  <TableCell>
+                    {(currentPage - 1) * petsPerPage + index + 1}
+                  </TableCell>
                   <TableCell>
                     <img
                       src={pet.image || "/placeholder.jpg"}
@@ -185,6 +252,29 @@ export default function PetsTable({ user, role }) {
             )}
           </TableBody>
         </Table>
+        {totalPages > 1 && (
+          <div className="flex justify-end gap-2 mt-4">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={goToPrevPage}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span className="text-sm px-2 py-1 border rounded">
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* CARD VIEW FOR MOBILE */}
@@ -197,8 +287,8 @@ export default function PetsTable({ user, role }) {
               <Skeleton className="h-12 w-full" />
             </div>
           ))
-        ) : filteredPets.length > 0 ? (
-          filteredPets.map((pet) => (
+        ) : sortedPets.length > 0 ? (
+          sortedPets.map((pet) => (
             <div
               key={pet._id}
               className="p-4 border rounded-lg shadow-sm space-y-2 bg-white"
@@ -259,6 +349,29 @@ export default function PetsTable({ user, role }) {
         ) : (
           <div className="text-center text-muted-foreground">
             No pets found.
+          </div>
+        )}
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-2 mt-4">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={goToPrevPage}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span className="text-sm px-2 py-1 border rounded">
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
           </div>
         )}
       </div>
