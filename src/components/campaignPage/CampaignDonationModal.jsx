@@ -79,15 +79,19 @@ const CampaignDonationModal = ({ campaign }) => {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <motion.div
-          className="w-fit"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Button>Donate Now</Button>
-        </motion.div>
-      </DialogTrigger>
+      {campaign.isOpen ? (
+        <DialogTrigger asChild>
+          <motion.div
+            className="w-fit"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button>Donate Now</Button>
+          </motion.div>
+        </DialogTrigger>
+      ) : (
+        <Button disabled>Donate Now</Button>
+      )}
 
       <DialogContent>
         <motion.div
@@ -125,9 +129,12 @@ const CampaignDonationModal = ({ campaign }) => {
             </div>
           ) : (
             <div className="space-y-5">
-              <h3 className="text-xl font-semibold">Thank you for your support!</h3>
+              <h3 className="text-xl font-semibold">
+                Thank you for your support!
+              </h3>
               <p className="text-muted-foreground">
-                Want to support more causes? Here are some other active campaigns:
+                Want to support more causes? Here are some other active
+                campaigns:
               </p>
 
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">

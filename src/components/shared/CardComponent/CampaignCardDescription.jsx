@@ -72,7 +72,7 @@ const CampaignCardDescription = ({ campaign }) => {
 
         {/* CTA */}
         <motion.div whileTap={{ scale: 0.95 }}>
-          <Button className="w-full mt-2" variant="default">
+          <Button className="w-full mt-2" variant="default" disabled={campaign.isOpen ? false: true}>
             Donate Now
           </Button>
         </motion.div>
