@@ -1,20 +1,21 @@
 import { createBrowserRouter } from "react-router";
-import MainLayout from "../layouts/MainLayout/MainLayout";
+import { lazy, Suspense } from "react";
+const MainLayout = lazy(() => import("../layouts/MainLayout/MainLayout"));
+const AuthLayout = lazy(() => import("@/layouts/AuthLayout/AuthLayout"));
+const DashboardLayout = lazy(() =>
+  import("@/layouts/DashboardLayout/DashboardLayout")
+);
 import Home from "@/pages/Home/Home";
-import PetList from "@/pages/Adopt/Adopt";
 import Campaigns from "@/pages/Campaigns/Campaigns";
 import Adopt from "@/pages/Adopt/Adopt";
 import ContactUs from "@/pages/ContactUs/ContactUs";
-import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
 import Login from "@/pages/Login/Login";
 import Register from "@/pages/Register/Register";
 import Dashboard from "@/pages/Dashboard/Dashboard";
-import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
 import PrivetRoute from "./PrivetRoute";
 import UserTable from "@/pages/Dashboard/Admin/UsersTable/UsersTable";
 import AllPetsTable from "@/pages/Dashboard/Admin/AllPetsTable/AllPetsTable";
 import AllDonationsTable from "@/pages/Dashboard/Admin/AllDonationsTable/AllDonationsTable";
-import AddPetForm from "@/pages/Dashboard/User/AddPet/AddPet";
 import AdoptionRequests from "@/pages/Dashboard/User/AdoptRequest/AdoptRequest";
 
 import MyDonationCampaigns from "@/pages/Dashboard/User/MyDonationCampaigns/MyDonationCampaigns";
@@ -27,10 +28,16 @@ import PetDetailsPage from "@/pages/Adopt/PetDetails/PetDetails";
 import CampaignDetailsPage from "@/pages/Campaigns/CampaignDetails/CampaignDetails";
 import EditCampaign from "@/pages/Dashboard/shared/EditCampaign";
 
+import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: MainLayout,
+    element: (
+      <Suspense fallback={<LoadingScreen isLoading={true} />}>
+        <MainLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
@@ -44,7 +51,6 @@ export const router = createBrowserRouter([
       {
         path: "pet/details/:id",
         Component: PetDetailsPage,
-
       },
       {
         path: "campaigns",
@@ -54,7 +60,8 @@ export const router = createBrowserRouter([
       {
         path: "campaign/details/:id",
         Component: CampaignDetailsPage,
-        loader: async ({params}) => await fetch(`http://localhost:8000/api/campaigns/${params.id}`),
+        loader: async ({ params }) =>
+          await fetch(`http://localhost:8000/api/campaigns/${params.id}`),
       },
       {
         path: "contact-us",
@@ -64,7 +71,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    Component: AuthLayout,
+    element: (
+      <Suspense fallback={<LoadingScreen isLoading={true} />}>
+        <AuthLayout />{" "}
+      </Suspense>
+    ),
     children: [
       {
         path: "login",
@@ -80,7 +91,9 @@ export const router = createBrowserRouter([
     path: "dashboard",
     element: (
       <PrivetRoute>
-        <DashboardLayout />
+        <Suspense fallback={<LoadingScreen isLoading={true} />}>
+          <DashboardLayout />
+        </Suspense>
       </PrivetRoute>
     ),
     children: [
