@@ -6,13 +6,15 @@ import petRoutes from "./routes/petRoutes.js";
 import campaignRoutes from "./routes/campaignRoutes.js";
 import jwtRoutes from "./routes/jwtRoutes.js";
 
-
 const app = express();
 
 // Middleware
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      callback(null, origin); // echo back origin (even if it's undefined)
+    },
     credentials: true,
   })
 );
