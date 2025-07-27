@@ -29,9 +29,12 @@ const DashboardLayout = () => {
     if (!user?.uid) return;
     const fetchUserRole = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/users/role", {
-          params: { uid: user.uid },
-        });
+        const res = await axios.get(
+          "https://kind-paws.vercel.app/api/users/role",
+          {
+            params: { uid: user.uid },
+          }
+        );
         setRole(res.data.role);
       } catch (err) {
         console.error("Axios error:", err);

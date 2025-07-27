@@ -26,7 +26,7 @@ export default function PetsTable({ user, role }) {
   } = useQuery({
     queryKey: ["allPets"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:8000/api/pets");
+      const res = await fetch("https://kind-paws.vercel.app/api/pets");
       if (!res.ok) throw new Error("Failed to fetch pets");
       return res.json();
     },
@@ -34,9 +34,12 @@ export default function PetsTable({ user, role }) {
 
   const deletePet = useMutation({
     mutationFn: async (petId) => {
-      const res = await axios.delete(`http://localhost:8000/api/pets/delete`, {
-        params: { id: petId },
-      });
+      const res = await axios.delete(
+        `https://kind-paws.vercel.app/api/pets/delete`,
+        {
+          params: { id: petId },
+        }
+      );
       return res.data;
     },
     onSuccess: () => {
@@ -49,7 +52,7 @@ export default function PetsTable({ user, role }) {
   const toggleStatus = useMutation({
     mutationFn: async (petId) => {
       const res = await axios.patch(
-        `http://localhost:8000/api/pets/statusToggle`,
+        `https://kind-paws.vercel.app/api/pets/statusToggle`,
         {},
         {
           params: { id: petId },

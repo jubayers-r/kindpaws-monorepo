@@ -13,7 +13,7 @@ const CreateDonationCampaign = () => {
     mutationFn: async (payload) => {
       console.log(payload);
       const res = await axios.post(
-        "http://localhost:8000/api/campaigns/add-campaign",
+        "https://kind-paws.vercel.app/api/campaigns/add-campaign",
         payload
       );
       return res.data;

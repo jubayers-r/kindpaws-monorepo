@@ -38,14 +38,19 @@ const PetDetailsPage = () => {
   const { data: pet, isLoading } = useQuery({
     queryKey: ["pet", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:8000/api/pets/${id}`);
+      const res = await axios.get(
+        `https://kind-paws.vercel.app/api/pets/${id}`
+      );
       return res.data;
     },
   });
 
   const mutation = useMutation({
     mutationFn: async (payload) => {
-      const res = await axios.post(`http://localhost:8000/api/pets/${id}/adoption-request`, payload);
+      const res = await axios.post(
+        `https://kind-paws.vercel.app/api/pets/${id}/adoption-request`,
+        payload
+      );
       return res.data;
     },
     onSuccess: () => {
@@ -53,7 +58,7 @@ const PetDetailsPage = () => {
       setPhone("");
       setAddress("");
       setOpen(false);
-      naviagte(-1)
+      naviagte(-1);
     },
     onError: () => {
       toast.error("Failed to send adoption request.");
@@ -63,7 +68,6 @@ const PetDetailsPage = () => {
   const handleAdopt = () => {
     if (!phone || !address) return toast.error("All fields are required.");
     mutation.mutate({
-
       petName: pet.name,
       userName: user.displayName,
       userEmail: user.email,
@@ -154,7 +158,10 @@ const PetDetailsPage = () => {
         className="text-sm text-gray-600 flex flex-wrap gap-4"
         variants={fadeIn(0.5)}
       >
-        <span>📅 Added on: {new Date(pet.dateAdded || pet.createdAt).toLocaleDateString()}</span>
+        <span>
+          📅 Added on:{" "}
+          {new Date(pet.dateAdded || pet.createdAt).toLocaleDateString()}
+        </span>
         {pet.isFeatured && (
           <span className="text-yellow-600">🌟 Featured Pet</span>
         )}

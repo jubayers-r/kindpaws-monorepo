@@ -22,14 +22,14 @@ const EditCampaign = () => {
     queryKey: ["campaign", id],
     queryFn: () =>
       axios
-        .get(`http://localhost:8000/api/campaigns/${id}`)
+        .get(`https://kind-paws.vercel.app/api/campaigns/${id}`)
         .then((res) => res.data),
   });
 
   const mutation = useMutation({
     mutationFn: async (payload) => {
       const res = await axios.put(
-        `http://localhost:8000/api/campaigns/${id}`,
+        `https://kind-paws.vercel.app/api/campaigns/${id}`,
         payload
       );
       return res.data;

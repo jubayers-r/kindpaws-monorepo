@@ -51,7 +51,10 @@ export default function Register() {
         lastLoginAt: new Date(),
       };
 
-      await axios.post("http://localhost:8000/api/users/register", userDB);
+      await axios.post(
+        "https://kind-paws.vercel.app/api/users/register",
+        userDB
+      );
       console.log("✅ User created:", {
         name: data.name,
         email: data.email,

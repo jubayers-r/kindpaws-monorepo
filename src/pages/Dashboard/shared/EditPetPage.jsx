@@ -19,13 +19,15 @@ const EditPetPage = () => {
   } = useQuery({
     queryKey: ["pet", id],
     queryFn: () =>
-      axios.get(`http://localhost:8000/api/pets/${id}`).then((res) => res.data),
+      axios
+        .get(`https://kind-paws.vercel.app/api/pets/${id}`)
+        .then((res) => res.data),
   });
 
   const mutation = useMutation({
     mutationFn: async (payload) => {
       const res = await axios.put(
-        `http://localhost:8000/api/pets/${id}`,
+        `https://kind-paws.vercel.app/api/pets/${id}`,
         payload
       );
       return res.data;

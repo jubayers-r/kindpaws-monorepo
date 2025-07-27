@@ -35,7 +35,7 @@ const DashboardTopNavbar = () => {
       <div className="flex items-center gap-3">
         <DarkMode/>
         <Avatar className={"dark:bg-white"}>
-          <AvatarImage src={user?.photoURL || ""} />
+          <AvatarImage src={user?.photoURL || ""} className={"object-cover"} />
           <AvatarFallback >{user?.displayName?.[0] || "U"}</AvatarFallback>
         </Avatar>
         <p className="hidden md:block dark:text-primary-foreground">{user?.displayName}</p>

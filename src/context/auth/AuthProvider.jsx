@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
 
         try {
           await axios.post(
-            "http://localhost:8000/api/jwt",
+            "https://kind-paws.vercel.app/api/jwt",
             { firebaseToken: idToken },
             { withCredentials: true }
           );

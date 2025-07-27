@@ -23,16 +23,21 @@ const MyDonations = () => {
   const { data: donations, isLoading } = useQuery({
     queryKey: ["my-donations"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:8000/api/campaigns/my", {
-        params: { id: user.uid },
-      });
+      const res = await axios.get(
+        "https://kind-paws.vercel.app/api/campaigns/my",
+        {
+          params: { id: user.uid },
+        }
+      );
       return res.data;
     },
   });
 
   const refundMutation = useMutation({
     mutationFn: async (id) => {
-      await axios.patch(`http://localhost:8000/api/campaigns/refund/${id}`);
+      await axios.patch(
+        `https://kind-paws.vercel.app/api/campaigns/refund/${id}`
+      );
     },
     onSuccess: () => {
       toast.success("Refund processed");
@@ -110,11 +115,14 @@ const MyDonations = () => {
                     </TableCell>
                     <TableCell>${donation.amount}</TableCell>
                     <TableCell>
-                      {new Date(donation.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {new Date(donation.createdAt).toLocaleDateString(
+                        "en-US",
+                        {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }
+                      )}
                     </TableCell>
                     <TableCell>
                       {donation.isRefunded ? (
@@ -181,9 +189,7 @@ const MyDonations = () => {
                     variant="outline"
                     size="sm"
                     className="ml-2"
-                    disabled={
-                      donation.isRefunded || refundMutation.isPending
-                    }
+                    disabled={donation.isRefunded || refundMutation.isPending}
                     onClick={() => {
                       if (confirm("Are you sure you want a refund?")) {
                         refundMutation.mutate(donation._id);

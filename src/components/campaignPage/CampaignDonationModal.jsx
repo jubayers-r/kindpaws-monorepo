@@ -38,7 +38,7 @@ const CampaignDonationModal = ({ campaign }) => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/campaigns/create-payment-intent",
+        "https://kind-paws.vercel.app/api/campaigns/create-payment-intent",
         {
           amount: parseInt(amount),
           campaignId: campaign._id,
@@ -57,17 +57,20 @@ const CampaignDonationModal = ({ campaign }) => {
         toast.error(result.error.message);
       } else if (result.paymentIntent.status === "succeeded") {
         try {
-          await axios.post("http://localhost:8000/api/campaigns/donations", {
-            amount: parseInt(amount),
-            campaignId: campaign._id,
-            donorId: user.uid,
-            paymentId: result.paymentIntent.id,
-            campaignSnapshot: {
-              title: campaign.title,
-              image: campaign.image,
-              petName: campaign.petName, // Make sure this field exists
-            },
-          });
+          await axios.post(
+            "https://kind-paws.vercel.app/api/campaigns/donations",
+            {
+              amount: parseInt(amount),
+              campaignId: campaign._id,
+              donorId: user.uid,
+              paymentId: result.paymentIntent.id,
+              campaignSnapshot: {
+                title: campaign.title,
+                image: campaign.image,
+                petName: campaign.petName, // Make sure this field exists
+              },
+            }
+          );
 
           toast.success("Donation successful!");
           setDonationSuccess(true);
@@ -88,9 +91,12 @@ const CampaignDonationModal = ({ campaign }) => {
 
   const fetchRecommendedCampaigns = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/api/campaigns", {
-        params: { limit: 3, excludeId: campaign._id },
-      });
+      const { data } = await axios.get(
+        "https://kind-paws.vercel.app/api/campaigns",
+        {
+          params: { limit: 3, excludeId: campaign._id },
+        }
+      );
       setRecommendedCampaigns(data);
     } catch (err) {
       console.error("Failed to fetch recommended campaigns", err);

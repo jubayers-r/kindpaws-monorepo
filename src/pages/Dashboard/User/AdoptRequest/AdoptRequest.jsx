@@ -20,7 +20,7 @@ const AdoptionRequests = () => {
     queryKey: ["adoption-requests"],
     queryFn: () =>
       axios
-        .get("http://localhost:8000/api/pets/adoption-requests", {
+        .get("https://kind-paws.vercel.app/api/pets/adoption-requests", {
           params: { userId: user.uid },
         })
         .then((res) => res.data),
@@ -29,7 +29,7 @@ const AdoptionRequests = () => {
   const mutation = useMutation({
     mutationFn: async ({ id, action }) =>
       axios.patch(
-        "http://localhost:8000/api/pets/adoption-requests",
+        "https://kind-paws.vercel.app/api/pets/adoption-requests",
         { status: action },
         { params: { id } }
       ),
@@ -86,11 +86,21 @@ const AdoptionRequests = () => {
               <tbody>
                 {requests.map((req) => (
                   <tr key={req._id} className="border-t">
-                    <td className="p-3 dark:text-primary-foreground">{req.petName}</td>
-                    <td className="p-3 dark:text-primary-foreground">{req.userName}</td>
-                    <td className="p-3 dark:text-primary-foreground">{req.userEmail}</td>
-                    <td className="p-3 dark:text-primary-foreground">{req.phone}</td>
-                    <td className="p-3 dark:text-primary-foreground">{req.address}</td>
+                    <td className="p-3 dark:text-primary-foreground">
+                      {req.petName}
+                    </td>
+                    <td className="p-3 dark:text-primary-foreground">
+                      {req.userName}
+                    </td>
+                    <td className="p-3 dark:text-primary-foreground">
+                      {req.userEmail}
+                    </td>
+                    <td className="p-3 dark:text-primary-foreground">
+                      {req.phone}
+                    </td>
+                    <td className="p-3 dark:text-primary-foreground">
+                      {req.address}
+                    </td>
                     <td className="p-3 dark:text-primary-foreground capitalize">
                       <span
                         className={`px-2 py-1 rounded text-white text-xs ${

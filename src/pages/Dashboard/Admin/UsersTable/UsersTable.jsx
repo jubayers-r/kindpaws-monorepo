@@ -25,7 +25,7 @@ export default function UserTable() {
   } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:8000/api/users");
+      const res = await fetch("https://kind-paws.vercel.app/api/users");
       if (!res.ok) throw new Error("Failed to fetch users");
       return res.json();
     },
@@ -34,7 +34,7 @@ export default function UserTable() {
   const makeAdminMutation = useMutation({
     mutationFn: async (userId) => {
       const res = await axios.patch(
-        `http://localhost:8000/api/users/promote`,
+        `https://kind-paws.vercel.app/api/users/promote`,
         {},
         {
           params: { uid: userId },
@@ -53,7 +53,7 @@ export default function UserTable() {
   const makeUserMutation = useMutation({
     mutationFn: async (userId) => {
       const res = await axios.patch(
-        `http://localhost:8000/api/users/demote`,
+        `https://kind-paws.vercel.app/api/users/demote`,
         {},
         {
           params: { uid: userId },
@@ -73,7 +73,7 @@ export default function UserTable() {
   const banUserMutation = useMutation({
     mutationFn: async (userId) => {
       const res = await axios.patch(
-        `http://localhost:8000/api/users/ban`,
+        `https://kind-paws.vercel.app/api/users/ban`,
         {},
         {
           params: { uid: userId },
@@ -92,7 +92,7 @@ export default function UserTable() {
   const unbanUserMutation = useMutation({
     mutationFn: async (userId) => {
       const res = await axios.patch(
-        `http://localhost:8000/api/users/unban`,
+        `https://kind-paws.vercel.app/api/users/unban`,
         {},
         {
           params: { uid: userId },

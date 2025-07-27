@@ -26,20 +26,14 @@ const CampaignDetailsPage = () => {
   const { data: campaign, isLoading } = useQuery({
     queryKey: ["campaign", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:8000/api/campaigns/${id}`);
-      return res.data;
-    },
-  });
-
-  const { data: recommended } = useQuery({
-    queryKey: ["recommended", id],
-    queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:8000/api/campaigns/recommended?exclude=${id}`
+        `https://kind-paws.vercel.app/api/campaigns/${id}`
       );
       return res.data;
     },
   });
+
+
 
   const handleDonate = () => {
     if (!amount || isNaN(amount)) return toast.error("Enter a valid amount");
@@ -154,30 +148,6 @@ const CampaignDetailsPage = () => {
         </div>
       )}
 
-      {recommended?.length > 0 && (
-        <div>
-          <h2 className="text-2xl font-semibold mt-10 mb-4">
-            Recommended Campaigns
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recommended.map((rec) => (
-              <motion.div
-                key={rec._id}
-                whileHover={{ scale: 1.03 }}
-                className="bg-white shadow rounded-lg overflow-hidden"
-              >
-                <img src={rec.image} className="w-full h-40 object-cover" />
-                <div className="p-4">
-                  <h3 className="font-semibold">{rec.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {rec.shortDescription}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
     </motion.div>
   );
 };

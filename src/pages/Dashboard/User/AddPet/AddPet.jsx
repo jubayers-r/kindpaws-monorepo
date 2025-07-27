@@ -12,7 +12,7 @@ const AddPetPage = () => {
   const mutation = useMutation({
     mutationFn: async (payload) => {
       const res = await axios.post(
-        "http://localhost:8000/api/pets/add-pet",
+        "https://kind-paws.vercel.app/api/pets/add-pet",
         payload
       );
       return res.data;

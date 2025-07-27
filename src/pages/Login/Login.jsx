@@ -26,7 +26,9 @@ export default function Login() {
 
   const updateLastLogin = async (userId) => {
     try {
-      await axios.patch(`http://localhost:8000/api/users/last-login/${userId}`);
+      await axios.patch(
+        `https://kind-paws.vercel.app/api/users/last-login/${userId}`
+      );
     } catch (err) {
       console.error("❌ Failed to update last login:", err);
     }
@@ -40,7 +42,7 @@ export default function Login() {
         await updateLastLogin(currentUser.uid);
       }
 
-      const res = await axios.get("http://localhost:8000/api/users", {
+      const res = await axios.get("https://kind-paws.vercel.app/api/users", {
         params: { uid: currentUser.uid },
       });
 

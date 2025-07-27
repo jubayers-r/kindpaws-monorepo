@@ -46,7 +46,8 @@ export const router = createBrowserRouter([
       {
         path: "adopt",
         Component: Adopt,
-        loader: async () => await fetch("http://localhost:8000/api/pets"),
+        loader: async () =>
+          await fetch("https://kind-paws.vercel.app/api/pets"),
       },
       {
         path: "pet/details/:id",
@@ -59,7 +60,8 @@ export const router = createBrowserRouter([
       {
         path: "campaigns",
         Component: Campaigns,
-        loader: async () => await fetch("http://localhost:8000/api/campaigns"),
+        loader: async () =>
+          await fetch("https://kind-paws.vercel.app/api/campaigns"),
       },
       {
         path: "campaign/details/:id",
@@ -69,7 +71,9 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: async ({ params }) =>
-          await fetch(`http://localhost:8000/api/campaigns/${params.id}`),
+          await fetch(
+            `https://kind-paws.vercel.app/api/campaigns/${params.id}`
+          ),
       },
       {
         path: "contact-us",

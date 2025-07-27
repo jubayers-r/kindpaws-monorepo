@@ -20,13 +20,12 @@ import axios from "axios";
 import { Link, useLocation } from "react-router";
 
 export default function DonationsTable({ user, role }) {
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   const isAdmin = role === "admin";
 
   const isAllDonationsLocation = pathname === "/dashboard/all-donations";
   const AllDonationsLogic = isAdmin && isAllDonationsLocation;
-
 
   const [filter, setFilter] = useState("all");
   const [ownerFilter, setOwnerFilter] = useState("");
@@ -38,7 +37,7 @@ export default function DonationsTable({ user, role }) {
   } = useQuery({
     queryKey: ["allDonations"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:8000/api/campaigns");
+      const res = await fetch("https://kind-paws.vercel.app/api/campaigns");
       if (!res.ok) throw new Error("Failed to fetch donation campaigns");
       return res.json();
     },
@@ -46,7 +45,7 @@ export default function DonationsTable({ user, role }) {
 
   const deleteCampaign = useMutation({
     mutationFn: async (campaignId) =>
-      await axios.delete("http://localhost:8000/api/campaigns/delete", {
+      await axios.delete("https://kind-paws.vercel.app/api/campaigns/delete", {
         params: { id: campaignId },
       }),
     onSuccess: () => {
@@ -58,9 +57,13 @@ export default function DonationsTable({ user, role }) {
 
   const togglePause = useMutation({
     mutationFn: async (campaignId) =>
-      await axios.patch("http://localhost:8000/api/campaigns/statusToggle", {}, {
-        params: { id: campaignId },
-      }),
+      await axios.patch(
+        "https://kind-paws.vercel.app/api/campaigns/statusToggle",
+        {},
+        {
+          params: { id: campaignId },
+        }
+      ),
     onSuccess: () => {
       toast.success("Campaign status updated");
       refetch();
@@ -69,11 +72,14 @@ export default function DonationsTable({ user, role }) {
   });
 
   const filteredCampaigns = campaigns
-    .filter((c) => (AllDonationsLogic || c?.ownerId === user?.uid))
+    .filter((c) => AllDonationsLogic || c?.ownerId === user?.uid)
     .filter((c) => {
       if (filter === "active" && !c.isOpen) return false;
       if (filter === "paused" && c.isOpen) return false;
-      if (ownerFilter && !c.ownerName?.toLowerCase().includes(ownerFilter.toLowerCase()))
+      if (
+        ownerFilter &&
+        !c.ownerName?.toLowerCase().includes(ownerFilter.toLowerCase())
+      )
         return false;
       return true;
     });
@@ -139,10 +145,15 @@ export default function DonationsTable({ user, role }) {
               ))
             ) : filteredCampaigns.length > 0 ? (
               filteredCampaigns.map((c) => {
-                const progress = Math.min(100, Math.round((c.collectedAmount / c.goalAmount) * 100));
+                const progress = Math.min(
+                  100,
+                  Math.round((c.collectedAmount / c.goalAmount) * 100)
+                );
                 return (
                   <TableRow key={c._id}>
-                    <TableCell className="font-medium dark:text-primary-foreground">{c.title}</TableCell>
+                    <TableCell className="font-medium dark:text-primary-foreground">
+                      {c.title}
+                    </TableCell>
                     <TableCell>${c.goalAmount}</TableCell>
                     <TableCell>
                       <Progress value={progress} className="h-2" />
@@ -157,17 +168,37 @@ export default function DonationsTable({ user, role }) {
                     </TableCell>
                     {isAdmin && (
                       <TableCell>
-                        <div className="text-sm font-medium dark:text-primary-foreground">{c.ownerName || "N/A"}</div>
+                        <div className="text-sm font-medium dark:text-primary-foreground">
+                          {c.ownerName || "N/A"}
+                        </div>
                       </TableCell>
                     )}
                     <TableCell className="space-x-2 whitespace-nowrap">
-                      <Button size="sm" variant="outline" onClick={() => togglePause.mutate(c._id)}>
-                        {c.isOpen ? <><Pause className="w-4 h-4 mr-1" /> Pause</> : <><Play className="w-4 h-4 mr-1" /> Unpause</>}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => togglePause.mutate(c._id)}
+                      >
+                        {c.isOpen ? (
+                          <>
+                            <Pause className="w-4 h-4 mr-1" /> Pause
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-4 h-4 mr-1" /> Unpause
+                          </>
+                        )}
                       </Button>
                       <Link to={`/dashboard/update-campaign/${c._id}`}>
-                        <Button size="sm"><Pencil className="w-4 h-4 mr-1" /> Edit</Button>
+                        <Button size="sm">
+                          <Pencil className="w-4 h-4 mr-1" /> Edit
+                        </Button>
                       </Link>
-                      <Button size="sm" variant="destructive" onClick={() => confirmDelete(c)}>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => confirmDelete(c)}
+                      >
                         <Trash2 className="w-4 h-4 mr-1" /> Delete
                       </Button>
                     </TableCell>
@@ -176,7 +207,10 @@ export default function DonationsTable({ user, role }) {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground dark:text-primary-foreground">
+                <TableCell
+                  colSpan={6}
+                  className="text-center text-muted-foreground dark:text-primary-foreground"
+                >
                   No campaigns found.
                 </TableCell>
               </TableRow>
@@ -189,7 +223,10 @@ export default function DonationsTable({ user, role }) {
       <div className="lg:hidden space-y-4">
         {isLoading ? (
           [...Array(4)].map((_, i) => (
-            <div key={i} className="p-4 border rounded shadow-sm bg-white space-y-2">
+            <div
+              key={i}
+              className="p-4 border rounded shadow-sm bg-white space-y-2"
+            >
               <Skeleton className="h-4 w-3/4" />
               <Skeleton className="h-2 w-full" />
               <Skeleton className="h-2 w-1/2" />
@@ -198,7 +235,10 @@ export default function DonationsTable({ user, role }) {
           ))
         ) : filteredCampaigns.length > 0 ? (
           filteredCampaigns.map((c) => {
-            const progress = Math.min(100, Math.round((c.collectedAmount / c.goalAmount) * 100));
+            const progress = Math.min(
+              100,
+              Math.round((c.collectedAmount / c.goalAmount) * 100)
+            );
             return (
               <motion.div
                 key={c._id}
@@ -208,7 +248,9 @@ export default function DonationsTable({ user, role }) {
                 transition={{ duration: 0.3 }}
               >
                 <h3 className="text-lg font-semibold">{c.title}</h3>
-                <div className="text-sm text-gray-500">${c.goalAmount} goal</div>
+                <div className="text-sm text-gray-500">
+                  ${c.goalAmount} goal
+                </div>
                 <Progress value={progress} className="h-2 mt-1" />
                 <div className="text-xs text-gray-500">
                   ${c.collectedAmount} raised ({progress}%)
@@ -217,7 +259,9 @@ export default function DonationsTable({ user, role }) {
                   {c.isOpen ? "Active" : "Paused"}
                 </Badge>
                 {isAdmin && (
-                  <div className="text-sm text-gray-600">By: {c.ownerName || "N/A"}</div>
+                  <div className="text-sm text-gray-600">
+                    By: {c.ownerName || "N/A"}
+                  </div>
                 )}
                 <div className="flex flex-wrap gap-2 pt-2">
                   <Button
@@ -225,12 +269,26 @@ export default function DonationsTable({ user, role }) {
                     variant="outline"
                     onClick={() => togglePause.mutate(c._id)}
                   >
-                    {c.isOpen ? <><Pause className="w-4 h-4 mr-1" /> Pause</> : <><Play className="w-4 h-4 mr-1" /> Unpause</>}
+                    {c.isOpen ? (
+                      <>
+                        <Pause className="w-4 h-4 mr-1" /> Pause
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-4 h-4 mr-1" /> Unpause
+                      </>
+                    )}
                   </Button>
                   <Link to={`/dashboard/update-campaign/${c._id}`}>
-                    <Button size="sm"><Pencil className="w-4 h-4 mr-1" /> Edit</Button>
+                    <Button size="sm">
+                      <Pencil className="w-4 h-4 mr-1" /> Edit
+                    </Button>
                   </Link>
-                  <Button size="sm" variant="destructive" onClick={() => confirmDelete(c)}>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => confirmDelete(c)}
+                  >
                     <Trash2 className="w-4 h-4 mr-1" /> Delete
                   </Button>
                 </div>
@@ -238,7 +296,9 @@ export default function DonationsTable({ user, role }) {
             );
           })
         ) : (
-          <div className="text-center text-muted-foreground">No campaigns found.</div>
+          <div className="text-center text-muted-foreground">
+            No campaigns found.
+          </div>
         )}
       </div>
     </motion.div>
