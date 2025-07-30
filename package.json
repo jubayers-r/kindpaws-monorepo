@@ -1,0 +1,14 @@
+{
+  "name": "kindpaws-monorepo",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n client,server -c cyan,magenta \"npm run dev --workspace kindpaws-client\" \"npm run dev --workspace kindpaws-server\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
