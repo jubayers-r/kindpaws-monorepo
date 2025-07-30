@@ -1,0 +1,107 @@
+import React from "react";
+import { motion } from "motion/react";
+
+import reptilesImg from "/src/assets/categories/reptiles.png";
+import fishImg from "/src/assets/categories/fish.png";
+import catImg from "/src/assets/categories/cat.png";
+import dogImg from "/src/assets/categories/dog.png";
+import parrotImg from "/src/assets/categories/parrot.png";
+import frogImg from "/src/assets/categories/frog.png";
+
+const Categories = () => {
+  // pet category info array
+  const petCategories = [
+    { img: reptilesImg, category: "Reptile", color: "bg-[#e2f1d2]" },
+    { img: fishImg, category: "Fish", color: "bg-[#f7efe2]" },
+    { img: catImg, category: "Cats", color: "bg-[#f2dcdc]" },
+    { img: dogImg, category: "Dogs", color: "bg-[#f3e9e0]" },
+    { img: parrotImg, category: "Birds", color: "bg-[#eeeeee]" },
+    { img: frogImg, category: "Frog", color: "bg-[#f7efe2]" },
+  ];
+  //   motion/react variables
+  const circleVariants = {
+    initial: {
+      scale: 1.1,
+    },
+    hover: {
+      scale: 1.15,
+    },
+  };
+
+  const textVariants = {
+    rest: {
+      x: 0,
+    },
+    hover: {
+      x: 300,
+      transition: {
+        duration: 1,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  //   resuable category circle variable
+  const circle = (index, shrink, color, img, category) => (
+    <motion.div
+      key={index}
+      className="flex flex-col justify-center text-center items-center"
+      whileHover="hover"
+      initial="initial"
+    >
+      <div
+        className={`relative h-[120px] w-[120px] sm:h-[200px] sm:w-[200px] rounded-full flex items-center justify-center font-bold ${color} ${shrink}`}
+      >
+        {/* CATEGORY TEXT BEHIND IMAGE */}
+        <div className="absolute inset-0 overflow-hidden rounded-full z-0">
+          <motion.p
+            variants={textVariants}
+            className="  text-white translate-y-2 text-[50px] sm:text-[80px] font-black tracking-wide pointer-events-none select-none font-[Outfit]"
+          >
+            {category}
+          </motion.p>
+        </div>
+
+        {/* IMAGE ABOVE TEXT */}
+        <motion.img
+          src={img}
+          alt={category}
+          variants={circleVariants}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="scale-[1.1] z-10 object-contain -translate-y-3 sm:-translate-y-5 pointer-events-none"
+        />
+      </div>
+      <p className="mt-3 font-bold">
+        {category}
+        <sup>(10)</sup>
+      </p>
+    </motion.div>
+  );
+
+  return (
+    <div className="text-secondary overflow-hidden ">
+      <h3 className="font-bold sm:text-5xl text-3xl text-center sm:mt-20 mt-10 dark:text-secondary-foreground">
+        Find Your Best Match
+      </h3>
+      <div className="xl:grid xl:grid-cols-6 xl:gap-5 hidden my-20 sm:my-30 dark:text-secondary-foreground">
+        {petCategories.map((item, i) => (
+          <>{circle(i, "", item.color, item.img, item.category)}</>
+        ))}
+      </div>
+
+      {/* mobile view */}
+      <motion.div
+        className="flex xl:hidden gap-5 cursor-grab active:cursor-grabbing my-20 sm:my-30 "
+        drag="x"
+        dragConstraints={{ left: -400, right: 0 }}
+        whileTap={{ cursor: "grabbing" }}
+      >
+        {petCategories.map((item, i) => (
+          <>{circle(i, "", item.color, item.img, item.category)}</>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+export default Categories;
