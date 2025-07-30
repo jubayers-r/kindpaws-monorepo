@@ -2,14 +2,13 @@ import { Moon, Sun } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const DarkMode = () => {
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return (
-      localStorage.getItem("theme") === "dark" ||
-      (!localStorage.getItem("theme") &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    );
-  });
+const [darkMode, setDarkMode] = useState(false);
+
+useEffect(() => {
+  const userPref = localStorage.getItem("theme");
+  const shouldUseDark = userPref === "dark"; // 👈 ignore system
+  setDarkMode(shouldUseDark);
+}, []);
   useEffect(() => {
     const root = window.document.documentElement;
     if (darkMode) {

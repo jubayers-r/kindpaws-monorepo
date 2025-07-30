@@ -20,11 +20,11 @@ const MobileMenu = () => {
           <Menu />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-64 sm:hidden">
+      <SheetContent side="right" className="w-64 sm:hidden dark:text-white  ">
         {user && (
           <NavLink
             className={clsx(
-              "flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white transition",
+              "flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white dark:hover:text-primary active:text-black transition",
               location.pathname === "/dashboard" && "bg-white font-semibold"
             )}
             to="/dashboard"
@@ -39,8 +39,9 @@ const MobileMenu = () => {
             key={i}
             to={item.href}
             className={clsx(
-              "flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white transition",
-              location.pathname === item.href && "bg-white font-semibold"
+              "flex items-center gap-3 px-4 py-2 rounded-md hover:bg-white dark:hover:text-primary transition",
+              location.pathname === item.href &&
+                "bg-white font-semibold dark:bg-black"
             )}
           >
             <PawPrint className="h-5 w-5" />

@@ -1,10 +1,13 @@
 import { createBrowserRouter } from "react-router";
 import { lazy, Suspense } from "react";
-const MainLayout = lazy(() => import("../layouts/MainLayout/MainLayout"));
-const AuthLayout = lazy(() => import("@/layouts/AuthLayout/AuthLayout"));
-const DashboardLayout = lazy(() =>
-  import("@/layouts/DashboardLayout/DashboardLayout")
-);
+// const MainLayout = lazy(() => import("../layouts/MainLayout/MainLayout"));
+// const AuthLayout = lazy(() => import("@/layouts/AuthLayout/AuthLayout"));
+// const DashboardLayout = lazy(() =>
+// import("@/layouts/DashboardLayout/DashboardLayout")
+// );
+import DashboardLayout from "@/layouts/DashboardLayout/DashboardLayout";
+import AuthLayout from "@/layouts/AuthLayout/AuthLayout";
+import MainLayout from "../layouts/MainLayout/MainLayout";
 import Home from "@/pages/Home/Home";
 import Campaigns from "@/pages/Campaigns/Campaigns";
 import Adopt from "@/pages/Adopt/Adopt";
@@ -34,9 +37,9 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Suspense fallback={<LoadingScreen isLoading={true} />}>
-        <MainLayout />
-      </Suspense>
+      // <Suspense fallback={<LoadingScreen isLoading={true} />}>
+
+      <MainLayout />
     ),
     children: [
       {
@@ -83,11 +86,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: (
-      <Suspense fallback={<LoadingScreen isLoading={true} />}>
-        <AuthLayout />
-      </Suspense>
-    ),
+    element: <AuthLayout />,
     children: [
       {
         path: "login",
@@ -103,9 +102,7 @@ export const router = createBrowserRouter([
     path: "dashboard",
     element: (
       <PrivateRoute>
-        <Suspense fallback={<LoadingScreen isLoading={true} />}>
-          <DashboardLayout />
-        </Suspense>
+        <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
