@@ -7,8 +7,8 @@ A full-stack MERN application where users can discover, adopt, or raise donation
 🔗 [Visit KindPaws](https://kind-paws.web.app/)
 
 ## 📁 Repositories
-- **Client:** [GitHub → PetConnect Client](https://github.com/jubayers-r/kindpaws-monorepo/tree/main/client)
-- **Server:** [GitHub → PetConnect Server](https://github.com/jubayers-r/kindpaws-monorepo/tree/main/server)
+- **Client:** [GitHub → KindPaws Client](https://github.com/jubayers-r/kindpaws-monorepo/tree/main/client)
+- **Server:** [GitHub → KindPaws Server](https://github.com/jubayers-r/kindpaws-monorepo/tree/main/server)
 
 ---
 

@@ -6,10 +6,6 @@ A full-stack MERN application where users can discover, adopt, or raise donation
 
 🔗 [Visit KindPaws](https://kind-paws.web.app/)
 
-<!-- ## 📁 Repositories
-- **Client:** [GitHub → PetConnect Client](https://github.com/yourusername/petconnect-client)
-- **Server:** [GitHub → PetConnect Server](https://github.com/yourusername/petconnect-server) -->
-
 ---
 
 ## 🎯 Project Purpose

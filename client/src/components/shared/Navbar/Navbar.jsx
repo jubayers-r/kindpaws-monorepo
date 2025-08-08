@@ -8,7 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { AvatarDropdown } from "./AvatarDropdown";
 import { Sun, Moon } from "lucide-react";
-import { useEffect, useState } from "react";
 import DarkMode from "../DarkMode";
 
 const Navbar = () => {
@@ -42,7 +41,7 @@ const Navbar = () => {
         )}
 
         {/* Dark Mode Toggle Button */}
-        <DarkMode />
+        {/* <DarkMode /> */}
 
         <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60 " />
         <Link to="/contact-us">
