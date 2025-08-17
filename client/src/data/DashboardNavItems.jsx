@@ -8,6 +8,7 @@ import {
   Megaphone,
   FolderHeart,
   HandHeart,
+  Hash
 } from "lucide-react";
 
 export const dashboardNavItems = [
@@ -15,6 +16,12 @@ export const dashboardNavItems = [
     label: "Overview",
     icon: LayoutDashboard,
     href: "/dashboard",
+    roles: ["admin", "user"],
+  },
+  {
+    label: "Profile",
+    icon: Hash,
+    href: "/dashboard/profile",
     roles: ["admin", "user"],
   },
   {

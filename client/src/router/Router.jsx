@@ -32,6 +32,7 @@ import CampaignDetailsPage from "@/pages/Campaigns/CampaignDetails/CampaignDetai
 import EditCampaign from "@/pages/Dashboard/shared/EditCampaign";
 
 import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
+import ProfilePage from "@/pages/Dashboard/shared/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -161,6 +162,10 @@ export const router = createBrowserRouter([
         path: "my-added-pets",
         Component: MyAddedPets,
       },
+      {
+        path: "profile",
+        Component: ProfilePage
+      }
     ],
   },
 ]);
