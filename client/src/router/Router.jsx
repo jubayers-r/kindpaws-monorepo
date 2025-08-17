@@ -33,6 +33,7 @@ import EditCampaign from "@/pages/Dashboard/shared/EditCampaign";
 
 import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
 import ProfilePage from "@/pages/Dashboard/shared/ProfilePage";
+import ErrorPage from "@/components/ErrorPage/ErrorPage";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,7 @@ export const router = createBrowserRouter([
 
       <MainLayout />
     ),
+    errorElement: <ErrorPage/>,
     children: [
       {
         index: true,
