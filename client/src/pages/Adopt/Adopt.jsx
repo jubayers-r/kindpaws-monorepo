@@ -8,8 +8,8 @@ const ITEMS_PER_PAGE = 6;
 
 const Adopt = () => {
   const allPets = useLoaderData(); // assuming all 20 are loaded
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOrder, setSortOrder] = useState("desc"); // 🔽 default descending
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
   const { ref, inView } = useInView();
@@ -21,20 +21,13 @@ const Adopt = () => {
 
   const filteredPets = useMemo(() => {
     return [...(allPets || [])]
-      .filter((pet) => {
-        const matchesName = pet.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-        const matchesCategory =
-          selectedCategory === "All" || pet.category === selectedCategory;
-        return matchesName && matchesCategory;
-      })
-      .sort(
-        (a, b) =>
-          new Date(b.dateAdded || b.createdAt) -
-          new Date(a.dateAdded || a.createdAt)
-      );
-  }, [allPets, searchTerm, selectedCategory]);
+      .filter((pet) => selectedCategory === "All" || pet.category === selectedCategory)
+      .sort((a, b) => {
+        const dateA = new Date(a.dateAdded || a.createdAt);
+        const dateB = new Date(b.dateAdded || b.createdAt);
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      });
+  }, [allPets, selectedCategory, sortOrder]);
 
   // Infinite + Repeating Pet List
   const totalPets = filteredPets.length;
@@ -58,36 +51,38 @@ const Adopt = () => {
   return (
     <>
       <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-8 sm:mb-12 dark:text-white">
-  Adopt a New Family Member
-</h1>
+        Adopt a New Family Member
+      </h1>
 
-{/* 🔍 Filter Controls */}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto">
-  <input
-    type="text"
-    placeholder="Search pets by name..."
-    value={searchTerm}
-    onChange={(e) => {
-      setSearchTerm(e.target.value);
-      setVisibleCount(ITEMS_PER_PAGE); // reset on search
-    }}
-    className="input input-bordered w-full bg-white rounded-xl px-4 py-3"
-  />
-  <select
-    value={selectedCategory}
-    onChange={(e) => {
-      setSelectedCategory(e.target.value);
-      setVisibleCount(ITEMS_PER_PAGE); // reset on filter
-    }}
-    className="select select-bordered w-full bg-white rounded-xl px-4 py-3"
-  >
-    {categories.map((cat) => (
-      <option key={cat} value={cat}>
-        {cat}
-      </option>
-    ))}
-  </select>
-</div>
+      {/* 🔍 Filter + Sort Controls */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto">
+        <select
+          value={selectedCategory}
+          onChange={(e) => {
+            setSelectedCategory(e.target.value);
+            setVisibleCount(ITEMS_PER_PAGE); // reset on filter
+          }}
+          className="select select-bordered w-full bg-white rounded-xl px-4 py-3"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sortOrder}
+          onChange={(e) => {
+            setSortOrder(e.target.value);
+            setVisibleCount(ITEMS_PER_PAGE); // reset on sort
+          }}
+          className="select select-bordered w-full bg-white rounded-xl px-4 py-3"
+        >
+          <option value="desc">Newest First</option>
+          <option value="asc">Oldest First</option>
+        </select>
+      </div>
 
 
       {/* 🐾 Pet Cards */}
