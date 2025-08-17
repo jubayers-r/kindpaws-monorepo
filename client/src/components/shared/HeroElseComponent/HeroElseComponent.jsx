@@ -16,7 +16,7 @@ const HeroElseComponent = () => {
   const pathSegments = location.pathname.split("/").filter(Boolean);
 
   return (
-    <div className="-mt-35 -z-10 w-full relative sm:mb-20 mb-10">
+    <div className="-mt-10 -z-10 w-full relative sm:mb-20 mb-10">
       <img
         src={titlebarBg}
         alt=""

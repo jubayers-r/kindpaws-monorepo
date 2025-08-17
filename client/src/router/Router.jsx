@@ -31,7 +31,7 @@ import PetDetailsPage from "@/pages/Adopt/PetDetails/PetDetails";
 import CampaignDetailsPage from "@/pages/Campaigns/CampaignDetails/CampaignDetails";
 import EditCampaign from "@/pages/Dashboard/shared/EditCampaign";
 
-import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
+// import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
 import ProfilePage from "@/pages/Dashboard/shared/ProfilePage";
 import ErrorPage from "@/components/ErrorPage/ErrorPage";
 

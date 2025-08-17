@@ -20,17 +20,15 @@ const MainLayout = () => {
   return (
     <div>
       <div className="  flex flex-col font-[Laila]">
-        <div className=" 2xl:w-9/11 w-[95%] mx-auto sm:my-7 ">
-          <Navbar />
-        </div>
+        <Navbar />
         <Hero>{heroContent}</Hero>
         <main className="flex-grow flex flex-col justify-center mb-15 2xl:w-9/11 w-[95%] mx-auto ">
           <Outlet />
-          <Toaster/>
+          <Toaster />
         </main>
       </div>
       <Footer />
-      <hr  />
+      <hr />
       <CopyrightComponent />
     </div>
   );

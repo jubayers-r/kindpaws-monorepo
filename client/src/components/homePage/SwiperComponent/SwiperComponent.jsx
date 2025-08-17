@@ -36,7 +36,7 @@ export const SwiperComponent = () => {
     },
   ];
   return (
-    <div className="-mt-35 -z-10 h-[50vw] w-full">
+    <div className="-mt-10 -z-10 h-[50vw] w-full">
       <Swiper
         direction="vertical"
         slidesPerView={1}

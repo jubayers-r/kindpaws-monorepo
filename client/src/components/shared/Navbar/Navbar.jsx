@@ -9,14 +9,32 @@ import { AuthContext } from "@/context/auth/AuthContext";
 import { AvatarDropdown } from "./AvatarDropdown";
 import { Sun, Moon } from "lucide-react";
 import DarkMode from "../DarkMode";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // navbar style change on scroll
+      setScrolled(window.scrollY > 10); // 10px scroll triggers the change
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const { user } = useAuth();
 
   return (
-    <div className=" py-4 flex items-center justify-between  ">
+    <div
+      className={`navbar px-5 transition-all duration-300 mt-2 2xl:w-9/11 w-[95%] mx-auto sm:my-7  fixed left-0 right-0 z-50 py-2 sm:py-5 flex items-center justify-between ${
+        scrolled
+          ? "shadow-sm dark:shadow-white rounded-full bg-secondary/80 backdrop-blur-md mt-0"
+          : ""
+      }`}
+    >
       {/* logo/ dropdown+logo on mobile */}
-      <div className="">
+      <div>
         <Logo />
       </div>
       {/* navcenter */}
