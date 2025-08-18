@@ -1,4 +1,5 @@
 import AboutUs from "@/components/homePage/AboutUs/AboutUs";
+import Apointment from "@/components/homePage/Apointment/Apointment";
 import Categories from "@/components/homePage/Categories/Categories";
 import CTA from "@/components/homePage/CTA/CTA";
 import FAQ from "@/components/homePage/FAQ/FAQ";
@@ -14,6 +15,7 @@ const Home = () => {
       <CTA />
       <AboutUs />
       <Testimonials />
+      <Apointment/>
       <Newsletter />
       <FAQ />
     </div>
