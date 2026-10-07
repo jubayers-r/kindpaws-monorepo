@@ -3,8 +3,52 @@ import CardComponent from "@/components/shared/CardComponent/CardComponent";
 import SkeletonCardComponent from "@/components/shared/CardComponent/SkeletonCardComponent";
 import { useLoaderData, useSearchParams } from "react-router";
 import { useInView } from "react-intersection-observer";
+import { Check, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 6;
+
+const CONTROL_CLASS =
+  "flex w-full items-center justify-between gap-2 rounded-xl bg-white px-4 py-3 text-base shadow-sm hover:bg-gray-50 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none data-[state=open]:bg-gray-50 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800 dark:data-[state=open]:bg-neutral-800";
+const CONTENT_CLASS =
+  "min-w-[var(--radix-dropdown-menu-trigger-width)] rounded-xl border-gray-200 p-1 shadow-lg dark:border-neutral-700 dark:bg-neutral-900 dark:text-white";
+const ITEM_CLASS =
+  "cursor-pointer rounded-lg px-3 py-2.5 focus:bg-accent dark:focus:bg-neutral-800";
+
+const FilterDropdown = ({ label, value, options, onChange }) => {
+  const selected = options.find((option) => option.value === value);
+
+  // modal={false} keeps Radix from locking page scroll (no scrollbar jump)
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger aria-label={label} className={CONTROL_CLASS}>
+        <span className="truncate">{selected?.label ?? value}</span>
+        <ChevronDown className="size-4 shrink-0 opacity-50" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" sideOffset={6} className={CONTENT_CLASS}>
+        {options.map((option) => (
+          <DropdownMenuItem
+            key={option.value}
+            onSelect={() => onChange(option.value)}
+            className={cn(
+              ITEM_CLASS,
+              option.value === value && "font-semibold text-primary"
+            )}
+          >
+            {option.label}
+            {option.value === value && <Check className="ml-auto size-4" />}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const normalizeCategory = (value) =>
   (value || "").trim().toLowerCase().replace(/s$/, "");
@@ -110,32 +154,28 @@ const Adopt = () => {
 
       {/* 🔍 Filter + Sort Controls */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto">
-        <select
+        <FilterDropdown
+          label="Filter by category"
           value={selectedCategory}
-          onChange={(e) => {
-            setSelectedCategory(e.target.value);
+          options={categories.map((cat) => ({ value: cat, label: cat }))}
+          onChange={(value) => {
+            setSelectedCategory(value);
             setVisibleCount(ITEMS_PER_PAGE); // reset on filter
           }}
-          className="select select-bordered w-full bg-white rounded-xl px-4 py-3"
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+        />
 
-        <select
+        <FilterDropdown
+          label="Sort order"
           value={sortOrder}
-          onChange={(e) => {
-            setSortOrder(e.target.value);
+          options={[
+            { value: "desc", label: "Newest First" },
+            { value: "asc", label: "Oldest First" },
+          ]}
+          onChange={(value) => {
+            setSortOrder(value);
             setVisibleCount(ITEMS_PER_PAGE); // reset on sort
           }}
-          className="select select-bordered w-full bg-white rounded-xl px-4 py-3"
-        >
-          <option value="desc">Newest First</option>
-          <option value="asc">Oldest First</option>
-        </select>
+        />
       </div>
 
 
