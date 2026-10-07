@@ -58,15 +58,17 @@ const Navbar = () => {
       </div>
       {/* navend starts */}
       <div className=" flex items-center gap-4 ">
-        <Link to="/register">
-          <p
-            className={`border-b hover:brightness-90 sm:block hidden transition-colors duration-300 ${
-              scrolled ? "text-black" : "text-white"
-            }`}
-          >
-            Register
-          </p>
-        </Link>
+        {!user && (
+          <Link to="/register">
+            <p
+              className={`border-b hover:brightness-90 sm:block hidden transition-colors duration-300 ${
+                scrolled ? "text-black" : "text-white"
+              }`}
+            >
+              Register
+            </p>
+          </Link>
+        )}
         {!user ? (
           <Link to="/login">
             <Button className=" py-4 hover:bg-white hover:text-black ">
