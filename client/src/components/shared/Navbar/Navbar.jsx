@@ -27,12 +27,12 @@ const Navbar = () => {
 
   return (
     <div
-      className={`navbar px-5 transition-[backdrop-filter,background-color,border-radius] duration-300 mt-2 2xl:w-9/11 w-[95%] mx-auto sm:my-7  fixed left-0 right-0 z-50 py-2 sm:py-5 flex items-center justify-between ${
+      className={`navbar px-5 transition-[backdrop-filter,background-color,border-radius] duration-300 mt-2 2xl:w-9/11 w-[95%] mx-auto sm:my-7  fixed left-0 right-0 z-50 py-2 sm:py-5 grid grid-cols-[1fr_auto_1fr] items-center ${
         scrolled ? "rounded-full backdrop-blur-md bg-white/70" : ""
       }`}
     >
       {/* logo/ dropdown+logo on mobile */}
-      <div className="relative">
+      <div className="relative justify-self-start col-start-1 row-start-1">
         <div
           className={`transition-opacity duration-300 ${
             scrolled ? "opacity-0" : "opacity-100"
@@ -50,14 +50,14 @@ const Navbar = () => {
       </div>
       {/* navcenter */}
       <div
-        className={`hidden lg:flex items-center rounded-full px-8 py-2 transition-[background-color,box-shadow] duration-300 ${
+        className={`hidden lg:flex items-center justify-self-center col-start-2 row-start-1 rounded-full px-8 py-2 transition-[background-color,box-shadow] duration-300 ${
           scrolled ? "shadow-none" : "bg-white shadow-sm"
         }`}
       >
         <NavLinks />
       </div>
       {/* navend starts */}
-      <div className=" flex items-center gap-4 ">
+      <div className="flex items-center gap-4 justify-self-end col-start-3 row-start-1">
         {!user && (
           <Link to="/register">
             <p
