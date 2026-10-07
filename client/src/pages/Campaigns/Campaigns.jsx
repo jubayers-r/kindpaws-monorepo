@@ -31,15 +31,14 @@ const Campaigns = () => {
   const allCampaigns = useLoaderData(); // assuming all 20 loaded initially
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const { ref, inView } = useInView();
   const columns = useGridColumns();
 
-  const categories = useMemo(() => {
-    const all = allCampaigns.map((c) => c.category);
-    return ["All", ...new Set(all)];
-  }, [allCampaigns]);
+  // no category picker on this page yet — every campaign matches
+  const selectedCategory = "All";
+
+  const isSearching = searchTerm.trim().length > 0;
 
   const filteredCampaigns = useMemo(() => {
     return [...(allCampaigns || [])]
@@ -59,29 +58,35 @@ const Campaigns = () => {
   }, [allCampaigns, searchTerm, selectedCategory]);
 
   const totalCampaigns = filteredCampaigns.length;
-  const visibleCampaigns =
-    totalCampaigns === 0
-      ? []
-      : Array.from(
-          { length: visibleCount },
-          (_, i) => filteredCampaigns[i % totalCampaigns]
-        );
+
+  // Cycle the list only for the infinite-scroll feel while browsing.
+  // Search results stay unique — no repeats.
+  const visibleCampaigns = useMemo(() => {
+    if (totalCampaigns === 0) return [];
+    if (isSearching) return filteredCampaigns.slice(0, visibleCount);
+    return Array.from(
+      { length: visibleCount },
+      (_, i) => filteredCampaigns[i % totalCampaigns]
+    );
+  }, [filteredCampaigns, totalCampaigns, visibleCount, isSearching]);
+
+  const hasMoreToLoad = !isSearching || visibleCount < totalCampaigns;
 
   // Loading placeholders: only fill the rest of the row with the last card
   // plus one full row after it — never beyond that.
   const skeletonCount = useMemo(() => {
-    if (totalCampaigns === 0) return 0;
+    if (totalCampaigns === 0 || !hasMoreToLoad) return 0;
     const remainingInRow = (columns - (visibleCount % columns)) % columns;
     return remainingInRow + columns;
-  }, [columns, visibleCount, totalCampaigns]);
+  }, [columns, visibleCount, totalCampaigns, hasMoreToLoad]);
 
   useEffect(() => {
-    if (inView && totalCampaigns > 0) {
+    if (inView && totalCampaigns > 0 && hasMoreToLoad) {
       setTimeout(() => {
         setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
       }, 10);
     }
-  }, [inView, totalCampaigns]);
+  }, [inView, totalCampaigns, hasMoreToLoad]);
 
   return (
     <>
@@ -99,7 +104,7 @@ const Campaigns = () => {
             setSearchTerm(e.target.value);
             setVisibleCount(ITEMS_PER_PAGE);
           }}
-          className="input input-bordered w-full bg-white rounded-xl px-4 py-3"
+          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base text-gray-900 shadow-sm transition-[color,box-shadow] placeholder:text-gray-400 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
         />
       </div>
 
@@ -107,9 +112,9 @@ const Campaigns = () => {
       <div className="grid 2xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-5">
         {visibleCampaigns.length > 0 ? (
           <>
-            {visibleCampaigns.map((campaign) => (
+            {visibleCampaigns.map((campaign, i) => (
               <CardComponent
-                key={campaign._id}
+                key={`${campaign._id}-${i}`}
                 data={campaign}
                 type="campaign"
               />
@@ -118,6 +123,10 @@ const Campaigns = () => {
               <SkeletonCardComponent key={`skeleton-${i}`} />
             ))}
           </>
+        ) : isSearching ? (
+          <p className="col-span-full py-10 text-center text-gray-600 dark:text-gray-300">
+            No campaigns match “{searchTerm.trim()}”.
+          </p>
         ) : (
           <SkeletonCardComponent />
         )}

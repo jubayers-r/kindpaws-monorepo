@@ -120,31 +120,38 @@ const Adopt = () => {
   }, [allPets, selectedCategory, sortOrder]);
 
   // Infinite + Repeating Pet List
+  const isFiltered = selectedCategory !== "All";
   const totalPets = filteredPets.length;
-  const visiblePets =
-    totalPets === 0
-      ? []
-      : Array.from(
-          { length: visibleCount },
-          (_, i) => filteredPets[i % totalPets]
-        );
+
+  // Cycle the list only for the infinite-scroll feel while browsing.
+  // Filtered results stay unique — no repeats.
+  const visiblePets = useMemo(() => {
+    if (totalPets === 0) return [];
+    if (isFiltered) return filteredPets.slice(0, visibleCount);
+    return Array.from(
+      { length: visibleCount },
+      (_, i) => filteredPets[i % totalPets]
+    );
+  }, [filteredPets, totalPets, visibleCount, isFiltered]);
+
+  const hasMoreToLoad = !isFiltered || visibleCount < totalPets;
 
   // Loading placeholders: only fill the rest of the row with the last card
   // plus one full row after it — never beyond that.
   const skeletonCount = useMemo(() => {
-    if (totalPets === 0) return 0;
+    if (totalPets === 0 || !hasMoreToLoad) return 0;
     const remainingInRow = (columns - (visibleCount % columns)) % columns;
     return remainingInRow + columns;
-  }, [columns, visibleCount, totalPets]);
+  }, [columns, visibleCount, totalPets, hasMoreToLoad]);
 
   // 👀 Load more when in view
   useEffect(() => {
-    if (inView && totalPets > 0) {
+    if (inView && totalPets > 0 && hasMoreToLoad) {
       setTimeout(() => {
         setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
       }, 10); // Optional delay
     }
-  }, [inView, totalPets]);
+  }, [inView, totalPets, hasMoreToLoad]);
 
   return (
     <>
@@ -183,8 +190,8 @@ const Adopt = () => {
       <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
         {visiblePets.length > 0 ? (
           <>
-            {visiblePets.map((pet) => (
-              <CardComponent key={pet._id} data={pet} type="pet" />
+            {visiblePets.map((pet, i) => (
+              <CardComponent key={`${pet._id}-${i}`} data={pet} type="pet" />
             ))}
             {Array.from({ length: skeletonCount }, (_, i) => (
               <SkeletonCardComponent key={`skeleton-${i}`} />
