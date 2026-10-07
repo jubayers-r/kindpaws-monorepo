@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import boneImg from "/src/assets/cta/bone-img.png";
-import pawWhite from "/src/assets/FAQ/paw-bg-pattern-white.png";
+import pawPattern from "/src/assets/cta/paw-bg-pattern.png";
 
 const petOptions = [
   { value: "Dog", icon: Dog },
@@ -92,14 +92,15 @@ export default function Apointment() {
   };
 
   const fieldClass = (hasError) =>
-    `bg-white rounded-full pl-11 pr-5 py-3 h-auto text-sm text-gray-700 placeholder:text-gray-400 border ${
-      hasError ? "border-2 border-white" : "border-transparent"
+    `bg-[#f9f5ef] rounded-full pl-11 pr-5 py-3 h-auto text-sm text-gray-700 placeholder:text-gray-400 border ${
+      hasError ? "border-2 border-destructive" : "border-transparent"
     }`;
 
   const iconWrap =
     "absolute left-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none";
 
-  const errorClass = "mt-1.5 text-xs font-semibold text-white bg-white/25 rounded-full px-3 py-1 w-fit";
+  const errorClass =
+    "mt-1.5 text-xs font-semibold text-destructive bg-destructive/10 rounded-full px-3 py-1 w-fit";
 
   return (
     <motion.div
@@ -107,14 +108,20 @@ export default function Apointment() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true }}
-      className="w-full mx-auto p-6 sm:p-10 bg-primary text-white rounded-[2.5rem] relative overflow-hidden"
+      className="w-full mx-auto p-6 sm:p-10 bg-white text-secondary shadow-md rounded-[2.5rem] relative overflow-hidden"
     >
       {/* Decorations (kept inside the card) */}
       <img
-        src={pawWhite}
+        src={pawPattern}
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute -top-6 -right-4 w-40 sm:w-56 opacity-20 select-none"
+        className="pointer-events-none absolute -top-6 -right-4 w-40 sm:w-56 select-none"
+      />
+      <img
+        src={pawPattern}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-8 -left-6 w-32 sm:w-44 rotate-180 select-none hidden sm:block"
       />
       <motion.img
         src={boneImg}
@@ -127,9 +134,9 @@ export default function Apointment() {
 
       {/* Header */}
       <motion.div variants={item} className="mb-3 flex justify-center">
-        <div className="bg-white/20 rounded-full w-fit px-5 py-1 flex items-center gap-2">
-          <PawPrint className="text-white w-4 h-4" />
-          <span className="uppercase text-sm font-semibold text-white">
+        <div className="bg-primary/10 rounded-full w-fit px-5 py-1 flex items-center gap-2">
+          <PawPrint className="text-primary w-4 h-4" />
+          <span className="uppercase text-sm font-semibold text-primary">
             Book a visit
           </span>
         </div>
@@ -144,7 +151,7 @@ export default function Apointment() {
 
       <motion.p
         variants={item}
-        className="text-center text-white/80 mb-8 max-w-lg mx-auto"
+        className="text-center text-muted-foreground mb-8 max-w-lg mx-auto"
       >
         Reserve a spot for your furry friend and we will have everything ready
         before you arrive.
@@ -233,8 +240,8 @@ export default function Apointment() {
                   onClick={() => setPetType(pet.value)}
                   className={`flex-1 flex items-center justify-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-all ${
                     active
-                      ? "bg-white text-primary ring-2 ring-white"
-                      : "bg-white/20 text-white hover:bg-white/30"
+                      ? "bg-primary/10 text-primary ring-2 ring-primary"
+                      : "bg-[#f9f5ef] text-gray-600 hover:bg-primary/10"
                   }`}
                 >
                   <Icon className="w-4 h-4" aria-hidden="true" />
@@ -253,8 +260,8 @@ export default function Apointment() {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={`w-full justify-start rounded-full px-5 py-3 h-auto bg-white text-sm text-gray-700 hover:text-gray-700 hover:bg-white ${
-                  errors.date ? "border-2 border-white" : "border-transparent"
+                className={`w-full justify-start rounded-full px-5 py-3 h-auto bg-[#f9f5ef] text-sm text-gray-700 hover:text-gray-700 hover:bg-[#f9f5ef] ${
+                  errors.date ? "border-2 border-destructive" : "border-transparent"
                 }`}
               >
                 <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
@@ -292,8 +299,8 @@ export default function Apointment() {
                 }
               }
             }}
-            className={`flex items-center bg-white rounded-full px-5 border cursor-pointer ${
-              errors.time ? "border-2 border-white" : "border-transparent"
+            className={`flex items-center bg-[#f9f5ef] rounded-full px-5 border cursor-pointer ${
+              errors.time ? "border-2 border-destructive" : "border-transparent"
             }`}
           >
             <Clock className="mr-2 h-4 w-4 text-primary shrink-0" />
@@ -318,7 +325,7 @@ export default function Apointment() {
         >
           <Button
             onClick={handleReservation}
-            className="bg-white text-primary hover:bg-secondary hover:text-white rounded-full px-7 py-3 h-auto text-base font-semibold gap-2"
+            className="bg-primary text-white hover:bg-secondary rounded-full px-7 py-3 h-auto text-base font-semibold gap-2"
           >
             Start A Reservation
             <MoveUpRight className="w-4 h-4" />
