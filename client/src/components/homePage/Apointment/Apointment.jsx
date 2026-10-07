@@ -52,6 +52,14 @@ export default function Apointment() {
   const [time, setTime] = useState("08:00");
   const [errors, setErrors] = useState({});
 
+  const clearError = (field) =>
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+
   const validate = () => {
     const phoneRegex = /^\+?[0-9\s-]{7,15}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -171,7 +179,10 @@ export default function Apointment() {
             <Input
               id="appt-name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                clearError("name");
+              }}
               placeholder="Type Your Full Name"
               aria-invalid={!!errors.name}
               className={fieldClass(errors.name)}
@@ -193,7 +204,10 @@ export default function Apointment() {
               id="appt-phone"
               type="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                setPhone(e.target.value);
+                clearError("phone");
+              }}
               placeholder="+123 888 ..."
               aria-invalid={!!errors.phone}
               className={fieldClass(errors.phone)}
@@ -215,7 +229,10 @@ export default function Apointment() {
               id="appt-email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearError("email");
+              }}
               placeholder="you@hotmail.com"
               aria-invalid={!!errors.email}
               className={fieldClass(errors.email)}
@@ -237,7 +254,10 @@ export default function Apointment() {
                   type="button"
                   role="radio"
                   aria-checked={active}
-                  onClick={() => setPetType(pet.value)}
+                  onClick={() => {
+                    setPetType(pet.value);
+                    clearError("petType");
+                  }}
                   className={`flex-1 flex items-center justify-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium transition-all ${
                     active
                       ? "bg-primary/10 text-primary ring-2 ring-primary"
@@ -272,7 +292,10 @@ export default function Apointment() {
               <Calendar
                 mode="single"
                 selected={date}
-                onSelect={setDate}
+                onSelect={(d) => {
+                  setDate(d);
+                  clearError("date");
+                }}
                 initialFocus
                 disabled={{ before: new Date() }}
               />
@@ -308,7 +331,10 @@ export default function Apointment() {
               id="appt-time"
               type="time"
               value={time}
-              onChange={(e) => setTime(e.target.value)}
+              onChange={(e) => {
+                setTime(e.target.value);
+                clearError("time");
+              }}
               className="bg-transparent w-full outline-none text-sm text-gray-700 py-2.5 cursor-pointer"
             />
           </label>
