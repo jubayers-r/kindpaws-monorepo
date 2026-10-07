@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router"; // use `Link` if using Next.js
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 export function AvatarDropdown() {
@@ -37,18 +36,21 @@ export function AvatarDropdown() {
     <div className="relative inline-block text-left " ref={dropdownRef}>
       <Button
         variant="ghost"
-        className="rounded-full p-0 "
+        className="rounded-full p-0 transition-colors hover:bg-black/10"
         onClick={() => setOpen((prev) => !prev)}
       >
-        <Avatar className="h-12 w-12 ">
-          <AvatarImage src={user.photoURL} alt="User Avatar" className={"object-cover"} />
-          <AvatarFallback>DP</AvatarFallback>
+        <Avatar className="h-9 w-9 ">
+          {user.photoURL && !user.photoURL.includes("icons8.com") && (
+            <AvatarImage
+              src={user.photoURL}
+              alt="User Avatar"
+              className={"object-cover"}
+            />
+          )}
+          <AvatarFallback className="bg-primary text-primary-foreground text-base font-semibold">
+            {(user?.displayName || user?.email || "U")[0].toUpperCase()}
+          </AvatarFallback>
         </Avatar>
-        {open ? (
-          <ChevronUp className="absolute bottom-2 right-3 bg-white rounded-full shadow-md text-gray-500 z-10" />
-        ) : (
-          <ChevronDown className="absolute bottom-2 right-3 bg-white rounded-full shadow-md text-gray-500 z-10" />
-        )}
       </Button>
 
       <AnimatePresence>

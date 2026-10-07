@@ -35,18 +35,14 @@ export default function Register() {
 
       await updateProfile(user, {
         displayName: data.name,
-        ...(imageUrl
-          ? { photoURL: imageUrl }
-          : {
-              photoURL: "https://img.icons8.com/?size=256&id=89245&format=png",
-            }),
+        ...(imageUrl ? { photoURL: imageUrl } : {}),
       });
 
       const userDB = {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
-        image: user.photoURL,
+        image: user.photoURL || "",
         role: "user",
         lastLoginAt: new Date(),
       };

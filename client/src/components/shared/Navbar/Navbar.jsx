@@ -84,7 +84,7 @@ const Navbar = () => {
         <Link to="/contact-us">
           <Button
             variant="none"
-            className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 border border-black/10 bg-white hover:bg-amber-500 text-black hover:text-white"
+            className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 rounded-full border border-black/10 bg-white hover:bg-amber-500 text-black hover:text-white"
           >
             Get In Touch <MoveUpRight />
           </Button>
