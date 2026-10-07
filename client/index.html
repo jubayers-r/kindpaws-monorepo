@@ -25,7 +25,7 @@
         width: 8rem;
         height: 8rem;
         object-fit: contain;
-        transform: scaleY(-1);
+        transform: rotate(50deg) scaleY(-1);
         animation: app-preloader-pulse 2.5s ease-in-out infinite;
       }
       @keyframes app-preloader-pulse {
@@ -63,11 +63,7 @@
   </head>
   <body>
     <div id="app-preloader" role="status" aria-label="Loading">
-      <img
-        class="app-preloader-paw"
-        src="/src/assets/cta/paw-img.png"
-        alt=""
-      />
+      <img class="app-preloader-paw" src="/src/assets/cta/paw-img.png" alt="" />
     </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

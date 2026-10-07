@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import pawImg from "/src/assets/cta/paw-img.png";
 
 const MIN_SHOW_MS = 2600; // one full paw pulse cycle (2.5s) + margin
@@ -56,6 +56,7 @@ const LoadingScreen = ({ isLoading }) => {
               src={pawImg}
               alt=""
               className="w-32 h-32 object-contain select-none"
+              transformTemplate={() => "rotate(50deg) scaleY(-1)"}
               initial={{ scaleY: -1 }}
               animate={{
                 scaleY: -1,

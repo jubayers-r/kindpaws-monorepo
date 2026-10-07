@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  isRouteErrorResponse,
-  useNavigate,
-  useRouteError,
-} from "react-router";
 import { motion } from "motion/react";
+import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router";
 import pawImg from "/src/assets/cta/paw-img.png";
 
 export default function ErrorPage({ error: errorProp }) {
@@ -35,6 +31,7 @@ export default function ErrorPage({ error: errorProp }) {
             src={pawImg}
             alt=""
             className="mx-auto mb-4 w-24 h-24 object-contain select-none"
+            transformTemplate={() => "rotate(50deg) scaleY(-1)"}
             initial={{ scaleY: -1 }}
             animate={{
               scaleY: -1,
