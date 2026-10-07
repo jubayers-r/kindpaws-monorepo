@@ -71,7 +71,7 @@ const Navbar = () => {
         )}
         {!user ? (
           <Link to="/login">
-            <Button className=" py-4 hover:bg-white hover:text-black ">
+            <Button className=" py-4 rounded-full hover:bg-white hover:text-black ">
               Login
             </Button>
           </Link>
@@ -82,7 +82,11 @@ const Navbar = () => {
         {/* Dark Mode Toggle Button */}
         {/* <DarkMode /> */}
 
-        <div className="w-[1px] h-6 bg-gray-300 rounded-full opacity-60 " />
+        <div
+          className={`w-[1px] h-6 rounded-full opacity-60 transition-colors duration-300 ${
+            scrolled ? "bg-black/30" : "bg-gray-300"
+          }`}
+        />
         <Link to="/contact-us">
           <Button
             variant="none"
