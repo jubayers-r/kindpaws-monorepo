@@ -1,7 +1,8 @@
+import { motion } from "motion/react";
 import { useState } from "react";
+import { Link } from "react-router";
 import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { motion } from "motion/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -36,7 +37,7 @@ export const SwiperComponent = () => {
     },
   ];
   return (
-    <div className="-mt-10 -z-10 h-[50vw] w-full">
+    <div className="-mt-10 relative h-[50vw] w-full">
       <Swiper
         direction="vertical"
         slidesPerView={1}
@@ -45,7 +46,7 @@ export const SwiperComponent = () => {
         modules={[Pagination, Autoplay]}
         loop={true}
         autoplay={{
-          delay: 3000,
+          delay: 7000,
           disableOnInteraction: false,
         }}
         className="h-full"
@@ -85,13 +86,19 @@ export const SwiperComponent = () => {
 
                     {/* CTA Buttons */}
                     <div className="flex flex-wrap gap-4 pt-2">
-                      <button className="px-6 py-2 rounded-full bg-primary hover:bg-primary/90 text-white font-semibold transition duration-300 text-sm sm:text-base">
+                      <Link
+                        to="/contact-us"
+                        className="px-6 py-2 rounded-full bg-primary hover:bg-primary/90 text-white font-semibold transition duration-300 text-sm sm:text-base"
+                      >
                         Know More
-                      </button>
+                      </Link>
 
-                      <button className="px-6 py-2 rounded-full border border-white hover:bg-white hover:text-black text-white font-semibold transition duration-300 text-sm sm:text-base">
+                      <Link
+                        to="/contact-us"
+                        className="px-6 py-2 rounded-full border border-white hover:bg-white hover:text-black text-white font-semibold transition duration-300 text-sm sm:text-base"
+                      >
                         Contact Us
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </motion.div>

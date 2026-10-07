@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import CardComponent from "@/components/shared/CardComponent/CardComponent";
 import SkeletonCardComponent from "@/components/shared/CardComponent/SkeletonCardComponent";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useSearchParams } from "react-router";
 import { useInView } from "react-intersection-observer";
 
 const ITEMS_PER_PAGE = 6;
 
+const normalizeCategory = (value) =>
+  (value || "").trim().toLowerCase().replace(/s$/, "");
+
 const Adopt = () => {
   const allPets = useLoaderData(); // assuming all 20 are loaded
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchParams] = useSearchParams();
   const [sortOrder, setSortOrder] = useState("desc"); // 🔽 default descending
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
@@ -18,6 +21,25 @@ const Adopt = () => {
     const all = allPets.map((pet) => pet.category);
     return ["All", ...new Set(all)];
   }, [allPets]);
+
+  // ?category= from "Find Your Best Match" (e.g. "Dogs" -> "Dog")
+  const requestedCategory = useMemo(() => {
+    const param = searchParams.get("category");
+    if (!param) return null;
+    const normalized = normalizeCategory(param);
+    return (
+      categories.find((cat) => normalizeCategory(cat) === normalized) || null
+    );
+  }, [searchParams, categories]);
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    () => requestedCategory || "All"
+  );
+
+  useEffect(() => {
+    setSelectedCategory(requestedCategory || "All");
+    setVisibleCount(ITEMS_PER_PAGE);
+  }, [requestedCategory]);
 
   const filteredPets = useMemo(() => {
     return [...(allPets || [])]

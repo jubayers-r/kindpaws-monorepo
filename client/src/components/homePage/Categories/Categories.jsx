@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
+import { Link } from "react-router";
 
 import reptilesImg from "/src/assets/categories/reptiles.png";
 import fishImg from "/src/assets/categories/fish.png";
@@ -43,39 +44,45 @@ const Categories = () => {
 
   //   resuable category circle variable
   const circle = (index, shrink, color, img, category) => (
-    <motion.div
+    <Link
       key={index}
-      className="flex flex-col justify-center text-center items-center"
-      whileHover="hover"
-      initial="initial"
+      to={`/adopt?category=${encodeURIComponent(category)}`}
+      className="block"
+      aria-label={`Find ${category} to adopt`}
     >
-      <div
-        className={`relative h-[120px] w-[120px] sm:h-[200px] sm:w-[200px] rounded-full flex items-center justify-center font-bold ${color} ${shrink}`}
+      <motion.div
+        className="flex flex-col justify-center text-center items-center"
+        whileHover="hover"
+        initial="initial"
       >
-        {/* CATEGORY TEXT BEHIND IMAGE */}
-        <div className="absolute inset-0 overflow-hidden rounded-full z-0">
-          <motion.p
-            variants={textVariants}
-            className="  text-white translate-y-2 text-[50px] sm:text-[80px] font-black tracking-wide pointer-events-none select-none font-[Outfit]"
-          >
-            {category}
-          </motion.p>
-        </div>
+        <div
+          className={`relative h-[120px] w-[120px] sm:h-[200px] sm:w-[200px] rounded-full flex items-center justify-center font-bold ${color} ${shrink}`}
+        >
+          {/* CATEGORY TEXT BEHIND IMAGE */}
+          <div className="absolute inset-0 overflow-hidden rounded-full z-0">
+            <motion.p
+              variants={textVariants}
+              className="  text-white translate-y-2 text-[50px] sm:text-[80px] font-black tracking-wide pointer-events-none select-none font-[Outfit]"
+            >
+              {category}
+            </motion.p>
+          </div>
 
-        {/* IMAGE ABOVE TEXT */}
-        <motion.img
-          src={img}
-          alt={category}
-          variants={circleVariants}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="scale-[1.1] z-10 object-contain -translate-y-3 sm:-translate-y-5 pointer-events-none"
-        />
-      </div>
-      <p className="mt-3 font-bold">
-        {category}
-        <sup>(10)</sup>
-      </p>
-    </motion.div>
+          {/* IMAGE ABOVE TEXT */}
+          <motion.img
+            src={img}
+            alt={category}
+            variants={circleVariants}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="scale-[1.1] z-10 object-contain -translate-y-3 sm:-translate-y-5 pointer-events-none"
+          />
+        </div>
+        <p className="mt-3 font-bold">
+          {category}
+          <sup>(10)</sup>
+        </p>
+      </motion.div>
+    </Link>
   );
 
   return (
@@ -84,9 +91,9 @@ const Categories = () => {
         Find Your Best Match
       </h3>
       <div className="xl:grid xl:grid-cols-6 xl:gap-5 hidden my-20 sm:my-30 dark:text-secondary-foreground">
-        {petCategories.map((item, i) => (
-          <>{circle(i, "", item.color, item.img, item.category)}</>
-        ))}
+        {petCategories.map((item, i) =>
+          circle(i, "", item.color, item.img, item.category)
+        )}
       </div>
 
       {/* mobile view */}
@@ -96,9 +103,9 @@ const Categories = () => {
         dragConstraints={{ left: -400, right: 0 }}
         whileTap={{ cursor: "grabbing" }}
       >
-        {petCategories.map((item, i) => (
-          <>{circle(i, "", item.color, item.img, item.category)}</>
-        ))}
+        {petCategories.map((item, i) =>
+          circle(i, "", item.color, item.img, item.category)
+        )}
       </motion.div>
     </div>
   );
