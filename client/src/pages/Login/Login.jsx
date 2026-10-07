@@ -7,12 +7,13 @@ import { useAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import { Mail } from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "sonner";
 
 export default function Login() {
-  const { logIn, logOut, stateData } = useAuth();
+  const { logIn, logOut, stateData, setStateData, user, loading } = useAuth();
 
   const {
     register,
@@ -21,6 +22,16 @@ export default function Login() {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
+  const submittingRef = useRef(false);
+  const from = location.state?.from ?? stateData;
+
+  useEffect(() => {
+    if (!loading && user && !submittingRef.current) {
+      setStateData(null);
+      navigate(from ?? "/", { replace: true });
+    }
+  }, [loading, user]);
 
   const updateLastLogin = async (userId) => {
     try {
@@ -33,6 +44,7 @@ export default function Login() {
   };
 
   const onSubmit = async (data) => {
+    submittingRef.current = true;
     try {
       await logIn(data.email, data.password);
       const currentUser = auth.currentUser;
@@ -52,7 +64,8 @@ export default function Login() {
         return;
       }
 
-      navigate(stateData ? stateData : "/");
+      navigate(from ?? "/", { replace: true });
+      setStateData(null);
     } catch (error) {
       // Handle Firebase error
       if (error.code === "auth/wrong-password") {
@@ -71,6 +84,8 @@ export default function Login() {
           message: "Authentication failed",
         });
       }
+    } finally {
+      submittingRef.current = false;
     }
   };
   return (

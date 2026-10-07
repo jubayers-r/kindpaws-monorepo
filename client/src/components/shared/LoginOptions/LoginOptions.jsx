@@ -2,11 +2,26 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import React from "react";
 import { FaArrowLeft, FaGithub, FaGoogle } from "react-icons/fa6";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const LoginOptions = () => {
-  const { googleLogin, githubLogin, stateData } = useAuth();
+  const { googleLogin, githubLogin, stateData, setStateData } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from ?? stateData;
+
+  const goAfterAuth = () => {
+    setStateData(null);
+    navigate(from ?? "/", { replace: true });
+  };
+
+  const goBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
   return (
     <>
       {/* google signup */}
@@ -27,7 +42,7 @@ const LoginOptions = () => {
             className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
             onClick={() =>
               googleLogin().then(() => {
-                navigate(stateData ? stateData : "/");
+                goAfterAuth();
               })
             }
           >
@@ -45,7 +60,7 @@ const LoginOptions = () => {
             className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
             onClick={() => {
               githubLogin().then(() => {
-                navigate(stateData ? stateData : "/");
+                goAfterAuth();
               });
             }}
           >
@@ -61,17 +76,7 @@ const LoginOptions = () => {
             type="submit"
             variant="outline"
             className="w-full sm:w-72 flex items-center gap-3 text-sm font-medium shadow-sm hover:bg-muted transition"
-            onClick={() => {
-              if (
-                stateData === null ||
-                stateData === "/login" ||
-                stateData === "/register"
-              ) {
-                navigate("/");
-              } else {
-                navigate(stateData);
-              }
-            }}
+            onClick={goBack}
           >
             <FaArrowLeft className="w-5 h-5 text-primary" />
             Go back

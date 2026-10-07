@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { User, Mail } from "lucide-react";
 import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
 import { FaGithub, FaGoogle } from "react-icons/fa6";
-import { use, useState } from "react";
+import { useEffect, use, useRef, useState } from "react";
 import { AuthContext } from "@/context/auth/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
@@ -15,8 +15,18 @@ import { useAuth } from "@/hooks/useAuth";
 import LoginOptions from "@/components/shared/LoginOptions/LoginOptions";
 
 export default function Register() {
-  const { createUser, stateData, setUser } = useAuth();
+  const {
+    createUser,
+    stateData,
+    setStateData,
+    setUser,
+    user,
+    loading,
+  } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const submittingRef = useRef(false);
+  const from = location.state?.from ?? stateData;
   const {
     register,
     handleSubmit,
@@ -24,14 +34,23 @@ export default function Register() {
   } = useForm();
   const [submitError, setSubmitError] = useState("");
 
+  useEffect(() => {
+    if (!loading && user && !submittingRef.current) {
+      setStateData(null);
+      navigate(from ?? "/", { replace: true });
+    }
+  }, [loading, user]);
+
   const onSubmit = async (data) => {
+    submittingRef.current = true;
     try {
       const imageFile = data.photo?.[0];
       const imageUrl = imageFile && (await uploadToImgBB(imageFile));
 
       const { user } = await createUser(data.email, data.password);
       setUser(user);
-      navigate(stateData ? stateData : "/");
+      navigate(from ?? "/", { replace: true });
+      setStateData(null);
 
       await updateProfile(user, {
         displayName: data.name,
@@ -67,6 +86,8 @@ export default function Register() {
       } else {
         setSubmitError("Something went wrong. Please try again.");
       }
+    } finally {
+      submittingRef.current = false;
     }
   };
 
