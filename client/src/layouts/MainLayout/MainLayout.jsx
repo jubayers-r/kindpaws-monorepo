@@ -5,7 +5,7 @@ import Hero from "../../components/homePage/Hero/Hero";
 import SwiperComponent from "@/components/homePage/SwiperComponent/SwiperComponent";
 import HeroElseComponent from "@/components/shared/HeroElseComponent/HeroElseComponent";
 import CopyrightComponent from "./Footer/CopyrightComponent";
-import { Toaster } from "sonner";
+import NavigationLoading from "@/components/shared/NavigationLoading/NavigationLoading";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -19,12 +19,12 @@ const MainLayout = () => {
 
   return (
     <div>
+      <NavigationLoading />
       <div className="  flex flex-col font-[Laila]">
         <Navbar />
         <Hero>{heroContent}</Hero>
         <main className="flex-grow flex flex-col justify-center mb-15 2xl:w-9/11 w-[95%] mx-auto ">
           <Outlet />
-          <Toaster />
         </main>
       </div>
       <Footer />

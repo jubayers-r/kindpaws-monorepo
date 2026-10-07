@@ -1,17 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { motion } from "motion/react";
-import { Mail, Lock } from "lucide-react";
-import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
-import { FaGoogle } from "react-icons/fa6";
-import { useAuth } from "@/hooks/useAuth";
-import { AuthContext } from "@/context/auth/AuthContext";
-import { Link, useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { auth } from "@/firebase/firebase.init";
 import LoginOptions from "@/components/shared/LoginOptions/LoginOptions";
-import { toast, Toaster } from "sonner";
+import PasswordInput from "@/components/shared/PasswordInput/PasswordInput";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { auth } from "@/firebase/firebase.init";
+import { useAuth } from "@/hooks/useAuth";
+import axios from "axios";
+import { Mail } from "lucide-react";
+import { motion } from "motion/react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function Login() {
   const { logIn, logOut, stateData } = useAuth();
@@ -27,7 +25,7 @@ export default function Login() {
   const updateLastLogin = async (userId) => {
     try {
       await axios.patch(
-        `https://kind-paws.vercel.app/api/users/last-login/${userId}`
+        `https://kind-paws.vercel.app/api/users/last-login/${userId}`,
       );
     } catch (err) {
       console.error("❌ Failed to update last login:", err);
@@ -122,7 +120,7 @@ export default function Login() {
               </form>
 
               <p className="text-sm text-center mt-4">
-                New to PawLink?{" "}
+                New to KindPaws?{" "}
                 <Link to="/register" className="text-primary underline">
                   Register here
                 </Link>
@@ -132,7 +130,6 @@ export default function Login() {
           </div>
         </motion.div>
       </div>
-      <Toaster />
     </div>
   );
 }

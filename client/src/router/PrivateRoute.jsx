@@ -1,5 +1,5 @@
 import { AuthContext } from "@/context/auth/AuthContext";
-import { Loader2 } from "lucide-react";
+import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate, useLocation } from "react-router";
 import { useEffect } from "react";
@@ -12,11 +12,7 @@ const PrivateRoute = ({ children }) => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-black" />
-      </div>
-    );
+    return <LoadingScreen isLoading={true} />;
   }
   if (!user) {
     return <Navigate to="/login" />;

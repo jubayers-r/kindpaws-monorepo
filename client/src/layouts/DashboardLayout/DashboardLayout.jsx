@@ -8,10 +8,11 @@ import { LogoBlack } from "@/assets/Logo";
 import { dashboardNavItems } from "@/data/DashboardNavItems";
 import DashboardTopNavbar from "@/components/dashboard/DashboardTopNavbar/DashboardTopNavbar";
 import { useEffect, useState } from "react";
-import { Toaster } from "sonner";
+import { toast } from "sonner";
 import axios from "axios";
 import { AuthRoleProvider } from "@/context/role/AuthRoleProvider";
 import { useAuth } from "@/hooks/useAuth";
+import NavigationLoading from "@/components/shared/NavigationLoading/NavigationLoading";
 
 const DashboardLayout = () => {
   const home = (
@@ -38,6 +39,7 @@ const DashboardLayout = () => {
         setRole(res.data.role);
       } catch (err) {
         console.error("Axios error:", err);
+        toast.error("Failed to load your dashboard menu.");
       }
     };
     fetchUserRole();
@@ -50,6 +52,7 @@ const DashboardLayout = () => {
 
   return (
     <div>
+      <NavigationLoading />
       {/* Mobile: Only show on small screens */}
 
       <Sheet>
@@ -98,7 +101,6 @@ const DashboardLayout = () => {
         <DashboardTopNavbar />
         <AuthRoleProvider user={user}>
           <Outlet />
-          <Toaster />
         </AuthRoleProvider>
       </main>
     </div>

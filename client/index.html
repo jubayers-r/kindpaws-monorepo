@@ -5,8 +5,70 @@
     <link rel="icon" type="image/svg+xml" href="/paws-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KindPaws</title>
+    <style>
+      #app-preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        transition: opacity 0.5s ease;
+      }
+      #app-preloader.is-done {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #app-preloader .app-preloader-paw {
+        width: 8rem;
+        height: 8rem;
+        object-fit: contain;
+        transform: scaleY(-1);
+        animation: app-preloader-pulse 2.5s ease-in-out infinite;
+      }
+      @keyframes app-preloader-pulse {
+        0% {
+          filter: brightness(100%);
+          opacity: 0.4;
+        }
+        50% {
+          filter: brightness(150%);
+          opacity: 1;
+        }
+        100% {
+          filter: brightness(100%);
+          opacity: 0.4;
+        }
+      }
+    </style>
+    <script>
+      (function () {
+        var hidden = false;
+        window.__hideAppPreloader = function () {
+          if (hidden) return;
+          hidden = true;
+          var el = document.getElementById("app-preloader");
+          if (!el) return;
+          el.classList.add("is-done");
+          setTimeout(function () {
+            el.remove();
+          }, 600);
+        };
+        // Safety net: never trap the user behind the preloader
+        setTimeout(window.__hideAppPreloader, 20000);
+      })();
+    </script>
   </head>
   <body>
+    <div id="app-preloader" role="status" aria-label="Loading">
+      <img
+        class="app-preloader-paw"
+        src="/src/assets/cta/paw-img.png"
+        alt=""
+      />
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

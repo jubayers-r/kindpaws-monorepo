@@ -1,18 +1,48 @@
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { PawPrint } from "lucide-react";
+import pawImg from "/src/assets/cta/paw-img.png";
+
+const MIN_SHOW_MS = 2600; // one full paw pulse cycle (2.5s) + margin
 
 const LoadingScreen = ({ isLoading }) => {
+  const [visible, setVisible] = useState(false);
+  const shownAtRef = useRef(null);
+
+  useEffect(() => {
+    if (isLoading) {
+      if (shownAtRef.current === null) shownAtRef.current = Date.now();
+      setVisible(true);
+      return;
+    }
+
+    const shownAt = shownAtRef.current;
+    if (shownAt === null) return;
+
+    const remaining = MIN_SHOW_MS - (Date.now() - shownAt);
+    if (remaining <= 0) {
+      shownAtRef.current = null;
+      setVisible(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      shownAtRef.current = null;
+      setVisible(false);
+    }, remaining);
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
   return (
     <AnimatePresence>
-      {isLoading && (
+      {visible && (
         <motion.div
-          className="fixed inset-0 z-50 bg-white flex items-center justify-center"
+          className="fixed inset-0 z-[100] bg-white flex items-center justify-center"
+          role="status"
+          aria-label="Loading"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
           <motion.div
-            className="flex flex-col items-center gap-4"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
@@ -22,15 +52,26 @@ const LoadingScreen = ({ isLoading }) => {
               damping: 20,
             }}
           >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
-            >
-              <PawPrint className="w-12 h-12 text-primary" />
-            </motion.div>
-            <p className="text-sm font-semibold text-primary/80 tracking-wider">
-              Loading the cuteness...
-            </p>
+            <motion.img
+              src={pawImg}
+              alt=""
+              className="w-32 h-32 object-contain select-none"
+              initial={{ scaleY: -1 }}
+              animate={{
+                scaleY: -1,
+                filter: [
+                  "brightness(100%)",
+                  "brightness(150%)",
+                  "brightness(100%)",
+                ],
+                opacity: [0.4, 1.2, 0.4],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
           </motion.div>
         </motion.div>
       )}

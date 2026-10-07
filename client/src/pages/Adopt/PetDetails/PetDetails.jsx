@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { motion } from "motion/react";
+import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
+import ErrorPage from "@/components/ErrorPage/ErrorPage";
 
 const fadeIn = (delay = 0) => ({
   hidden: { opacity: 0, y: 20 },
@@ -35,8 +37,9 @@ const PetDetailsPage = () => {
   const [address, setAddress] = useState("");
   const [open, setOpen] = useState(false);
 
-  const { data: pet, isLoading } = useQuery({
+  const { data: pet, isLoading, error: petError } = useQuery({
     queryKey: ["pet", id],
+    meta: { globalErrorToast: false },
     queryFn: async () => {
       const res = await axios.get(
         `https://kind-paws.vercel.app/api/pets/${id}`
@@ -76,12 +79,12 @@ const PetDetailsPage = () => {
     });
   };
 
+  if (petError && !pet) {
+    return <ErrorPage error={petError} />;
+  }
+
   if (isLoading || !pet || !user) {
-    return (
-      <div className="flex justify-center items-center h-[60vh]">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-primary" />
-      </div>
-    );
+    return <LoadingScreen isLoading={true} />;
   }
 
   return (

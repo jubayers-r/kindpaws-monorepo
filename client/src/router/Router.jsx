@@ -35,6 +35,21 @@ import EditCampaign from "@/pages/Dashboard/shared/EditCampaign";
 import ProfilePage from "@/pages/Dashboard/shared/ProfilePage";
 import ErrorPage from "@/components/ErrorPage/ErrorPage";
 
+const loadJson = async (url) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    let message = `Failed to load data (${res.status})`;
+    try {
+      const body = await res.json();
+      if (body?.message) message = body.message;
+    } catch {
+      // non-JSON error body
+    }
+    throw new Error(message);
+  }
+  return res.json();
+};
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -52,8 +67,8 @@ export const router = createBrowserRouter([
       {
         path: "adopt",
         Component: Adopt,
-        loader: async () =>
-          await fetch("https://kind-paws.vercel.app/api/pets"),
+        loader: () => loadJson("https://kind-paws.vercel.app/api/pets"),
+        errorElement: <ErrorPage />,
       },
       {
         path: "pet/details/:id",
@@ -66,8 +81,8 @@ export const router = createBrowserRouter([
       {
         path: "campaigns",
         Component: Campaigns,
-        loader: async () =>
-          await fetch("https://kind-paws.vercel.app/api/campaigns"),
+        loader: () => loadJson("https://kind-paws.vercel.app/api/campaigns"),
+        errorElement: <ErrorPage />,
       },
       {
         path: "campaign/details/:id",
@@ -76,20 +91,30 @@ export const router = createBrowserRouter([
             <CampaignDetailsPage />
           </PrivateRoute>
         ),
-        loader: async ({ params }) =>
-          await fetch(
-            `https://kind-paws.vercel.app/api/campaigns/${params.id}`
-          ),
       },
       {
         path: "contact-us",
         Component: ContactUs,
+      },
+      {
+        path: "*",
+        element: (
+          <ErrorPage
+            error={{
+              status: 404,
+              statusText: "Not Found",
+              internal: true,
+              data: null,
+            }}
+          />
+        ),
       },
     ],
   },
   {
     path: "/",
     element: <AuthLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "login",
@@ -108,6 +133,7 @@ export const router = createBrowserRouter([
         <DashboardLayout />
       </PrivateRoute>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

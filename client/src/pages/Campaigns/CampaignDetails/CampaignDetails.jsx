@@ -18,13 +18,16 @@ import { toast } from "sonner";
 import CampaignDonationModal from "@/components/campaignPage/CampaignDonationModal";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import LoadingScreen from "@/components/shared/LoadingScreen/LoadingScreen";
+import ErrorPage from "@/components/ErrorPage/ErrorPage";
 
 const CampaignDetailsPage = () => {
   const { id } = useParams();
   const [amount, setAmount] = useState("");
 
-  const { data: campaign, isLoading } = useQuery({
+  const { data: campaign, isLoading, error: campaignError } = useQuery({
     queryKey: ["campaign", id],
+    meta: { globalErrorToast: false },
     queryFn: async () => {
       const res = await axios.get(
         `https://kind-paws.vercel.app/api/campaigns/${id}`
@@ -42,12 +45,12 @@ const CampaignDetailsPage = () => {
     setAmount("");
   };
 
+  if (campaignError && !campaign) {
+    return <ErrorPage error={campaignError} />;
+  }
+
   if (isLoading || !campaign) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary" />
-      </div>
-    );
+    return <LoadingScreen isLoading={true} />;
   }
 
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
