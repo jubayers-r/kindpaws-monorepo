@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 
 import {
   Breadcrumb,
@@ -27,8 +27,11 @@ const HeroElseComponent = () => {
         <Breadcrumb>
           <BreadcrumbList className="flex items-center gap-1 text-white ">
             <BreadcrumbItem>
-              <BreadcrumbLink className="flex items-center gap-1 hover:border-b hover:border-white">
-                KINDPAWS
+              <BreadcrumbLink
+                asChild
+                className="flex items-center gap-1 hover:border-b hover:border-white"
+              >
+                <Link to="/">KINDPAWS</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
 
@@ -36,10 +39,12 @@ const HeroElseComponent = () => {
               <div key={index} className="flex items-center gap-1">
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink
-                    href={`/${pathSegments.slice(0, index + 1).join("/")}`}
-                  >
-                    {segment.toUpperCase().replaceAll("-", " ")}
+                  <BreadcrumbLink asChild>
+                    <Link
+                      to={`/${pathSegments.slice(0, index + 1).join("/")}`}
+                    >
+                      {segment.toUpperCase().replaceAll("-", " ")}
+                    </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </div>
