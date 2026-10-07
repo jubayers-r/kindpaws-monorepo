@@ -9,6 +9,28 @@ const ITEMS_PER_PAGE = 6;
 const normalizeCategory = (value) =>
   (value || "").trim().toLowerCase().replace(/s$/, "");
 
+// Mirrors the grid classes: 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2
+const getColumnCount = (width) => {
+  if (width >= 1536) return 5;
+  if (width >= 1280) return 4;
+  if (width >= 768) return 3;
+  if (width >= 640) return 2;
+  return 1;
+};
+
+const useGridColumns = () => {
+  const [columns, setColumns] = useState(1);
+
+  useEffect(() => {
+    const update = () => setColumns(getColumnCount(window.innerWidth));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return columns;
+};
+
 const Adopt = () => {
   const allPets = useLoaderData(); // assuming all 20 are loaded
   const [searchParams] = useSearchParams();
@@ -36,6 +58,8 @@ const Adopt = () => {
     () => requestedCategory || "All"
   );
 
+  const columns = useGridColumns();
+
   useEffect(() => {
     setSelectedCategory(requestedCategory || "All");
     setVisibleCount(ITEMS_PER_PAGE);
@@ -60,6 +84,14 @@ const Adopt = () => {
           { length: visibleCount },
           (_, i) => filteredPets[i % totalPets]
         );
+
+  // Loading placeholders: only fill the rest of the row with the last card
+  // plus one full row after it — never beyond that.
+  const skeletonCount = useMemo(() => {
+    if (totalPets === 0) return 0;
+    const remainingInRow = (columns - (visibleCount % columns)) % columns;
+    return remainingInRow + columns;
+  }, [columns, visibleCount, totalPets]);
 
   // 👀 Load more when in view
   useEffect(() => {
@@ -110,20 +142,21 @@ const Adopt = () => {
       {/* 🐾 Pet Cards */}
       <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5">
         {visiblePets.length > 0 ? (
-          visiblePets.map((pet) => (
-            <CardComponent key={pet._id} data={pet} type="pet" />
-          ))
+          <>
+            {visiblePets.map((pet) => (
+              <CardComponent key={pet._id} data={pet} type="pet" />
+            ))}
+            {Array.from({ length: skeletonCount }, (_, i) => (
+              <SkeletonCardComponent key={`skeleton-${i}`} />
+            ))}
+          </>
         ) : (
           <SkeletonCardComponent />
         )}
       </div>
 
       {/* 🌀 Loader trigger */}
-      {filteredPets.length > 0 && (
-        <div ref={ref} className="my-10 text-center">
-          <SkeletonCardComponent />
-        </div>
-      )}
+      {filteredPets.length > 0 && <div ref={ref} aria-hidden="true" />}
     </>
   );
 };

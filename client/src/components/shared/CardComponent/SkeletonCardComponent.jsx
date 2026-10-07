@@ -1,7 +1,7 @@
 const SkeletonCardComponent = () => {
   return (
     <div
-      className="bg-white rounded-3xl p-4 shadow-md w-full max-w-sm space-y-4 animate-pulse"
+      className="bg-white rounded-3xl p-4 shadow-md w-full max-w-sm mx-auto space-y-4 animate-pulse"
       aria-busy="true"
       aria-label="Loading pet card"
     >
