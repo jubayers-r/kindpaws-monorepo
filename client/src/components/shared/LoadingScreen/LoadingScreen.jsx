@@ -35,7 +35,7 @@ const LoadingScreen = ({ isLoading }) => {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[100] bg-white flex items-center justify-center"
+          className="fixed inset-0 z-[100] bg-background flex items-center justify-center"
           role="status"
           aria-label="Loading"
           initial={{ opacity: 1 }}
