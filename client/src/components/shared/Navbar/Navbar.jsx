@@ -1,5 +1,5 @@
 import { MoveUpRight } from "lucide-react";
-import { Logo } from "../../../assets/Logo";
+import { Logo, LogoBlack } from "../../../assets/Logo";
 import { Button } from "@/components/ui/button";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
@@ -27,24 +27,43 @@ const Navbar = () => {
 
   return (
     <div
-      className={`navbar px-5 transition-all duration-300 mt-2 2xl:w-9/11 w-[95%] mx-auto sm:my-7  fixed left-0 right-0 z-50 py-2 sm:py-5 flex items-center justify-between ${
-        scrolled
-          ? "shadow-sm dark:shadow-white rounded-full bg-secondary/80 backdrop-blur-md mt-0"
-          : ""
+      className={`navbar px-5 transition-[backdrop-filter,background-color,border-radius] duration-300 mt-2 2xl:w-9/11 w-[95%] mx-auto sm:my-7  fixed left-0 right-0 z-50 py-2 sm:py-5 flex items-center justify-between ${
+        scrolled ? "rounded-full backdrop-blur-md bg-white/70" : ""
       }`}
     >
       {/* logo/ dropdown+logo on mobile */}
-      <div>
-        <Logo />
+      <div className="relative">
+        <div
+          className={`transition-opacity duration-300 ${
+            scrolled ? "opacity-0" : "opacity-100"
+          }`}
+        >
+          <Logo />
+        </div>
+        <div
+          className={`absolute inset-0 transition-opacity duration-300 ${
+            scrolled ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <LogoBlack />
+        </div>
       </div>
       {/* navcenter */}
-      <div className="hidden lg:flex bg-white rounded-full px-8 py-2 shadow-sm">
+      <div
+        className={`hidden lg:flex items-center rounded-full px-8 py-2 transition-[background-color,box-shadow] duration-300 ${
+          scrolled ? "shadow-none" : "bg-white shadow-sm"
+        }`}
+      >
         <NavLinks />
       </div>
       {/* navend starts */}
       <div className=" flex items-center gap-4 ">
         <Link to="/register">
-          <p className=" text-white border-b hover:brightness-90 sm:block hidden">
+          <p
+            className={`border-b hover:brightness-90 sm:block hidden transition-colors duration-300 ${
+              scrolled ? "text-black" : "text-white"
+            }`}
+          >
             Register
           </p>
         </Link>
@@ -65,13 +84,17 @@ const Navbar = () => {
         <Link to="/contact-us">
           <Button
             variant="none"
-            className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 rounded-full bg-white hover:bg-amber-500 text-black hover:text-white"
+            className="hidden xl:inline-flex px-6 py-4 min-w-[170px]  items-center justify-center gap-2 border border-black/10 bg-white hover:bg-amber-500 text-black hover:text-white"
           >
             Get In Touch <MoveUpRight />
           </Button>
         </Link>
 
-        <div className="xl:hidden text-white ">
+        <div
+          className={`xl:hidden transition-colors duration-300 ${
+            scrolled ? "text-black" : "text-white"
+          }`}
+        >
           <MobileMenu />
         </div>
       </div>
